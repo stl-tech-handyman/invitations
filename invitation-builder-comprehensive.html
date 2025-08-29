@@ -1455,6 +1455,7 @@
 
             <div class="row" style="margin-top:12px">
               <button id="reset-edge" class="btn btn-secondary">Reset</button>
+              <button id="test-edge-direct" class="btn" style="background: #28a745; color: white;">Test Edge Direct</button>
             </div>
           </div>
         </div>
@@ -2925,11 +2926,16 @@
     // Apply edge effect to the invitation
     function applyEdgeEffect() {
       console.log('🎨 Applying edge effect:', edgeSettings);
+      console.log('🎨 Edge style:', edgeSettings.style);
+      console.log('🎨 Edge variant:', edgeSettings.variant);
 
       // Check if el function is available, with fallback
       const getElement = (typeof el === 'function') ? el : (id) => document.getElementById(id);
+      console.log('🔧 getElement function available:', typeof getElement === 'function');
       
       const edgeLayer = getElement('edge-layer');
+      console.log('🔍 Edge layer element:', edgeLayer);
+      
       if (!edgeLayer) {
         console.error('❌ Edge layer not found!');
         return;
@@ -2944,6 +2950,10 @@
       }
 
       const style = EDGE_STYLES[edgeSettings.style];
+      console.log('🔍 Looking for edge style:', edgeSettings.style);
+      console.log('🔍 Available styles:', Object.keys(EDGE_STYLES));
+      console.log('🔍 Found style object:', style);
+      
       if (!style) {
         console.error('❌ Edge style not found:', edgeSettings.style);
         console.log('Available styles:', Object.keys(EDGE_STYLES));
@@ -4909,6 +4919,15 @@
     function initializeEdgeControls() {
       console.log('🔧 Initializing edge controls...');
       
+      // Check if el function is available
+      if (typeof el !== 'function') {
+        console.error('❌ el function not available during edge controls initialization!');
+        console.log('Available global functions:', Object.keys(window).filter(key => typeof window[key] === 'function'));
+        return;
+      }
+      
+      console.log('✅ el function is available');
+      
       // Check if all required elements exist
       const edgeStyleEl = el('edge-style');
       const edgeThicknessEl = el('edge-thickness');
@@ -4933,9 +4952,21 @@
       
       // Edge style change
       edgeStyleEl.addEventListener('change', (e) => {
+        console.log('🎯 Edge style change event fired!');
+        console.log('Event target:', e.target);
+        console.log('Event target value:', e.target.value);
+        console.log('Previous edge style:', edgeSettings.style);
+        
         edgeSettings.style = e.target.value;
         console.log('🎨 Edge style changed to:', edgeSettings.style);
-        applyEdgeEffect();
+        console.log('Calling applyEdgeEffect...');
+        
+        try {
+          applyEdgeEffect();
+          console.log('✅ applyEdgeEffect completed successfully');
+        } catch (error) {
+          console.error('❌ Error in applyEdgeEffect:', error);
+        }
       });
 
       // Edge thickness
@@ -4990,6 +5021,26 @@
 
           applyEdgeEffect();
           console.log('✅ Test edge applied!');
+        });
+      }
+
+      // Test edge direct button (in the left sidebar)
+      const testEdgeDirectEl = el('test-edge-direct');
+      if (testEdgeDirectEl) {
+        testEdgeDirectEl.addEventListener('click', () => {
+          console.log('🧪 Testing edge system directly from left sidebar...');
+          console.log('Current edge settings:', edgeSettings);
+          
+          // Force apply a test edge
+          edgeSettings.style = 'torn';
+          edgeSettings.variant = 'default';
+          edgeSettings.color = '#ff0000';
+          edgeSettings.thickness = 5;
+          edgeSettings.opacity = 0.8;
+          
+          console.log('Updated edge settings:', edgeSettings);
+          applyEdgeEffect();
+          console.log('✅ Test edge applied from left sidebar!');
         });
       }
 
