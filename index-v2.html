@@ -581,29 +581,116 @@
       }
     });
     
+    // Preload all fonts for better reliability
+    function preloadFonts() {
+      console.log('🔤 Preloading all fonts...');
+      
+      const fonts = [
+        'Playfair Display',
+        'Bebas Neue', 
+        'Abril Fatface',
+        'Poppins',
+        'Montserrat',
+        'Quicksand',
+        'Open Sans',
+        'Roboto',
+        'Lato',
+        'Inter'
+      ];
+      
+      fonts.forEach(font => {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'font';
+        link.type = 'font/woff2';
+        link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:400,600,700&display=swap`;
+        link.crossOrigin = 'anonymous';
+        document.head.appendChild(link);
+        
+        // Also load the actual font
+        const fontLink = document.createElement('link');
+        fontLink.rel = 'stylesheet';
+        fontLink.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:400,600,700&display=swap`;
+        document.head.appendChild(fontLink);
+      });
+      
+      console.log('🔤 All fonts preloaded');
+    }
+    
     // Font system functionality
     function updateFonts() {
       const titleFont = document.getElementById('title-font').value;
       const bodyFont = document.getElementById('body-font').value;
       
-      // Update Google Fonts link
+      console.log('🔤 Updating fonts:', { titleFont, bodyFont });
+      
+      // Update Google Fonts link with proper encoding
       const gfontsLink = document.getElementById('gfonts');
       if (gfontsLink) {
-        const families = [
-          `${titleFont}:400,600,700`,
-          `${bodyFont}:400,600,700`
-        ].map(f => `family=${encodeURIComponent(f)}`).join('&');
-        gfontsLink.href = `https://fonts.googleapis.com/css2?${families}&display=swap`;
+        try {
+          const families = [
+            `${titleFont}:400,600,700`,
+            `${bodyFont}:400,600,700`
+          ].map(f => `family=${encodeURIComponent(f)}`).join('&');
+          
+          const newHref = `https://fonts.googleapis.com/css2?${families}&display=swap`;
+          console.log('🔤 New Google Fonts URL:', newHref);
+          
+          gfontsLink.href = newHref;
+          
+          // Force reload of the font
+          const newLink = document.createElement('link');
+          newLink.rel = 'stylesheet';
+          newLink.href = newHref;
+          newLink.id = 'gfonts-new';
+          
+          // Remove old link and add new one
+          if (gfontsLink.parentNode) {
+            gfontsLink.parentNode.removeChild(gfontsLink);
+            document.head.appendChild(newLink);
+            newLink.id = 'gfonts';
+          }
+          
+        } catch (error) {
+          console.error('🔤 Error updating Google Fonts:', error);
+        }
       }
       
       // Update CSS variables (scoped to stage only)
       const stage = document.getElementById('stage');
       if (stage) {
+        // Set font variables on the stage element
         stage.style.setProperty('--title-font', `'${titleFont}', serif`);
         stage.style.setProperty('--body-font', `'${bodyFont}', system-ui, sans-serif`);
+        
+        // Also update the specific text elements directly for immediate effect
+        const titleDisplay = document.getElementById('title-display');
+        const subtitleDisplay = document.getElementById('subtitle-display');
+        const namesDisplay = document.getElementById('names-display');
+        
+        if (titleDisplay) {
+          titleDisplay.style.fontFamily = `'${titleFont}', serif`;
+        }
+        if (subtitleDisplay) {
+          subtitleDisplay.style.fontFamily = `'${bodyFont}', system-ui, sans-serif`;
+        }
+        if (namesDisplay) {
+          namesDisplay.style.fontFamily = `'${titleFont}', serif`;
+        }
+        
+        console.log('🔤 Fonts applied to stage and elements');
       }
       
-      console.log('🔤 Fonts updated:', { titleFont, bodyFont });
+      // Wait a bit for fonts to load, then verify
+      setTimeout(() => {
+        console.log('🔤 Fonts should now be loaded');
+        if (stage) {
+          console.log('🔤 Current stage font variables:', {
+            titleFont: getComputedStyle(stage).getPropertyValue('--title-font'),
+            bodyFont: getComputedStyle(stage).getPropertyValue('--body-font')
+          });
+        }
+      }, 1000);
     }
     
     // Setup font listeners
@@ -635,11 +722,44 @@
         bodyFontSelect.value = 'Roboto';
         updateFonts();
         console.log('✅ Live font update working');
+        
+        // Verify fonts are actually loaded
+        setTimeout(() => {
+          verifyFontsLoaded();
+        }, 1500);
       } else {
         updateStatus('❌ Font system broken');
         console.error('❌ Font system has issues');
       }
     });
+    
+    // Verify fonts are actually loaded
+    function verifyFontsLoaded() {
+      console.log('🔤 Verifying fonts are loaded...');
+      
+      const stage = document.getElementById('stage');
+      if (!stage) return;
+      
+      const computedStyle = getComputedStyle(stage);
+      const titleFont = computedStyle.getPropertyValue('--title-font');
+      const bodyFont = computedStyle.getPropertyValue('--body-font');
+      
+      console.log('🔤 Current font variables:', { titleFont, bodyFont });
+      
+      // Check if fonts are actually applied to elements
+      const titleDisplay = document.getElementById('title-display');
+      const subtitleDisplay = document.getElementById('subtitle-display');
+      
+      if (titleDisplay) {
+        const titleComputed = getComputedStyle(titleDisplay);
+        console.log('🔤 Title font family:', titleComputed.fontFamily);
+      }
+      
+      if (subtitleDisplay) {
+        const subtitleComputed = getComputedStyle(subtitleDisplay);
+        console.log('🔤 Subtitle font family:', subtitleComputed.fontFamily);
+      }
+    }
     
     // Background system functionality
     function updateBackground() {
@@ -941,6 +1061,9 @@
     setupColorListeners();
     setupFontListeners();
     setupBackgroundListeners();
+    
+    // Preload fonts for better reliability
+    preloadFonts();
     
     // Run validation after a short delay to ensure DOM is ready
     setTimeout(() => {
