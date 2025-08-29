@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width="initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Invitation Builder v2 - Modular with Sidebars</title>
   
   <!-- External CSS and JS modules -->
@@ -83,12 +83,201 @@
       font-size: 18px;
       margin-bottom: 30px;
     }
+    
+    /* Sidebar styling */
+    .left-panel, .right-panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px 18px 24px;
+      box-shadow: var(--shadow);
+      overflow: auto;
+    }
+    
+    .group {
+      margin: 12px 0 16px;
+    }
+    
+    .group-header {
+      cursor: pointer;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .group-header h3 {
+      margin: 0;
+      font-size: 14px;
+      color: var(--ink);
+    }
+    
+    .group-content {
+      padding: 12px 0;
+    }
+    
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: var(--body-font);
+    }
+    
+    input[type="color"] {
+      height: 40px;
+      cursor: pointer;
+    }
+    
+    input[type="range"] {
+      height: 20px;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    
+    .actions button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .actions button:hover {
+      background: var(--accent-2);
+    }
   </style>
 </head>
 <body>
   <div class="app">
     <!-- Left Sidebar: Text Editing Controls -->
-    <div id="left-panel-container"></div>
+    <aside class="left-panel" id="text-controls">
+      <h2>✏️ Text Editor</h2>
+      
+      <!-- Text content -->
+      <div class="group" data-section="text">
+        <label>Top Pill Text</label>
+        <input id="pill" value="Join us for a" />
+      </div>
+      
+      <div class="group" data-section="text">
+        <label>Main Title</label>
+        <input id="title" value="POOL PARTY!" />
+      </div>
+      
+      <div class="group" data-section="text">
+        <label>Subtitle</label>
+        <input id="subtitle" value="Celebrating" />
+      </div>
+      
+      <div class="group">
+        <label>Names / Occasion</label>
+        <input id="names" value="Lincoln & Bentley's 6th Birthday" />
+      </div>
+      
+      <div class="group row">
+        <div>
+          <label>Date</label>
+          <input id="date" value="June 21" />
+        </div>
+        <div>
+          <label>Time</label>
+          <input id="time" value="12:00 — 2:30 PM" />
+        </div>
+      </div>
+      
+      <div class="group">
+        <label>Location</label>
+        <input id="location" value="The Pointe • 1 Ballwin Commons Circle" />
+      </div>
+      
+      <div class="group">
+        <label>RSVP / Contact</label>
+        <input id="rsvp" value="RSVP: Stephanie • (314) 330-0860 • sdo...@hotmail.com" />
+      </div>
+      
+      <!-- Fonts -->
+      <div class="group" data-section="text">
+        <div class="group-header">
+          <h3>📝 Typography</h3>
+        </div>
+        <div class="group-content">
+          <label>Fonts (Google Fonts)</label>
+          <div class="row">
+            <select id="font-title">
+              <option value="Playfair Display">Playfair Display</option>
+              <option value="Bebas Neue">Bebas Neue</option>
+              <option value="Abril Fatface">Abril Fatface</option>
+              <option value="Poppins">Poppins</option>
+              <option value="Montserrat">Montserrat</option>
+            </select>
+            <select id="font-names">
+              <option value="Playfair Display">Playfair Display</option>
+              <option value="Bebas Neue">Bebas Neue</option>
+              <option value="Abril Fatface">Abril Fatface</option>
+              <option value="Poppins">Poppins</option>
+              <option value="Montserrat">Montserrat</option>
+            </select>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <select id="font-body">
+              <option value="Quicksand">Quicksand</option>
+              <option value="Open Sans">Open Sans</option>
+              <option value="Roboto">Roboto</option>
+              <option value="Lato">Lato</option>
+              <option value="Inter">Inter</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Theme & Color System -->
+      <div class="group" data-section="theme">
+        <div class="group-header">
+          <h3>🎨 Theme & Colors</h3>
+        </div>
+        <div class="group-content">
+          <label>Theme Category</label>
+          <select id="category">
+            <option value="pool">Pool Party</option>
+            <option value="birthday">Birthday</option>
+            <option value="baby">Baby Shower</option>
+            <option value="graduation">Graduation</option>
+            <option value="holiday">Holiday</option>
+            <option value="custom">Custom Elements</option>
+          </select>
+          
+          <div class="row">
+            <div>
+              <label>Primary Accent</label>
+              <input type="color" id="accent" value="#2ec5ff" />
+            </div>
+            <div>
+              <label>Secondary Accent</label>
+              <input type="color" id="accent2" value="#ff6b6b" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
     
     <!-- Center Stage Area -->
     <main class="stage-wrap">
@@ -121,31 +310,139 @@
     </main>
     
     <!-- Right Sidebar: All Other Controls -->
-    <div id="right-panel-container"></div>
+    <aside class="right-panel" id="controls">
+      <h2>🎛️ Controls & Effects</h2>
+      
+      <!-- Background System -->
+      <div class="group" data-section="background">
+        <div class="group-header">
+          <h3>🎨 Background System</h3>
+        </div>
+        <div class="group-content">
+          <label>Background Mode</label>
+          <select id="bg-mode">
+            <option value="gradient">Theme Gradient</option>
+            <option value="texture">Texture</option>
+            <option value="image">Image</option>
+            <option value="grad+tex">Gradient + Texture</option>
+            <option value="img+tex">Image + Texture</option>
+          </select>
+          
+          <!-- Texture Settings -->
+          <div class="group" id="tex-controls" data-section="background">
+            <h4>🎭 Texture Settings</h4>
+            <label>Texture Preset</label>
+            <select id="texture">
+              <option value="stripes">Diagonal Stripes</option>
+              <option value="dots">Polka Dots</option>
+              <option value="grid">Grid Paper</option>
+              <option value="crosshatch">Crosshatch</option>
+              <option value="chevron">Chevron</option>
+              <option value="checker">Checkerboard</option>
+              <option value="sprinkles">Sprinkles</option>
+              <option value="pluses">Plus Signs</option>
+              <option value="waves">Waves</option>
+              <option value="noise">Noise</option>
+            </select>
+            
+            <div class="row">
+              <div>
+                <label>Texture Opacity</label>
+                <input type="range" id="tex-opacity" min="0" max="100" value="60" />
+                <span id="tex-opacity-value">60</span>%
+              </div>
+              <div>
+                <label>Texture Scale</label>
+                <input type="range" id="tex-scale" min="20" max="200" value="100" />
+                <span id="tex-scale-value">100</span>px
+              </div>
+            </div>
+          </div>
+          
+          <!-- Image Settings -->
+          <div class="group" id="img-controls" data-section="background">
+            <h4>🖼️ Image Settings</h4>
+            <label>Stock Image</label>
+            <select id="stock-image">
+              <optgroup label="Built-in">
+                <option value="pool">Pool Scene</option>
+                <option value="confetti">Confetti</option>
+                <option value="clouds">Clouds</option>
+              </optgroup>
+            </select>
+            
+            <div class="row">
+              <div>
+                <label>Image Opacity</label>
+                <input type="range" id="img-opacity" min="0" max="100" value="80" />
+                <span id="img-opacity-value">80</span>%
+              </div>
+              <div>
+                <label>Blur</label>
+                <input type="range" id="img-blur" min="0" max="20" value="0" />
+                <span id="img-blur-value">0</span>px
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Edge System -->
+      <div class="group" data-section="edge">
+        <div class="group-header">
+          <h3>✂️ Edge Effects</h3>
+        </div>
+        <div class="group-content">
+          <label>Edge Style</label>
+          <select id="edge-style">
+            <option value="none">None</option>
+            <option value="torn">Torn Paper</option>
+            <option value="scalloped">Scalloped</option>
+            <option value="wave">Wavy</option>
+            <option value="zigzag">Zigzag</option>
+            <option value="spikes">Spikes</option>
+            <option value="dots">Dots</option>
+            <option value="geometric">Geometric</option>
+            <option value="organic">Organic</option>
+            <option value="vintage">Vintage</option>
+          </select>
+          
+          <div class="row">
+            <div>
+              <label>Thickness: <span id="edge-thickness-value">2</span>px</label>
+              <input type="range" id="edge-thickness" min="1" max="10" value="2" step="1">
+            </div>
+            <div>
+              <label>Opacity: <span id="edge-opacity-value">0.8</span></label>
+              <input type="range" id="edge-opacity" min="0" max="1" value="0.8" step="0.1">
+            </div>
+          </div>
+          
+          <label>Edge Color</label>
+          <input type="color" id="edge-color" value="#ffffff">
+        </div>
+      </div>
+      
+      <!-- Actions -->
+      <div class="group">
+        <div class="actions">
+          <button id="randomize">🎲 Randomize</button>
+          <button id="swap">🔄 Swap</button>
+          <button id="replay">▶️ Replay</button>
+          <button id="pdf">📄 Print/PDF</button>
+        </div>
+      </div>
+    </aside>
   </div>
   
-  <!-- External JavaScript modules -->
-  <script type="module" src="js/partial-loader.js"></script>
-  <script type="module" src="js/main.js"></script>
-  <script type="module" src="js/select-initializer.js"></script>
-  <script type="module" src="js/sprite-browser.js"></script>
-  <script type="module" src="js/sprite-manager.js"></script>
-  <script type="module" src="js/event-handlers.js"></script>
-  
   <!-- Main application script -->
-  <script type="module">
-    import { loadPartials } from './js/partial-loader.js';
-    import { updateFonts, updateText } from './js/main.js';
-    
+  <script>
     // Initialize the application
-    async function initializeApp() {
+    function initializeApp() {
       console.log('🚀 Initializing Invitation Builder v2...');
       
       try {
-        // Load sidebar partials
-        await loadPartials();
-        
-        // Set up event listeners for the new sidebar structure
+        // Set up event listeners for the sidebar structure
         setupSidebarEventListeners();
         
         // Initialize all systems
@@ -158,100 +455,80 @@
       }
     }
     
-    // Set up event listeners for the new sidebar structure
+    // Set up event listeners for the sidebar structure
     function setupSidebarEventListeners() {
       console.log('🔧 Setting up sidebar event listeners...');
       
-      // Wait for partials to be loaded
-      setTimeout(() => {
-        // Text input listeners
-        const textInputs = ['pill', 'title', 'subtitle', 'names', 'date', 'time', 'location', 'rsvp'];
-        textInputs.forEach(id => {
-          const input = document.getElementById(id);
-          if (input) {
-            input.addEventListener('input', handleTextChange);
-            console.log(`📝 Added text listener for ${id}`);
-          }
-        });
-        
-        // Color input listeners
-        const colorInputs = ['accent', 'accent2'];
-        colorInputs.forEach(id => {
-          const input = document.getElementById(id);
-          if (input) {
-            input.addEventListener('input', handleColorChange);
-            console.log(`🎨 Added color listener for ${id}`);
-          }
-        });
-        
-        // Font select listeners
-        const fontSelects = ['font-title', 'font-names', 'font-body'];
-        fontSelects.forEach(id => {
-          const select = document.getElementById(id);
-          if (select) {
-            select.addEventListener('change', handleFontChange);
-            console.log(`🔤 Added font listener for ${id}`);
-          }
-        });
-        
-        // Background system listeners
-        const bgInputs = ['bg-mode', 'texture', 'tex-opacity', 'tex-scale', 'stock-image', 'img-opacity', 'img-blur', 'img-bright', 'img-vignette'];
-        bgInputs.forEach(id => {
-          const input = document.getElementById(id);
-          if (input) {
-            input.addEventListener('change', handleBackgroundChange);
-            input.addEventListener('input', handleBackgroundChange);
-            console.log(`🖼️ Added background listener for ${id}`);
-          }
-        });
-        
-        // Edge system listeners
-        const edgeInputs = ['edge-style', 'edge-variant', 'edge-thickness', 'edge-opacity', 'edge-color'];
-        edgeInputs.forEach(id => {
-          const input = document.getElementById(id);
-          if (input) {
-            input.addEventListener('change', handleEdgeChange);
-            input.addEventListener('input', handleEdgeChange);
-            console.log(`✂️ Added edge listener for ${id}`);
-          }
-        });
-        
-        // Overlay system listeners
-        const overlayInputs = ['overlay-style', 'overlay-opacity', 'overlay-scale', 'overlay-position', 'overlay-blend'];
-        overlayInputs.forEach(id => {
-          const input = document.getElementById(id);
-          if (input) {
-            input.addEventListener('change', handleOverlayChange);
-            input.addEventListener('input', handleOverlayChange);
-            console.log(`🎨 Added overlay listener for ${id}`);
-          }
-        });
-        
-        // Shadow system listeners
-        const shadowInputs = ['shadow-x', 'shadow-y', 'shadow-blur', 'shadow-color', 'shadow-opacity'];
-        shadowInputs.forEach(id => {
-          const input = document.getElementById(id);
-          if (input) {
-            input.addEventListener('change', handleShadowChange);
-            input.addEventListener('input', handleShadowChange);
-            console.log(`🌑 Added shadow listener for ${id}`);
-          }
-        });
-        
-        // Layout and effects listeners
-        const effectInputs = ['layout', 'effect', 'parallax', 'density', 'scale', 'sprite-anim'];
-        effectInputs.forEach(id => {
-          const input = document.getElementById(id);
-          if (input) {
-            input.addEventListener('change', handleEffectChange);
-            input.addEventListener('input', handleEffectChange);
-            console.log(`🎭 Added effect listener for ${id}`);
-          }
-        });
-        
-        console.log('✅ All sidebar event listeners set up');
-        
-      }, 500); // Wait for partials to load
+      // Text input listeners
+      const textInputs = ['pill', 'title', 'subtitle', 'names', 'date', 'time', 'location', 'rsvp'];
+      textInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.addEventListener('input', handleTextChange);
+          console.log(`📝 Added text listener for ${id}`);
+        }
+      });
+      
+      // Color input listeners
+      const colorInputs = ['accent', 'accent2'];
+      colorInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.addEventListener('input', handleColorChange);
+          console.log(`🎨 Added color listener for ${id}`);
+        }
+      });
+      
+      // Font select listeners
+      const fontSelects = ['font-title', 'font-names', 'font-body'];
+      fontSelects.forEach(id => {
+        const select = document.getElementById(id);
+        if (select) {
+          select.addEventListener('change', handleFontChange);
+          console.log(`🔤 Added font listener for ${id}`);
+        }
+      });
+      
+      // Background system listeners
+      const bgInputs = ['bg-mode', 'texture', 'tex-opacity', 'tex-scale', 'stock-image', 'img-opacity', 'img-blur'];
+      bgInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.addEventListener('change', handleBackgroundChange);
+          input.addEventListener('input', handleBackgroundChange);
+          console.log(`🖼️ Added background listener for ${id}`);
+        }
+      });
+      
+      // Edge system listeners
+      const edgeInputs = ['edge-style', 'edge-thickness', 'edge-opacity', 'edge-color'];
+      edgeInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.addEventListener('change', handleEdgeChange);
+          input.addEventListener('input', handleEdgeChange);
+          console.log(`✂️ Added edge listener for ${id}`);
+        }
+      });
+      
+      // Range input value displays
+      setupRangeValueDisplays();
+      
+      console.log('✅ All sidebar event listeners set up');
+    }
+    
+    // Set up range input value displays
+    function setupRangeValueDisplays() {
+      const rangeInputs = ['tex-opacity', 'tex-scale', 'img-opacity', 'img-blur', 'edge-thickness', 'edge-opacity'];
+      rangeInputs.forEach(id => {
+        const input = document.getElementById(id);
+        const valueSpan = document.getElementById(`${id}-value`);
+        if (input && valueSpan) {
+          input.addEventListener('input', () => {
+            valueSpan.textContent = input.value;
+          });
+        }
+      });
     }
     
     // Event handler functions
@@ -301,7 +578,7 @@
       
       console.log(`🔤 Font changed: ${id} = ${value}`);
       
-      // Update fonts using the existing font system
+      // Update fonts
       updateFonts();
     }
     
@@ -312,7 +589,7 @@
       
       console.log(`🖼️ Background changed: ${id} = ${value}`);
       
-      // Update background using the existing background system
+      // Update background
       updateBackground();
     }
     
@@ -325,39 +602,6 @@
       
       // Update edge effects
       updateEdgeEffects();
-    }
-    
-    function handleOverlayChange(event) {
-      const input = event.target;
-      const value = input.value;
-      const id = input.id;
-      
-      console.log(`🎨 Overlay changed: ${id} = ${value}`);
-      
-      // Update overlay effects
-      updateOverlayEffects();
-    }
-    
-    function handleShadowChange(event) {
-      const input = event.target;
-      const value = input.value;
-      const id = input.id;
-      
-      console.log(`🌑 Shadow changed: ${id} = ${value}`);
-      
-      // Update shadow effects
-      updateShadowEffects();
-    }
-    
-    function handleEffectChange(event) {
-      const input = event.target;
-      const value = input.value;
-      const id = input.id;
-      
-      console.log(`🎭 Effect changed: ${id} = ${value}`);
-      
-      // Update effects
-      updateEffects();
     }
     
     // Helper functions
@@ -374,6 +618,10 @@
     }
     
     // Placeholder functions for systems that will be implemented
+    function updateFonts() {
+      console.log('🔤 Font system update (to be implemented)');
+    }
+    
     function updateBackground() {
       console.log('🖼️ Background system update (to be implemented)');
     }
@@ -382,27 +630,15 @@
       console.log('✂️ Edge effects update (to be implemented)');
     }
     
-    function updateOverlayEffects() {
-      console.log('🎨 Overlay effects update (to be implemented)');
-    }
-    
-    function updateShadowEffects() {
-      console.log('🌑 Shadow effects update (to be implemented)');
-    }
-    
-    function updateEffects() {
-      console.log('🎭 Effects update (to be implemented)');
-    }
-    
     // Initialize all systems
     function initializeAllSystems() {
       console.log('🚀 Initializing all systems...');
       
       // Set initial values for display elements
       const initialTexts = {
-        'title-display': 'Invitation Builder v2',
-        'subtitle-display': 'Modular version with dual sidebars',
-        'names-display': 'Your Names Here'
+        'title-display': 'POOL PARTY!',
+        'subtitle-display': 'Celebrating',
+        'names-display': 'Lincoln & Bentley\'s 6th Birthday'
       };
       
       Object.entries(initialTexts).forEach(([id, text]) => {

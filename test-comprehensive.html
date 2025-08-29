@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Comprehensive Invitation Builder Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+    .test-section {
+      background: white;
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .test-button {
+      background: #2196F3;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .test-button:hover {
+      background: #1976D2;
+    }
+    .test-button.success {
+      background: #4CAF50;
+    }
+    .test-button.error {
+      background: #F44336;
+    }
+    .test-result {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .test-result.success {
+      background: #E8F5E8;
+      border: 1px solid #4CAF50;
+      color: #2E7D32;
+    }
+    .test-result.error {
+      background: #FFEBEE;
+      border: 1px solid #F44336;
+      color: #C62828;
+    }
+    .test-result.info {
+      background: #E3F2FD;
+      border: 1px solid #2196F3;
+      color: #1565C0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Comprehensive Invitation Builder Test Suite</h1>
+  
+  <div class="test-section">
+    <h2>📝 Text System Tests</h2>
+    <button class="test-button" onclick="testTextSystem()">Test Text System</button>
+    <button class="test-button" onclick="testTextUpdates()">Test Text Updates</button>
+    <div id="text-results"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>🔤 Font System Tests</h2>
+    <button class="test-button" onclick="testFontSystem()">Test Font System</button>
+    <button class="test-button" onclick="testGoogleFonts()">Test Google Fonts</button>
+    <div id="font-results"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>🎨 Color System Tests</h2>
+    <button class="test-button" onclick="testColorSystem()">Test Color System</button>
+    <button class="test-button" onclick="testThemeSystem()">Test Theme System</button>
+    <div id="color-results"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>🖼️ Background System Tests</h2>
+    <button class="test-button" onclick="testBackgroundSystem()">Test Background System</button>
+    <button class="test-button" onclick="testTextureSystem()">Test Texture System</button>
+    <div id="background-results"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>✂️ Edge System Tests</h2>
+    <button class="test-button" onclick="testEdgeSystem()">Test Edge System</button>
+    <button class="test-button" onclick="testEdgeEffects()">Test Edge Effects</button>
+    <div id="edge-results"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>🎭 Effects System Tests</h2>
+    <button class="test-button" onclick="testEffectsSystem()">Test Effects System</button>
+    <button class="test-button" onclick="testAnimationSystem()">Test Animation System</button>
+    <div id="effects-results"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>✨ Sprite System Tests</h2>
+    <button class="test-button" onclick="testSpriteSystem()">Test Sprite System</button>
+    <button class="test-button" onclick="testSpriteManagement()">Test Sprite Management</button>
+    <div id="sprite-results"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>🎯 Draggable System Tests</h2>
+    <button class="test-button" onclick="testDraggableSystem()">Test Draggable System</button>
+    <button class="test-button" onclick="testObjectRegistry()">Test Object Registry</button>
+    <div id="draggable-results"></div>
+  </div>
+  
+  <div class="test-section">
+    <h2>🚀 Full System Test</h2>
+    <button class="test-button" onclick="runFullSystemTest()">Run Complete Test Suite</button>
+    <div id="full-results"></div>
+  </div>
+
+  <script>
+    // Utility functions
+    function logResult(containerId, message, type = 'info') {
+      const container = document.getElementById(containerId);
+      const resultDiv = document.createElement('div');
+      resultDiv.className = `test-result ${type}`;
+      resultDiv.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+      container.appendChild(resultDiv);
+    }
+    
+    function clearResults(containerId) {
+      document.getElementById(containerId).innerHTML = '';
+    }
+    
+    // Test functions
+    function testTextSystem() {
+      clearResults('text-results');
+      logResult('text-results', '🧪 Testing text system...', 'info');
+      
+      try {
+        // Test if text elements exist
+        const textElements = ['title', 'names', 'date', 'time', 'location', 'rsvp'];
+        const missingElements = [];
+        
+        textElements.forEach(id => {
+          if (!document.getElementById(id)) {
+            missingElements.push(id);
+          }
+        });
+        
+        if (missingElements.length === 0) {
+          logResult('text-results', '✅ All text input elements found', 'success');
+        } else {
+          logResult('text-results', `❌ Missing text elements: ${missingElements.join(', ')}`, 'error');
+        }
+        
+        // Test text update function
+        if (typeof updateText === 'function') {
+          logResult('text-results', '✅ updateText function exists', 'success');
+        } else {
+          logResult('text-results', '❌ updateText function not found', 'error');
+        }
+        
+      } catch (error) {
+        logResult('text-results', `❌ Text system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testTextUpdates() {
+      logResult('text-results', '🔄 Testing text updates...', 'info');
+      
+      try {
+        if (typeof updateText === 'function') {
+          updateText();
+          logResult('text-results', '✅ Text update function executed successfully', 'success');
+        } else {
+          logResult('text-results', '❌ Cannot test text updates - function not found', 'error');
+        }
+      } catch (error) {
+        logResult('text-results', `❌ Text update test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testFontSystem() {
+      clearResults('font-results');
+      logResult('font-results', '🧪 Testing font system...', 'info');
+      
+      try {
+        // Test font select elements
+        const fontElements = ['font-title', 'font-names', 'font-body'];
+        const missingFontElements = [];
+        
+        fontElements.forEach(id => {
+          if (!document.getElementById(id)) {
+            missingFontElements.push(id);
+          }
+        });
+        
+        if (missingFontElements.length === 0) {
+          logResult('font-results', '✅ All font select elements found', 'success');
+        } else {
+          logResult('font-results', `❌ Missing font elements: ${missingFontElements.join(', ')}`, 'error');
+        }
+        
+        // Test updateFonts function
+        if (typeof updateFonts === 'function') {
+          logResult('font-results', '✅ updateFonts function exists', 'success');
+        } else {
+          logResult('font-results', '❌ updateFonts function not found', 'error');
+        }
+        
+      } catch (error) {
+        logResult('font-results', `❌ Font system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testGoogleFonts() {
+      logResult('font-results', '🔤 Testing Google Fonts...', 'info');
+      
+      try {
+        const gfontsLink = document.getElementById('gfonts');
+        if (gfontsLink && gfontsLink.href.includes('fonts.googleapis.com')) {
+          logResult('font-results', '✅ Google Fonts link found and valid', 'success');
+          
+          if (typeof updateFonts === 'function') {
+            updateFonts();
+            logResult('font-results', '✅ Font update function executed successfully', 'success');
+          } else {
+            logResult('font-results', '❌ Cannot test font updates - function not found', 'error');
+          }
+        } else {
+          logResult('font-results', '❌ Google Fonts link not found or invalid', 'error');
+        }
+      } catch (error) {
+        logResult('font-results', `❌ Google Fonts test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testColorSystem() {
+      clearResults('color-results');
+      logResult('color-results', '🧪 Testing color system...', 'info');
+      
+      try {
+        // Test color input elements
+        const colorElements = ['accent', 'accent2'];
+        const missingColorElements = [];
+        
+        colorElements.forEach(id => {
+          if (!document.getElementById(id)) {
+            missingColorElements.push(id);
+          }
+        });
+        
+        if (missingColorElements.length === 0) {
+          logResult('color-results', '✅ All color input elements found', 'success');
+        } else {
+          logResult('color-results', `❌ Missing color elements: ${missingColorElements.join(', ')}`, 'error');
+        }
+        
+        // Test theme system
+        if (typeof setTheme === 'function') {
+          logResult('color-results', '✅ setTheme function exists', 'success');
+        } else {
+          logResult('color-results', '❌ setTheme function not found', 'error');
+        }
+        
+      } catch (error) {
+        logResult('color-results', `❌ Color system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testThemeSystem() {
+      logResult('color-results', '🎨 Testing theme system...', 'info');
+      
+      try {
+        if (typeof setTheme === 'function') {
+          const categorySelect = document.getElementById('category');
+          if (categorySelect) {
+            setTheme(categorySelect.value);
+            logResult('color-results', '✅ Theme system executed successfully', 'success');
+          } else {
+            logResult('color-results', '❌ Category select not found', 'error');
+          }
+        } else {
+          logResult('color-results', '❌ Cannot test theme system - function not found', 'error');
+        }
+      } catch (error) {
+        logResult('color-results', `❌ Theme system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testBackgroundSystem() {
+      clearResults('background-results');
+      logResult('background-results', '🧪 Testing background system...', 'info');
+      
+      try {
+        // Test background mode select
+        const bgModeSelect = document.getElementById('bg-mode');
+        if (bgModeSelect) {
+          logResult('background-results', '✅ Background mode select found', 'success');
+        } else {
+          logResult('background-results', '❌ Background mode select not found', 'error');
+        }
+        
+        // Test applyBackground function
+        if (typeof applyBackground === 'function') {
+          logResult('background-results', '✅ applyBackground function exists', 'success');
+        } else {
+          logResult('background-results', '❌ applyBackground function not found', 'error');
+        }
+        
+      } catch (error) {
+        logResult('background-results', `❌ Background system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testTextureSystem() {
+      logResult('background-results', '🖼️ Testing texture system...', 'info');
+      
+      try {
+        if (typeof applyBackground === 'function') {
+          applyBackground();
+          logResult('background-results', '✅ Background system executed successfully', 'success');
+        } else {
+          logResult('background-results', '❌ Cannot test background system - function not found', 'error');
+        }
+      } catch (error) {
+        logResult('background-results', `❌ Texture system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testEdgeSystem() {
+      clearResults('edge-results');
+      logResult('edge-results', '🧪 Testing edge system...', 'info');
+      
+      try {
+        // Test edge style select
+        const edgeStyleSelect = document.getElementById('edge-style');
+        if (edgeStyleSelect) {
+          logResult('edge-results', '✅ Edge style select found', 'success');
+        } else {
+          logResult('edge-results', '❌ Edge style select not found', 'error');
+        }
+        
+        // Test updateEdgeEffects function
+        if (typeof updateEdgeEffects === 'function') {
+          logResult('edge-results', '✅ updateEdgeEffects function exists', 'success');
+        } else {
+          logResult('edge-results', '❌ updateEdgeEffects function not found', 'error');
+        }
+        
+      } catch (error) {
+        logResult('edge-results', `❌ Edge system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testEdgeEffects() {
+      logResult('edge-results', '✂️ Testing edge effects...', 'info');
+      
+      try {
+        if (typeof updateEdgeEffects === 'function') {
+          updateEdgeEffects();
+          logResult('edge-results', '✅ Edge effects executed successfully', 'success');
+        } else {
+          logResult('edge-results', '❌ Cannot test edge effects - function not found', 'error');
+        }
+      } catch (error) {
+        logResult('edge-results', `❌ Edge effects test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testEffectsSystem() {
+      clearResults('effects-results');
+      logResult('effects-results', '🧪 Testing effects system...', 'info');
+      
+      try {
+        // Test effects functions
+        const effectsFunctions = ['setLayout', 'setEffect', 'setupParallax'];
+        const missingFunctions = [];
+        
+        effectsFunctions.forEach(funcName => {
+          if (typeof window[funcName] !== 'function') {
+            missingFunctions.push(funcName);
+          }
+        });
+        
+        if (missingFunctions.length === 0) {
+          logResult('effects-results', '✅ All effects functions found', 'success');
+        } else {
+          logResult('effects-results', `❌ Missing effects functions: ${missingFunctions.join(', ')}`, 'error');
+        }
+        
+      } catch (error) {
+        logResult('effects-results', `❌ Effects system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testAnimationSystem() {
+      logResult('effects-results', '🎭 Testing animation system...', 'info');
+      
+      try {
+        if (typeof setLayout === 'function' && typeof setEffect === 'function' && typeof setupParallax === 'function') {
+          setLayout();
+          setEffect();
+          setupParallax();
+          logResult('effects-results', '✅ Animation system executed successfully', 'success');
+        } else {
+          logResult('effects-results', '❌ Cannot test animation system - functions not found', 'error');
+        }
+      } catch (error) {
+        logResult('effects-results', `❌ Animation system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testSpriteSystem() {
+      clearResults('sprite-results');
+      logResult('sprite-results', '🧪 Testing sprite system...', 'info');
+      
+      try {
+        // Test sprite functions
+        if (typeof updateSprites === 'function') {
+          logResult('sprite-results', '✅ updateSprites function exists', 'success');
+        } else {
+          logResult('sprite-results', '❌ updateSprites function not found', 'error');
+        }
+        
+        if (typeof drawSprites === 'function') {
+          logResult('sprite-results', '✅ drawSprites function exists', 'success');
+        } else {
+          logResult('sprite-results', '❌ drawSprites function not found', 'error');
+        }
+        
+      } catch (error) {
+        logResult('sprite-results', `❌ Sprite system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testSpriteManagement() {
+      logResult('sprite-results', '✨ Testing sprite management...', 'info');
+      
+      try {
+        if (typeof updateSprites === 'function') {
+          updateSprites();
+          logResult('sprite-results', '✅ Sprite management executed successfully', 'success');
+        } else {
+          logResult('sprite-results', '❌ Cannot test sprite management - function not found', 'error');
+        }
+      } catch (error) {
+        logResult('sprite-results', `❌ Sprite management test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testDraggableSystem() {
+      clearResults('draggable-results');
+      logResult('draggable-results', '🧪 Testing draggable system...', 'info');
+      
+      try {
+        // Test draggable functions
+        if (typeof makeSpriteDraggable === 'function') {
+          logResult('draggable-results', '✅ makeSpriteDraggable function exists', 'success');
+        } else {
+          logResult('draggable-results', '❌ makeSpriteDraggable function not found', 'error');
+        }
+        
+        if (typeof makeElementDraggable === 'function') {
+          logResult('draggable-results', '✅ makeElementDraggable function exists', 'success');
+        } else {
+          logResult('draggable-results', '❌ makeElementDraggable function not found', 'error');
+        }
+        
+      } catch (error) {
+        logResult('draggable-results', `❌ Draggable system test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function testObjectRegistry() {
+      logResult('draggable-results', '🎯 Testing object registry...', 'info');
+      
+      try {
+        if (window.objectRegistry) {
+          logResult('draggable-results', '✅ Object registry exists', 'success');
+        } else {
+          logResult('draggable-results', '❌ Object registry not found', 'error');
+        }
+      } catch (error) {
+        logResult('draggable-results', `❌ Object registry test failed: ${error.message}`, 'error');
+      }
+    }
+    
+    function runFullSystemTest() {
+      clearResults('full-results');
+      logResult('full-results', '🚀 Starting comprehensive system test...', 'info');
+      
+      // Run all tests
+      setTimeout(() => testTextSystem(), 100);
+      setTimeout(() => testFontSystem(), 200);
+      setTimeout(() => testColorSystem(), 300);
+      setTimeout(() => testBackgroundSystem(), 400);
+      setTimeout(() => testEdgeSystem(), 500);
+      setTimeout(() => testEffectsSystem(), 600);
+      setTimeout(() => testSpriteSystem(), 700);
+      setTimeout(() => testDraggableSystem(), 800);
+      
+      setTimeout(() => {
+        logResult('full-results', '🎉 Comprehensive test suite completed!', 'success');
+        logResult('full-results', '📊 Check individual test results above for detailed status', 'info');
+      }, 1000);
+    }
+    
+    // Auto-run basic tests when page loads
+    window.addEventListener('load', () => {
+      logResult('full-results', '🔄 Page loaded, ready for testing', 'info');
+    });
+  </script>
+</body>
+</html>
