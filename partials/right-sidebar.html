@@ -202,6 +202,113 @@
     </div>
   </div>
   
+  <!-- Edge System -->
+  <div class="group" data-section="edge">
+    <div class="group-header" onclick="toggleGroup(this)">
+      <h3>✂️ Edge Effects</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="group-content">
+      <label>Edge Style</label>
+              <select id="edge-style">
+          <option value="none">None</option>
+          <option value="torn">Torn Paper</option>
+          <option value="scalloped">Scalloped</option>
+          <option value="wave">Wavy</option>
+          <option value="zigzag">Zigzag</option>
+          <option value="spikes">Spikes</option>
+          <option value="dots">Dots</option>
+          <option value="geometric">Geometric</option>
+          <option value="organic">Organic</option>
+          <option value="vintage">Vintage</option>
+        </select>
+      
+      <label>Edge Variant</label>
+      <select id="edge-variant">
+        <option value="default">Default</option>
+        <option value="rough">Rough</option>
+        <option value="smooth">Smooth</option>
+        <option value="sharp">Sharp</option>
+        <option value="soft">Soft</option>
+      </select>
+      
+      <div class="row">
+        <div>
+          <label>Thickness: <span id="edge-thickness-value">2</span>px</label>
+          <input type="range" id="edge-thickness" min="1" max="10" value="2" step="1">
+        </div>
+        <div>
+          <label>Opacity: <span id="edge-opacity-value">0.8</span></label>
+          <input type="range" id="edge-opacity" min="0" max="1" value="0.8" step="0.1">
+        </div>
+      </div>
+      
+      <label>Edge Color</label>
+      <input type="color" id="edge-color" value="#ffffff">
+    </div>
+  </div>
+  
+  <!-- Overlay System -->
+  <div class="group" data-section="overlay">
+    <div class="group-header" onclick="toggleGroup(this)">
+      <h3>🎨 Overlay System</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="group-content">
+      <label>Overlay Style</label>
+      <select id="overlay-style">
+        <option value="none">None</option>
+        <option value="frame-elegant">Elegant Frame</option>
+        <option value="frame-vintage">Vintage Frame</option>
+        <option value="frame-modern">Modern Frame</option>
+        <option value="frame-playful">Playful Frame</option>
+        <option value="frame-minimal">Minimal Frame</option>
+        <option value="frame-ornate">Ornate Frame</option>
+        <option value="frame-nature">Nature Frame</option>
+      </select>
+      
+      <div class="row">
+        <div>
+          <label>Opacity: <span id="overlay-opacity-value">0.8</span></label>
+          <input type="range" id="overlay-opacity" min="0" max="1" value="0.8" step="0.1">
+        </div>
+        <div>
+          <label>Scale</label>
+          <select id="overlay-scale">
+            <option value="0.5">50%</option>
+            <option value="0.75">75%</option>
+            <option value="1.0">100%</option>
+            <option value="1.25">125%</option>
+            <option value="1.5">150%</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div>
+          <label>Position</label>
+          <select id="overlay-position">
+            <option value="center">Center</option>
+            <option value="top-left">Top Left</option>
+            <option value="top-right">Top Right</option>
+            <option value="bottom-left">Bottom Left</option>
+            <option value="bottom-right">Bottom Right</option>
+          </select>
+        </div>
+        <div>
+          <label>Blend Mode</label>
+          <select id="overlay-blend">
+            <option value="normal">Normal</option>
+            <option value="multiply">Multiply</option>
+            <option value="screen">Screen</option>
+            <option value="overlay">Overlay</option>
+            <option value="soft-light">Soft Light</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- Actions -->
   <div class="group">
     <div class="actions">
