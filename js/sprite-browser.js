@@ -459,5 +459,5 @@ class SpriteBrowser {
   }
 }
 
-// Export for use in other modules
-export { SpriteBrowser };
+// Make available globally for non-module usage
+window.SpriteBrowser = SpriteBrowser;

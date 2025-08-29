@@ -410,5 +410,5 @@ class SpriteManager {
   }
 }
 
-// Export for use in other modules
-export { SpriteManager };
+// Make available globally for non-module usage
+window.SpriteManager = SpriteManager;

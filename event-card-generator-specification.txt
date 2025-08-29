@@ -1,0 +1,304 @@
+🎉 Event Card Generator - Complete Technical Specification
+
+Project Overview
+A comprehensive, feature-rich invitation card generator with real-time preview, multiple themes, textures, and export capabilities. Built with vanilla JavaScript, HTML5, and CSS3.
+
+🏗️ Architecture & Structure
+
+File Organization
+event-card-generator/
+├── index.html                 # Main application
+├── css/
+│   ├── main.css              # Core styles and variables
+│   ├── components.css        # Component-specific styles
+│   ├── animations.css        # Keyframes and animations
+│   └── responsive.css        # Mobile and print styles
+├── js/
+│   ├── main.js               # Core application logic
+│   ├── themes.js             # Theme definitions and management
+│   ├── sprites.js            # Sprite system and management
+│   ├── backgrounds.js        # Background and texture system
+│   ├── effects.js            # Animation and visual effects
+│   ├── export.js             # Export and import functionality
+│   └── utils.js              # Utility functions and helpers
+├── assets/
+│   ├── backgrounds/          # Background images
+│   ├── overlays/             # SVG overlay frames
+│   ├── sprites/              # Decorative SVG elements
+│   └── fonts/                # Custom font files
+└── docs/                     # Documentation and examples
+
+🎨 Left Sidebar - Text & Content Controls
+
+1. Text Content Section (Collapsible)
+- Top Pill Text: Input field for event type/occasion
+- Main Title: Primary event title (large text)
+- Subtitle: Secondary descriptive text
+- Names/Occasion: Who/what the event is for
+- Date: Event date
+- Time: Event time
+- Location: Event venue/address
+- RSVP/Contact: Contact information and RSVP details
+
+2. Typography Section (Collapsible)
+- Font Selection: Dropdown for title, names, and body fonts
+- Google Fonts Integration: Dynamic font loading
+- Font Preview: Live preview of selected fonts
+- Font Weight Controls: Bold, regular, light options
+- Letter Spacing: Adjustable character spacing
+- Line Height: Adjustable line spacing
+
+3. Theme & Colors Section (Collapsible)
+- Theme Category: Pool Party, Birthday, Baby Shower, Graduation, Holiday, Custom
+- Primary Accent Color: Color picker for main accent
+- Secondary Accent Color: Color picker for secondary elements
+- Color Palette Preview: Visual display of selected colors
+- Auto-Contrast: Automatic text color adjustment for readability
+
+4. Layout & Effects Section (Collapsible)
+- Layout Style: Centered, Banner, Split options
+- Entrance Animation: None, Fade Up, Pop effects
+- Animation Speed: Adjustable timing controls
+- Parallax Effect: Mouse-responsive background movement toggle
+
+🎭 Right Sidebar - Visual & Advanced Controls
+
+1. Background System Section (Collapsible)
+- Background Mode: 
+  - Theme gradient only
+  - Texture only
+  - Image only
+  - Gradient + texture
+  - Image + texture
+- Texture Controls:
+  - 10 texture patterns (stripes, dots, grid, crosshatch, chevron, checker, sprinkles, pluses, waves, noise)
+  - Texture opacity slider (0-100%)
+  - Texture scale slider (20-200%)
+- Image Controls:
+  - Stock image selector
+  - Custom image upload (drag & drop)
+  - Image opacity slider
+  - Blur effect slider
+  - Brightness adjustment
+  - Vignette effect
+
+2. Edge Effects Section (Collapsible)
+- Edge Style: None, Border, Torn Paper, Scalloped, Zigzag, Wave, Spikes, Dots, Geometric, Organic, Vintage
+- Edge Variants: Default, Rough, Smooth, Sharp, Soft
+- Edge Thickness: 1-20px slider
+- Edge Opacity: 0-1 slider
+- Edge Color: Color picker
+- Reset Button: Restore default settings
+
+3. Overlay System Section (Collapsible)
+- Overlay Style: Elegant Frame, Vintage Frame, Modern Frame, Playful Frame, Minimal Frame, Ornate Frame, Nature Frame
+- Overlay Opacity: 0-1 slider
+- Overlay Scale: 50%-150% options
+- Overlay Position: Center, Top, Bottom, Left, Right
+- Blend Mode: Normal, Multiply, Screen, Overlay, Soft Light, Hard Light, Color Dodge, Color Burn, Darken, Lighten
+
+4. Sprite & Decoration Section (Collapsible)
+- Sprite Browser: Visual browser for decorative elements
+- Sprite Density: 3-40 sprites slider
+- Sprite Scale: 60%-140% slider
+- Sprite Animation: None, Gentle, Lively options
+- Sprite Management: Add, remove, duplicate, reposition
+- Custom Sprites: Upload and manage custom decorative elements
+
+5. Text Shadows Section (Collapsible)
+- Global Shadow Toggle: Enable/disable for all text
+- X Offset: -10px to +10px slider
+- Y Offset: -10px to +10px slider
+- Blur Radius: 0-20px slider
+- Shadow Color: Color picker
+- Shadow Opacity: 0-1 slider
+- Apply to All: Apply shadow to all text elements
+- Reset: Clear all shadow effects
+
+6. Particle Effects Section (Collapsible)
+- Effect Type: Confetti, Snow, Sparkles, Fireworks, Falling Leaves, Bubbles
+- Intensity: Low, Medium, High, Extreme
+- Speed: Slow, Normal, Fast, Ultra Fast
+- Direction: Down, Up, Left, Right, Random, Outward
+- Colors: Rainbow, Warm, Cool, Pastel, Neon, Monochrome
+- Size: Tiny, Small, Medium, Large, Mixed
+- Control Buttons: Start, Stop, Burst, Clear All
+
+7. Object Management Section (Collapsible)
+- Export Objects: Save object positions and properties
+- Import Objects: Load saved object configurations
+- Reset Positions: Restore all objects to default positions
+- Reset Rotations: Clear all rotation values
+- Layer Management: Bring to front, send to back
+- Object Inspector: View and edit individual object properties
+
+8. Readability Checker Section (Collapsible)
+- Contrast Sensitivity: Strict (WCAG AAA), Normal (WCAG AA), Relaxed (WCAG A), Custom
+- Check Frequency: On every change, On focus, Manual, Auto (every 5s)
+- Custom Thresholds: Adjustable contrast ratios
+- Warning Levels: Errors only, Warnings & errors, All issues, Suggestions
+- Auto-fix Levels: None, Safe fixes only, Aggressive fixes, Experimental
+- Issue Display: Visual highlighting of readability problems
+
+9. Export & Import Section (Collapsible)
+- Settings Export: Save all current settings as JSON
+- Settings Import: Load previously saved configurations
+- PDF Export Settings:
+  - Paper size (A4, Letter, Legal, A3, A5, Custom)
+  - Orientation (Portrait, Landscape, Auto)
+  - Quality (Low 72 DPI, Medium 150 DPI, High 300 DPI, Ultra 600 DPI)
+  - Margins (None, Minimal 5mm, Standard 10mm, Wide 20mm, Custom)
+  - Include background checkbox
+  - Include shadows checkbox
+- Invitation Slideshow:
+  - Play/Pause/Stop controls
+  - Speed control (1-10 seconds)
+  - Mode (Sequential, Random, Loop, Bounce)
+  - Current/total counter display
+
+🎯 Core Functionality Requirements
+
+Real-time Preview System
+- Instant updates as user types/changes settings
+- Live preview of all visual changes
+- Responsive canvas that maintains aspect ratio
+- High-quality rendering for both screen and print
+
+Theme Management System
+- 5 built-in themes with predefined color palettes
+- Custom theme creation and saving
+- Theme-specific sprite collections
+- Automatic color scheme generation
+
+Sprite Management System
+- SVG-based decorative elements
+- Drag-and-drop positioning
+- Rotation with mouse wheel
+- Scale and opacity controls
+- Animation system with multiple presets
+- Context menu for advanced options
+
+Background Management System
+- Multiple background modes
+- Texture pattern generation
+- Image processing (blur, brightness, vignette)
+- Gradient creation and management
+- Layer management and blending
+
+Export System
+- High-quality PDF generation
+- Print-optimized CSS
+- Settings backup and restore
+- Multiple format support
+- Quality and size options
+
+🎨 Visual Design Requirements
+
+Color System
+- CSS custom properties for theming
+- Automatic contrast calculation
+- Color palette generation
+- Accessibility compliance (WCAG AA/AAA)
+
+Typography System
+- Google Fonts integration
+- Font fallback system
+- Responsive text sizing
+- Text shadow and effects
+- Multiple font weight support
+
+Animation System
+- CSS keyframe animations
+- Smooth transitions
+- Performance-optimized effects
+- Mobile-friendly animations
+
+Responsive Design
+- Mobile-first approach
+- Touch-friendly controls
+- Adaptive layouts
+- Print media queries
+
+🔧 Technical Requirements
+
+Browser Support
+- Chrome 80+
+- Firefox 75+
+- Safari 13+
+- Edge 80+
+- Mobile browsers
+
+Performance Targets
+- Sprite generation: <100ms
+- Real-time updates: <16ms (60fps)
+- Memory usage: <50MB
+- Load time: <2 seconds
+
+Accessibility
+- WCAG 2.1 AA compliance
+- Keyboard navigation
+- Screen reader support
+- High contrast mode
+- Focus indicators
+
+Data Management
+- Local storage for settings
+- Export/import functionality
+- Auto-save feature
+- Version control for settings
+
+🧪 Testing Requirements
+
+Comprehensive Test Suite
+- Unit tests for all functions
+- Integration tests for systems
+- End-to-end user workflow tests
+- Performance benchmarks
+- Accessibility validation
+- Cross-browser compatibility
+
+Quality Assurance
+- Error handling and validation
+- Input sanitization
+- Memory leak prevention
+- Performance monitoring
+- User experience testing
+
+📱 User Experience Requirements
+
+Interface Design
+- Clean, modern aesthetic
+- Intuitive control layout
+- Visual feedback for all actions
+- Helpful tooltips and guidance
+- Progressive disclosure of advanced features
+
+Workflow Optimization
+- Quick start templates
+- Preset configurations
+- Undo/redo functionality
+- Batch operations
+- Keyboard shortcuts
+
+Help & Documentation
+- In-app help system
+- Video tutorials
+- Example galleries
+- Best practices guide
+- Troubleshooting section
+
+Implementation Notes:
+- All sections should be collapsible for better organization
+- Use CSS Grid for responsive layout
+- Implement lazy loading for performance
+- Add comprehensive error handling
+- Include accessibility features from the start
+- Build with mobile-first responsive design
+- Implement comprehensive logging and debugging
+- Add unit tests for all major functions
+- Include performance monitoring and optimization
+- Build with future extensibility in mind
+
+This specification provides everything needed to rebuild the event card generator from scratch, with comprehensive coverage of all features, systems, and requirements.
+
+
