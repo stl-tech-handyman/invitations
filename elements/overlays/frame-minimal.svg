@@ -1,0 +1,54 @@
+<svg width="900" height="1350" viewBox="0 0 900 1350" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="minimalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.98" />
+      <stop offset="100%" style="stop-color:#f8f9fa;stop-opacity:0.9" />
+    </linearGradient>
+    <filter id="minimalShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  
+  <!-- Main minimal frame -->
+  <rect x="10" y="10" width="880" height="1330" rx="4" ry="4" 
+        fill="url(#minimalGradient)" 
+        stroke="#e9ecef" 
+        stroke-width="1"
+        filter="url(#minimalShadow)"/>
+  
+  <!-- Inner border -->
+  <rect x="30" y="30" width="840" height="1290" rx="2" ry="2" 
+        fill="none" 
+        stroke="#dee2e6" 
+        stroke-width="0.5"/>
+  
+  <!-- Subtle corner accents -->
+  <g fill="#adb5bd" opacity="0.3">
+    <!-- Top-left -->
+    <rect x="10" y="10" width="15" height="2" rx="1"/>
+    <rect x="10" y="10" width="2" height="15" rx="1"/>
+    
+    <!-- Top-right -->
+    <rect x="875" y="10" width="15" height="2" rx="1"/>
+    <rect x="888" y="10" width="2" height="15" rx="1"/>
+    
+    <!-- Bottom-left -->
+    <rect x="10" y="1338" width="15" height="2" rx="1"/>
+    <rect x="10" y="1323" width="2" height="15" rx="1"/>
+    
+    <!-- Bottom-right -->
+    <rect x="875" y="1338" width="15" height="2" rx="1"/>
+    <rect x="888" y="1323" width="2" height="15" rx="1"/>
+  </g>
+  
+  <!-- Minimal pattern -->
+  <defs>
+    <pattern id="minimalPattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="50" x2="100" y2="50" stroke="#f1f3f4" stroke-width="0.3" opacity="0.4"/>
+    </pattern>
+  </defs>
+  
+  <rect x="10" y="10" width="880" height="1330" rx="4" ry="4" 
+        fill="url(#minimalPattern)" 
+        opacity="0.15"/>
+</svg>

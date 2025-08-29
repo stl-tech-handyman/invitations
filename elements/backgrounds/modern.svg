@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="modern1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8f9fa" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#e9ecef" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="modern2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#dee2e6" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ced4da" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="900" height="1350" fill="url(#modern1)"/>
+  <rect width="900" height="1350" fill="url(#modern2)"/>
+  
+  <!-- Modern grid system -->
+  <g stroke="#6c757d" stroke-width="0.5" opacity="0.15" fill="none">
+    <!-- Vertical grid lines -->
+    <line x1="150" y1="0" x2="150" y2="1350"/>
+    <line x1="300" y1="0" x2="300" y2="1350"/>
+    <line x1="450" y1="0" x2="450" y2="1350"/>
+    <line x1="600" y1="0" x2="600" y2="1350"/>
+    <line x1="750" y1="0" x2="750" y2="1350"/>
+    
+    <!-- Horizontal grid lines -->
+    <line x1="0" y1="150" x2="900" y2="150"/>
+    <line x1="0" y1="300" x2="900" y2="300"/>
+    <line x1="0" y1="450" x2="900" y2="450"/>
+    <line x1="0" y1="600" x2="900" y2="600"/>
+    <line x1="0" y1="750" x2="900" y2="750"/>
+    <line x1="0" y1="900" x2="900" y2="900"/>
+    <line x1="0" y1="1050" x2="900" y2="1050"/>
+    <line x1="0" y1="1200" x2="900" y2="1200"/>
+  </g>
+  
+  <!-- Modern accent blocks -->
+  <g opacity="0.08">
+    <rect x="150" y="150" width="150" height="150" fill="#007bff"/>
+    <rect x="600" y="300" width="150" height="150" fill="#28a745"/>
+    <rect x="300" y="600" width="150" height="150" fill="#ffc107"/>
+    <rect x="750" y="750" width="150" height="150" fill="#dc3545"/>
+    <rect x="150" y="900" width="150" height="150" fill="#6f42c1"/>
+    <rect x="600" y="1050" width="150" height="150" fill="#17a2b8"/>
+  </g>
+  
+  <!-- Clean lines -->
+  <g stroke="#6c757d" stroke-width="2" opacity="0.2" fill="none">
+    <!-- Horizontal accent lines -->
+    <line x1="100" y1="200" x2="800" y2="200"/>
+    <line x1="100" y1="500" x2="800" y2="500"/>
+    <line x1="100" y1="800" x2="800" y2="800"/>
+    <line x1="100" y1="1100" x2="800" y2="1100"/>
+    
+    <!-- Vertical accent lines -->
+    <line x1="200" y1="100" x2="200" y2="1250"/>
+    <line x1="500" y1="100" x2="500" y2="1250"/>
+    <line x1="700" y1="100" x2="700" y2="1250"/>
+  </g>
+  
+  <!-- Modern dots -->
+  <g fill="#6c757d" opacity="0.3">
+    <circle cx="225" cy="225" r="4"/>
+    <circle cx="675" cy="375" r="4"/>
+    <circle cx="375" cy="675" r="4"/>
+    <circle cx="825" cy="825" r="4"/>
+    <circle cx="225" cy="975" r="4"/>
+    <circle cx="675" cy="1125" r="4"/>
+  </g>
+  
+  <!-- Subtle shadows -->
+  <g opacity="0.05">
+    <rect x="160" y="160" width="130" height="130" fill="#000000"/>
+    <rect x="610" y="310" width="130" height="130" fill="#000000"/>
+    <rect x="310" y="610" width="130" height="130" fill="#000000"/>
+    <rect x="760" y="760" width="130" height="130" fill="#000000"/>
+    <rect x="160" y="910" width="130" height="130" fill="#000000"/>
+    <rect x="610" y="1060" width="130" height="130" fill="#000000"/>
+  </g>
+  
+  <!-- Modern typography elements -->
+  <g fill="#6c757d" opacity="0.1" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="300">
+    <text x="50" y="1300">MODERN</text>
+    <text x="200" y="1300">DESIGN</text>
+    <text x="350" y="1300">SYSTEM</text>
+    <text x="500" y="1300">2024</text>
+    <text x="650" y="1300">CLEAN</text>
+    <text x="800" y="1300">LINES</text>
+  </g>
+</svg>

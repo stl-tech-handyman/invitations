@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="abs6-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f9ff"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="wave2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="wave3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0891b2" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="1350" fill="url(#abs6-bg)"/>
+  
+  <!-- Wave patterns -->
+  <g>
+    <!-- Large wave 1 -->
+    <path d="M0,150 Q150,100 300,150 T600,120 T900,150 L900,300 Q600,270 300,300 T0,270 Z" fill="url(#wave1)"/>
+    
+    <!-- Large wave 2 -->
+    <path d="M0,450 Q200,400 400,450 T600,420 T800,450 L800,600 Q600,570 400,600 T0,570 Z" fill="url(#wave2)"/>
+    
+    <!-- Large wave 3 -->
+    <path d="M0,750 Q250,700 450,750 T650,720 T850,750 L850,900 Q650,870 450,900 T0,870 Z" fill="url(#wave3)"/>
+    
+    <!-- Large wave 4 -->
+    <path d="M0,1050 Q300,1000 500,1050 T700,1020 T900,1050 L900,1200 Q700,1170 500,1200 T0,1170 Z" fill="url(#wave1)" opacity="0.8"/>
+  </g>
+  
+  <!-- Medium waves -->
+  <g>
+    <path d="M100,100 Q200,80 300,100 T500,80 T700,100" fill="url(#wave2)" opacity="0.6"/>
+    <path d="M150,350 Q250,330 350,350 T550,330 T750,350" fill="url(#wave3)" opacity="0.5"/>
+    <path d="M200,600 Q300,580 400,600 T600,580 T800,600" fill="url(#wave1)" opacity="0.7"/>
+    <path d="M250,850 Q350,830 450,850 T650,830 T850,850" fill="url(#wave2)" opacity="0.6"/>
+  </g>
+  
+  <!-- Small accent waves -->
+  <g>
+    <path d="M50,200 Q100,190 150,200 T250,190 T350,200" fill="url(#wave3)" opacity="0.4"/>
+    <path d="M550,250 Q600,240 650,250 T750,240 T850,250" fill="url(#wave1)" opacity="0.4"/>
+    <path d="M100,500 Q150,490 200,500 T300,490 T400,500" fill="url(#wave2)" opacity="0.4"/>
+    <path d="M600,550 Q650,540 700,550 T800,540 T900,550" fill="url(#wave3)" opacity="0.4"/>
+    <path d="M150,800 Q200,790 250,800 T350,790 T450,800" fill="url(#wave1)" opacity="0.4"/>
+    <path d="M650,850 Q700,840 750,850 T850,840 T950,850" fill="url(#wave2)" opacity="0.4"/>
+  </g>
+  
+  <!-- Subtle dots -->
+  <g fill="#0ea5e9" opacity="0.2">
+    <circle cx="200" cy="100" r="2"/>
+    <circle cx="400" cy="120" r="1.5"/>
+    <circle cx="600" cy="110" r="2.5"/>
+    <circle cx="800" cy="130" r="1"/>
+    
+    <circle cx="150" cy="400" r="1.5"/>
+    <circle cx="350" cy="420" r="2"/>
+    <circle cx="550" cy="410" r="1"/>
+    <circle cx="750" cy="430" r="2.5"/>
+    
+    <circle cx="250" cy="700" r="2"/>
+    <circle cx="450" cy="720" r="1.5"/>
+    <circle cx="650" cy="710" r="2.5"/>
+    <circle cx="850" cy="730" r="1"/>
+    
+    <circle cx="100" cy="1000" r="1.5"/>
+    <circle cx="300" cy="1020" r="2"/>
+    <circle cx="500" cy="1010" r="1"/>
+    <circle cx="700" cy="1030" r="2.5"/>
+  </g>
+</svg>

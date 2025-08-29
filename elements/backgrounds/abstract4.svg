@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="abs4-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f7fafc"/>
+      <stop offset="100%" stop-color="#edf2f7"/>
+    </linearGradient>
+    <linearGradient id="triangle1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#667eea" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#764ba2" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="triangle2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f093fb" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#f5576c" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="triangle3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4facfe" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#00f2fe" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="1350" fill="url(#abs4-bg)"/>
+  
+  <!-- Large triangles -->
+  <g>
+    <polygon points="450,100 650,300 250,300" fill="url(#triangle1)"/>
+    <polygon points="150,500 350,700 50,700" fill="url(#triangle2)"/>
+    <polygon points="550,600 750,800 350,800" fill="url(#triangle3)"/>
+    <polygon points="250,900 450,1100 50,1100" fill="url(#triangle1)" opacity="0.8"/>
+    <polygon points="650,1000 850,1200 450,1200" fill="url(#triangle2)" opacity="0.7"/>
+  </g>
+  
+  <!-- Medium triangles -->
+  <g>
+    <polygon points="100,200 200,300 0,300" fill="url(#triangle3)" opacity="0.6"/>
+    <polygon points="700,400 800,500 600,500" fill="url(#triangle1)" opacity="0.5"/>
+    <polygon points="300,800 400,900 200,900" fill="url(#triangle2)" opacity="0.6"/>
+    <polygon points="600,1100 700,1200 500,1200" fill="url(#triangle3)" opacity="0.5"/>
+  </g>
+  
+  <!-- Small triangles -->
+  <g>
+    <polygon points="50,150 100,200 0,200" fill="url(#triangle1)" opacity="0.4"/>
+    <polygon points="800,250 850,300 750,300" fill="url(#triangle2)" opacity="0.4"/>
+    <polygon points="150,650 200,700 100,700" fill="url(#triangle3)" opacity="0.4"/>
+    <polygon points="700,750 750,800 650,800" fill="url(#triangle1)" opacity="0.4"/>
+    <polygon points="250,1150 300,1200 200,1200" fill="url(#triangle2)" opacity="0.4"/>
+  </g>
+  
+  <!-- Circles -->
+  <g fill="#667eea" opacity="0.2">
+    <circle cx="200" cy="400" r="25"/>
+    <circle cx="700" cy="600" r="20"/>
+    <circle cx="300" cy="1000" r="30"/>
+    <circle cx="600" cy="1200" r="18"/>
+  </g>
+  
+  <!-- Subtle grid -->
+  <g stroke="#e2e8f0" stroke-width="0.5" opacity="0.4">
+    <line x1="0" y1="0" x2="900" y2="0"/>
+    <line x1="0" y1="225" x2="900" y2="225"/>
+    <line x1="0" y1="450" x2="900" y2="450"/>
+    <line x1="0" y1="675" x2="900" y2="675"/>
+    <line x1="0" y1="900" x2="900" y2="900"/>
+    <line x1="0" y1="1125" x2="900" y2="1125"/>
+    <line x1="0" y1="1350" x2="900" y2="1350"/>
+    
+    <line x1="0" y1="0" x2="0" y2="1350"/>
+    <line x1="225" y1="0" x2="225" y2="1350"/>
+    <line x1="450" y1="0" x2="450" y2="1350"/>
+    <line x1="675" y1="0" x2="675" y2="1350"/>
+    <line x1="900" y1="0" x2="900" y2="1350"/>
+  </g>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="abstract-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4ECDC4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#45B7D1;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="circle-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFD93D;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#FF6B6B;stop-opacity:0.3" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="1350" fill="url(#abstract-bg)"/>
+  
+  <!-- Geometric shapes -->
+  <g opacity="0.7">
+    <!-- Large circles -->
+    <circle cx="200" cy="300" r="150" fill="url(#circle-grad)"/>
+    <circle cx="700" cy="800" r="180" fill="url(#circle-grad)"/>
+    
+    <!-- Triangles -->
+    <polygon points="450,200 550,100 650,200" fill="#FF6B6B" opacity="0.6"/>
+    <polygon points="150,800 250,700 350,800" fill="#4ECDC4" opacity="0.6"/>
+    
+    <!-- Squares -->
+    <rect x="600" y="400" width="120" height="120" fill="#45B7D1" opacity="0.6" transform="rotate(45 660 460)"/>
+    <rect x="100" y="1000" width="100" height="100" fill="#FFD93D" opacity="0.6" transform="rotate(30 150 1050)"/>
+    
+    <!-- Hexagons -->
+    <polygon points="400,600 450,550 500,550 550,600 500,650 450,650" fill="#FF6B6B" opacity="0.5"/>
+    <polygon points="300,1100 350,1050 400,1050 450,1100 400,1150 350,1150" fill="#4ECDC4" opacity="0.5"/>
+  </g>
+  
+  <!-- Floating elements -->
+  <g opacity="0.4">
+    <circle cx="100" cy="400" r="20" fill="#FFFFFF"/>
+    <circle cx="800" cy="300" r="15" fill="#FFFFFF"/>
+    <circle cx="150" cy="1200" r="25" fill="#FFFFFF"/>
+    <circle cx="750" cy="1100" r="18" fill="#FFFFFF"/>
+  </g>
+</svg>
+

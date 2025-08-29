@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="abs5-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fafbfc"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <linearGradient id="organic1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c084fc" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="organic2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="organic3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="1350" fill="url(#abs5-bg)"/>
+  
+  <!-- Organic flowing shapes -->
+  <g>
+    <!-- Large organic blob 1 -->
+    <path d="M0,200 Q200,150 400,200 T600,180 T800,200 L800,400 Q600,350 400,400 T0,350 Z" fill="url(#organic1)"/>
+    
+    <!-- Large organic blob 2 -->
+    <path d="M0,600 Q300,550 500,600 T700,580 T900,600 L900,800 Q700,750 500,800 T0,750 Z" fill="url(#organic2)"/>
+    
+    <!-- Large organic blob 3 -->
+    <path d="M0,1000 Q250,950 450,1000 T650,980 T850,1000 L850,1200 Q650,1150 450,1200 T0,1150 Z" fill="url(#organic3)"/>
+    
+    <!-- Medium organic shapes -->
+    <path d="M100,100 Q200,80 300,100 T500,80 T700,100" fill="url(#organic1)" opacity="0.7"/>
+    <path d="M150,500 Q250,480 350,500 T550,480 T750,500" fill="url(#organic2)" opacity="0.6"/>
+    <path d="M200,900 Q300,880 400,900 T600,880 T800,900" fill="url(#organic3)" opacity="0.8"/>
+  </g>
+  
+  <!-- Small organic details -->
+  <g>
+    <ellipse cx="200" cy="150" rx="40" ry="25" fill="url(#organic1)" opacity="0.5"/>
+    <ellipse cx="600" cy="180" rx="35" ry="20" fill="url(#organic2)" opacity="0.4"/>
+    <ellipse cx="150" cy="450" rx="45" ry="30" fill="url(#organic3)" opacity="0.6"/>
+    <ellipse cx="700" cy="480" rx="30" ry="18" fill="url(#organic1)" opacity="0.5"/>
+    <ellipse cx="250" cy="750" rx="38" ry="22" fill="url(#organic2)" opacity="0.4"/>
+    <ellipse cx="650" cy="780" rx="42" ry="28" fill="url(#organic3)" opacity="0.6"/>
+    <ellipse cx="300" cy="1050" rx="35" ry="20" fill="url(#organic1)" opacity="0.5"/>
+    <ellipse cx="750" cy="1080" rx="40" ry="25" fill="url(#organic2)" opacity="0.4"/>
+  </g>
+  
+  <!-- Subtle connecting lines -->
+  <g stroke="#e2e8f0" stroke-width="0.5" opacity="0.3">
+    <path d="M200,150 Q300,200 400,150"/>
+    <path d="M600,180 Q700,230 800,180"/>
+    <path d="M150,450 Q250,500 350,450"/>
+    <path d="M700,480 Q800,530 900,480"/>
+    <path d="M250,750 Q350,800 450,750"/>
+    <path d="M650,780 Q750,830 850,780"/>
+    <path d="M300,1050 Q400,1100 500,1050"/>
+    <path d="M750,1080 Q850,1130 950,1080"/>
+  </g>
+</svg>

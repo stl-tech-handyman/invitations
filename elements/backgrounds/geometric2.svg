@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="geo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="shape1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="shape2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#059669" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="shape3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0.03"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="1350" fill="url(#geo-bg)"/>
+  
+  <!-- Geometric shapes -->
+  <g>
+    <!-- Large hexagons -->
+    <polygon points="450,100 550,150 550,250 450,300 350,250 350,150" fill="url(#shape1)"/>
+    <polygon points="650,400 750,450 750,550 650,600 550,550 550,450" fill="url(#shape2)"/>
+    <polygon points="250,700 350,750 350,850 250,900 150,850 150,750" fill="url(#shape3)"/>
+    
+    <!-- Medium triangles -->
+    <polygon points="100,200 200,200 150,300" fill="url(#shape1)" opacity="0.7"/>
+    <polygon points="700,300 800,300 750,400" fill="url(#shape2)" opacity="0.7"/>
+    <polygon points="400,1000 500,1000 450,1100" fill="url(#shape3)" opacity="0.7"/>
+    
+    <!-- Small circles -->
+    <circle cx="150" cy="400" r="40" fill="url(#shape1)" opacity="0.5"/>
+    <circle cx="750" cy="600" r="35" fill="url(#shape2)" opacity="0.5"/>
+    <circle cx="300" cy="1200" r="45" fill="url(#shape3)" opacity="0.5"/>
+    
+    <!-- Rectangles -->
+    <rect x="50" y="500" width="120" height="80" fill="url(#shape1)" opacity="0.4" rx="10"/>
+    <rect x="700" y="800" width="100" height="60" fill="url(#shape2)" opacity="0.4" rx="8"/>
+    <rect x="200" y="1100" width="140" height="90" fill="url(#shape3)" opacity="0.4" rx="12"/>
+  </g>
+  
+  <!-- Subtle grid lines -->
+  <g stroke="#e2e8f0" stroke-width="0.5" opacity="0.3">
+    <line x1="0" y1="0" x2="900" y2="0"/>
+    <line x1="0" y1="225" x2="900" y2="225"/>
+    <line x1="0" y1="450" x2="900" y2="450"/>
+    <line x1="0" y1="675" x2="900" y2="675"/>
+    <line x1="0" y1="900" x2="900" y2="900"/>
+    <line x1="0" y1="1125" x2="900" y2="1125"/>
+    <line x1="0" y1="1350" x2="900" y2="1350"/>
+    
+    <line x1="0" y1="0" x2="0" y2="1350"/>
+    <line x1="225" y1="0" x2="225" y2="1350"/>
+    <line x1="450" y1="0" x2="450" y2="1350"/>
+    <line x1="675" y1="0" x2="675" y2="1350"/>
+    <line x1="900" y1="0" x2="900" y2="1350"/>
+  </g>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <radialGradient id="space1" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#0c1445" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#1a1a2e" stop-opacity="0.1"/>
+    </radialGradient>
+    <radialGradient id="planet1" cx="30%" cy="70%" r="50%">
+      <stop offset="0%" stop-color="#ff6b6b" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ee5a24" stop-opacity="0.1"/>
+    </radialGradient>
+  </defs>
+  
+  <rect width="900" height="1350" fill="url(#space1)"/>
+  
+  <!-- Stars -->
+  <g fill="#ffffff" opacity="0.8">
+    <circle cx="100" cy="150" r="1.5"/>
+    <circle cx="250" cy="200" r="1"/>
+    <circle cx="400" cy="120" r="2"/>
+    <circle cx="600" cy="180" r="1.5"/>
+    <circle cx="750" cy="250" r="1"/>
+    <circle cx="200" cy="400" r="1.5"/>
+    <circle cx="500" cy="350" r="1"/>
+    <circle cx="700" cy="450" r="2"/>
+    <circle cx="150" cy="600" r="1"/>
+    <circle cx="350" cy="700" r="1.5"/>
+    <circle cx="650" cy="650" r="1"/>
+    <circle cx="800" cy="750" r="1.5"/>
+    <circle cx="300" cy="900" r="1"/>
+    <circle cx="550" cy="850" r="2"/>
+    <circle cx="750" cy="950" r="1.5"/>
+    <circle cx="200" cy="1100" r="1"/>
+    <circle cx="450" cy="1050" r="1.5"/>
+    <circle cx="700" cy="1150" r="1"/>
+    <circle cx="100" cy="1250" r="1.5"/>
+    <circle cx="600" cy="1200" r="1"/>
+  </g>
+  
+  <!-- Planets -->
+  <circle cx="200" cy="300" r="40" fill="url(#planet1)"/>
+  <circle cx="700" cy="500" r="35" fill="#4ecdc4" opacity="0.15"/>
+  <circle cx="150" cy="800" r="25" fill="#45b7d1" opacity="0.12"/>
+  
+  <!-- Nebula clouds -->
+  <ellipse cx="600" cy="200" rx="120" ry="80" fill="#9b59b6" opacity="0.08"/>
+  <ellipse cx="300" cy="1000" rx="100" ry="60" fill="#e74c3c" opacity="0.06"/>
+  <ellipse cx="750" cy="800" rx="80" ry="100" fill="#f39c12" opacity="0.07"/>
+  
+  <!-- Shooting star -->
+  <line x1="50" y1="100" x2="150" y2="200" stroke="#ffffff" stroke-width="2" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite"/>
+  </line>
+</svg>

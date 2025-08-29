@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <radialGradient id="zen1" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#f8f9fa" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#e9ecef" stop-opacity="0.1"/>
+    </radialGradient>
+    <radialGradient id="zen2" cx="30%" cy="70%" r="50%">
+      <stop offset="0%" stop-color="#dee2e6" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ced4da" stop-opacity="0.05"/>
+    </radialGradient>
+  </defs>
+  
+  <rect width="900" height="1350" fill="url(#zen1)"/>
+  <rect width="900" height="1350" fill="url(#zen2)"/>
+  
+  <!-- Zen circles (ensō) -->
+  <g fill="none" stroke="#6c757d" stroke-width="2" opacity="0.15">
+    <circle cx="200" cy="200" r="60"/>
+    <circle cx="700" cy="300" r="45"/>
+    <circle cx="400" cy="500" r="55"/>
+    <circle cx="800" cy="600" r="40"/>
+    <circle cx="300" cy="800" r="50"/>
+    <circle cx="600" cy="900" r="65"/>
+    <circle cx="150" cy="1100" r="35"/>
+    <circle cx="750" cy="1200" r="55"/>
+  </g>
+  
+  <!-- Incomplete circles (symbolizing imperfection) -->
+  <g fill="none" stroke="#6c757d" stroke-width="2" opacity="0.12">
+    <path d="M500,200 A40,40 0 1,1 500,280 A40,40 0 1,1 500,200" stroke-dasharray="1,3"/>
+    <path d="M250,400 A35,35 0 1,1 250,470 A35,35 0 1,1 250,400" stroke-dasharray="1,2"/>
+    <path d="M650,700 A50,50 0 1,1 650,800 A50,50 0 1,1 650,700" stroke-dasharray="2,4"/>
+    <path d="M350,1000 A30,30 0 1,1 350,1060 A30,30 0 1,1 350,1000" stroke-dasharray="1,3"/>
+  </g>
+  
+  <!-- Minimalist lines -->
+  <g stroke="#6c757d" stroke-width="1" opacity="0.1">
+    <!-- Horizontal lines -->
+    <line x1="100" y1="150" x2="300" y2="150"/>
+    <line x1="500" y1="250" x2="700" y2="250"/>
+    <line x1="200" y1="400" x2="400" y2="400"/>
+    <line x1="600" y1="550" x2="800" y2="550"/>
+    <line x1="150" y1="700" x2="350" y2="700"/>
+    <line x1="450" y1="850" x2="650" y2="850"/>
+    <line x1="250" y1="1000" x2="450" y2="1000"/>
+    <line x1="550" y1="1150" x2="750" y2="1150"/>
+    
+    <!-- Vertical lines -->
+    <line x1="150" y1="100" x2="150" y2="300"/>
+    <line x1="350" y1="200" x2="350" y2="400"/>
+    <line x1="550" y1="300" x2="550" y2="500"/>
+    <line x1="750" y1="400" x2="750" y2="600"/>
+    <line x1="250" y1="600" x2="250" y2="800"/>
+    <line x1="450" y1="700" x2="450" y2="900"/>
+    <line x1="650" y1="800" x2="650" y2="1000"/>
+    <line x1="150" y1="1000" x2="150" y2="1200"/>
+  </g>
+  
+  <!-- Floating dots (like meditation beads) -->
+  <g fill="#6c757d" opacity="0.08">
+    <circle cx="180" cy="180" r="2"/>
+    <circle cx="720" cy="280" r="1.5"/>
+    <circle cx="420" cy="480" r="2"/>
+    <circle cx="780" cy="580" r="1.5"/>
+    <circle cx="320" cy="780" r="2"/>
+    <circle cx="620" cy="880" r="1.5"/>
+    <circle cx="170" cy="1080" r="2"/>
+    <circle cx="740" cy="1180" r="1.5"/>
+    <circle cx="480" cy="320" r="1.5"/>
+    <circle cx="280" cy="620" r="2"/>
+    <circle cx="680" cy="720" r="1.5"/>
+    <circle cx="380" cy="920" r="2"/>
+  </g>
+  
+  <!-- Subtle gradients for depth -->
+  <g opacity="0.03">
+    <circle cx="450" cy="675" r="200" fill="#6c757d"/>
+    <circle cx="300" cy="400" r="150" fill="#6c757d"/>
+    <circle cx="600" cy="950" r="180" fill="#6c757d"/>
+  </g>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="geo1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#667eea" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#764ba2" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="geo2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f093fb" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#f5576c" stop-opacity="0.08"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="900" height="1350" fill="url(#geo1)"/>
+  <rect width="900" height="1350" fill="url(#geo2)"/>
+  
+  <!-- Geometric shapes -->
+  <g fill="currentColor" opacity="0.06">
+    <!-- Hexagons -->
+    <polygon points="100,100 150,75 200,100 200,150 150,175 100,150"/>
+    <polygon points="700,200 750,175 800,200 800,250 750,275 700,250"/>
+    <polygon points="300,400 350,375 400,400 400,450 350,475 300,450"/>
+    
+    <!-- Triangles -->
+    <polygon points="600,100 650,50 700,100"/>
+    <polygon points="200,600 250,550 300,600"/>
+    <polygon points="500,800 550,750 600,800"/>
+    
+    <!-- Circles with patterns -->
+    <circle cx="150" cy="800" r="60"/>
+    <circle cx="750" cy="600" r="80"/>
+    <circle cx="450" cy="1000" r="70"/>
+    
+    <!-- Squares rotated -->
+    <rect x="650" y="900" width="80" height="80" transform="rotate(45 690 940)"/>
+    <rect x="250" y="1100" width="60" height="60" transform="rotate(30 280 1130)"/>
+  </g>
+</svg>

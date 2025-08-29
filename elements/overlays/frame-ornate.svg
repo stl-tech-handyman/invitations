@@ -1,0 +1,74 @@
+<svg width="900" height="1350" viewBox="0 0 900 1350" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ornateGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:0.95" />
+      <stop offset="50%" style="stop-color:#e9ecef;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#dee2e6;stop-opacity:0.95" />
+    </linearGradient>
+    <filter id="ornateShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  
+  <!-- Main ornate frame -->
+  <rect x="30" y="30" width="840" height="1290" rx="30" ry="30" 
+        fill="url(#ornateGradient)" 
+        stroke="#6c757d" 
+        stroke-width="4"
+        filter="url(#ornateShadow)"/>
+  
+  <!-- Ornate corner decorations -->
+  <g fill="#495057" opacity="0.8">
+    <!-- Top-left ornate corner -->
+    <path d="M30,30 Q60,30 90,30 Q120,30 150,30 L150,60 Q120,60 90,60 Q60,60 30,60 Z"/>
+    <path d="M30,30 Q30,60 30,90 Q30,120 30,150 L60,150 Q60,120 60,90 Q60,60 60,30 Z"/>
+    
+    <!-- Top-right ornate corner -->
+    <path d="M750,30 Q780,30 810,30 Q840,30 870,30 L870,60 Q840,60 810,60 Q780,60 750,60 Z"/>
+    <path d="M870,30 Q870,60 870,90 Q870,120 870,150 L840,150 Q840,120 840,90 Q840,60 840,30 Z"/>
+    
+    <!-- Bottom-left ornate corner -->
+    <path d="M30,1200 Q60,1200 90,1200 Q120,1200 150,1200 L150,1230 Q120,1230 90,1230 Q60,1230 30,1230 Z"/>
+    <path d="M30,1200 Q30,1230 30,1260 Q30,1290 30,1320 L60,1320 Q60,1290 60,1260 Q60,1230 60,1200 Z"/>
+    
+    <!-- Bottom-right ornate corner -->
+    <path d="M750,1200 Q780,1200 810,1200 Q840,1200 870,1200 L870,1230 Q840,1230 810,1230 Q780,1230 750,1230 Z"/>
+    <path d="M870,1200 Q870,1230 870,1260 Q870,1290 870,1320 L840,1320 Q840,1290 840,1260 Q840,1230 840,1200 Z"/>
+  </g>
+  
+  <!-- Inner ornate border -->
+  <rect x="70" y="70" width="760" height="1210" rx="20" ry="20" 
+        fill="none" 
+        stroke="#adb5bd" 
+        stroke-width="3"/>
+  
+  <!-- Decorative flourishes -->
+  <g fill="#868e96" opacity="0.6">
+    <!-- Top center flourish -->
+    <path d="M400,30 Q450,30 500,30 L500,70 Q450,70 400,70 Z"/>
+    
+    <!-- Bottom center flourish -->
+    <path d="M400,1280 Q450,1280 500,1280 L500,1320 Q450,1320 400,1320 Z"/>
+    
+    <!-- Left center flourish -->
+    <path d="M30,600 Q30,650 30,700 L70,700 Q70,650 70,600 Z"/>
+    
+    <!-- Right center flourish -->
+    <path d="M830,600 Q830,650 830,700 L870,700 Q870,650 870,600 Z"/>
+  </g>
+  
+  <!-- Ornate pattern overlay -->
+  <defs>
+    <pattern id="ornatePattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+      <circle cx="60" cy="60" r="1.5" fill="#6c757d" opacity="0.25"/>
+      <circle cx="30" cy="30" r="1" fill="#495057" opacity="0.2"/>
+      <circle cx="90" cy="90" r="1" fill="#495057" opacity="0.2"/>
+      <circle cx="30" cy="90" r="0.8" fill="#868e96" opacity="0.15"/>
+      <circle cx="90" cy="30" r="0.8" fill="#868e96" opacity="0.15"/>
+    </pattern>
+  </defs>
+  
+  <rect x="30" y="30" width="840" height="1290" rx="30" ry="30" 
+        fill="url(#ornatePattern)" 
+        opacity="0.4"/>
+</svg>

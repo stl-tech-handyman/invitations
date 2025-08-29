@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="abs3-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f9ff"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="curve1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="curve2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.08"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="1350" fill="url(#abs3-bg)"/>
+  
+  <!-- Abstract curves -->
+  <g>
+    <!-- Large flowing curves -->
+    <path d="M0,200 Q300,150 600,200 T900,250 L900,400 Q600,350 300,400 T0,350 Z" fill="url(#curve1)"/>
+    <path d="M0,600 Q400,550 700,600 T900,650 L900,800 Q700,750 400,800 T0,750 Z" fill="url(#curve2)"/>
+    <path d="M0,1000 Q200,950 500,1000 T900,1050 L900,1200 Q500,1150 200,1200 T0,1150 Z" fill="url(#curve1)" opacity="0.8"/>
+    
+    <!-- Smaller accent curves -->
+    <path d="M100,100 Q200,80 300,100 T500,80 T700,100" fill="url(#curve2)" opacity="0.6"/>
+    <path d="M150,500 Q250,480 350,500 T550,480 T750,500" fill="url(#curve1)" opacity="0.5"/>
+    <path d="M200,900 Q300,880 400,900 T600,880 T800,900" fill="url(#curve2)" opacity="0.7"/>
+  </g>
+  
+  <!-- Subtle dots -->
+  <g fill="#0ea5e9" opacity="0.3">
+    <circle cx="200" cy="150" r="3"/>
+    <circle cx="400" cy="180" r="2"/>
+    <circle cx="600" cy="160" r="2.5"/>
+    <circle cx="800" cy="190" r="1.5"/>
+    
+    <circle cx="150" cy="450" r="2"/>
+    <circle cx="350" cy="480" r="2.5"/>
+    <circle cx="550" cy="460" r="1.5"/>
+    <circle cx="750" cy="490" r="2"/>
+    
+    <circle cx="250" cy="750" r="2.5"/>
+    <circle cx="450" cy="780" r="2"/>
+    <circle cx="650" cy="760" r="1.5"/>
+    <circle cx="850" cy="790" r="2"/>
+  </g>
+</svg>

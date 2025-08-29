@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300">
+  <defs>
+    <linearGradient id="balloon-red" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DC143C;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="balloon-blue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4682B4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="balloon-yellow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD93D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Red balloon -->
+  <ellipse cx="80" cy="120" rx="40" ry="60" fill="url(#balloon-red)"/>
+  <line x1="80" y1="180" x2="80" y2="220" stroke="#8B4513" stroke-width="2"/>
+  <circle cx="80" cy="220" r="3" fill="#8B4513"/>
+  
+  <!-- Blue balloon -->
+  <ellipse cx="140" cy="100" rx="35" ry="55" fill="url(#balloon-blue)"/>
+  <line x1="140" y1="155" x2="140" y2="190" stroke="#8B4513" stroke-width="2"/>
+  <circle cx="140" cy="190" r="3" fill="#8B4513"/>
+  
+  <!-- Yellow balloon -->
+  <ellipse cx="110" cy="80" rx="30" ry="50" fill="url(#balloon-yellow)"/>
+  <line x1="110" y1="130" x2="110" y2="160" stroke="#8B4513" stroke-width="2"/>
+  <circle cx="110" cy="160" r="3" fill="#8B4513"/>
+</svg>
+

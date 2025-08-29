@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="retro1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b9d" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#c44569" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="retro2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4ecdc4" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#44a08d" stop-opacity="0.08"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="900" height="1350" fill="url(#retro1)"/>
+  <rect width="900" height="1350" fill="url(#retro2)"/>
+  
+  <!-- Retro grid -->
+  <g stroke="#ff6b9d" stroke-width="1" opacity="0.3" fill="none">
+    <line x1="0" y1="0" x2="900" y2="0"/>
+    <line x1="0" y1="100" x2="900" y2="100"/>
+    <line x1="0" y1="200" x2="900" y2="200"/>
+    <line x1="0" y1="300" x2="900" y2="300"/>
+    <line x1="0" y1="400" x2="900" y2="400"/>
+    <line x1="0" y1="500" x2="900" y2="500"/>
+    <line x1="0" y1="600" x2="900" y2="600"/>
+    <line x1="0" y1="700" x2="900" y2="700"/>
+    <line x1="0" y1="800" x2="900" y2="800"/>
+    <line x1="0" y1="900" x2="900" y2="900"/>
+    <line x1="0" y1="1000" x2="900" y2="1000"/>
+    <line x1="0" y1="1100" x2="900" y2="1100"/>
+    <line x1="0" y1="1200" x2="900" y2="1200"/>
+    <line x1="0" y1="1300" x2="900" y2="1300"/>
+    <line x1="0" y1="1350" x2="900" y2="1350"/>
+    
+    <line x1="0" y1="0" x2="0" y2="1350"/>
+    <line x1="100" y1="0" x2="100" y2="1350"/>
+    <line x1="200" y1="0" x2="200" y2="1350"/>
+    <line x1="300" y1="0" x2="300" y2="1350"/>
+    <line x1="400" y1="0" x2="400" y2="1350"/>
+    <line x1="500" y1="0" x2="500" y2="1350"/>
+    <line x1="600" y1="0" x2="600" y2="1350"/>
+    <line x1="700" y1="0" x2="700" y2="1350"/>
+    <line x1="800" y1="0" x2="800" y2="1350"/>
+    <line x1="900" y1="0" x2="900" y2="1350"/>
+  </g>
+  
+  <!-- Retro shapes -->
+  <g opacity="0.4">
+    <!-- Triangles -->
+    <polygon points="150,150 200,100 250,150" fill="#ff6b9d"/>
+    <polygon points="650,250 700,200 750,250" fill="#4ecdc4"/>
+    <polygon points="250,450 300,400 350,450" fill="#f39c12"/>
+    <polygon points="750,550 800,500 850,550" fill="#9b59b6"/>
+    
+    <!-- Diamonds -->
+    <polygon points="400,200 450,150 500,200 450,250" fill="#e74c3c"/>
+    <polygon points="200,600 250,550 300,600 250,650" fill="#3498db"/>
+    <polygon points="600,700 650,650 700,700 650,750" fill="#1abc9c"/>
+    
+    <!-- Zigzags -->
+    <path d="M100,800 L150,750 L200,800 L250,750 L300,800" stroke="#ff6b9d" stroke-width="3" fill="none"/>
+    <path d="M500,900 L550,850 L600,900 L650,850 L700,900" stroke="#4ecdc4" stroke-width="3" fill="none"/>
+    <path d="M300,1000 L350,950 L400,1000 L450,950 L500,1000" stroke="#f39c12" stroke-width="3" fill="none"/>
+  </g>
+  
+  <!-- Retro circles -->
+  <g opacity="0.3">
+    <circle cx="180" cy="180" r="20" fill="#ff6b9d"/>
+    <circle cx="720" cy="280" r="25" fill="#4ecdc4"/>
+    <circle cx="320" cy="480" r="18" fill="#f39c12"/>
+    <circle cx="780" cy="580" r="22" fill="#9b59b6"/>
+    <circle cx="420" cy="780" r="20" fill="#e74c3c"/>
+    <circle cx="680" cy="880" r="24" fill="#3498db"/>
+    <circle cx="220" cy="1080" r="19" fill="#1abc9c"/>
+    <circle cx="760" cy="1180" r="21" fill="#ff6b9d"/>
+  </g>
+  
+  <!-- Retro stripes -->
+  <g opacity="0.2">
+    <rect x="50" y="1200" width="800" height="8" fill="#ff6b9d"/>
+    <rect x="50" y="1220" width="800" height="8" fill="#4ecdc4"/>
+    <rect x="50" y="1240" width="800" height="8" fill="#f39c12"/>
+    <rect x="50" y="1260" width="800" height="8" fill="#9b59b6"/>
+  </g>
+</svg>

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <radialGradient id="playful1" cx="30%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#ff9a9e" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#fecfef" stop-opacity="0.08"/>
+    </radialGradient>
+    <radialGradient id="playful2" cx="70%" cy="60%" r="60%">
+      <stop offset="0%" stop-color="#a8edea" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#fed6e3" stop-opacity="0.06"/>
+    </radialGradient>
+  </defs>
+  
+  <rect width="900" height="1350" fill="url(#playful1)"/>
+  <rect width="900" height="1350" fill="url(#playful2)"/>
+  
+  <!-- Bubbles -->
+  <g fill="#ff6b6b" opacity="0.15">
+    <circle cx="150" cy="200" r="25"/>
+    <circle cx="700" cy="300" r="30"/>
+    <circle cx="400" cy="500" r="20"/>
+    <circle cx="800" cy="600" r="35"/>
+    <circle cx="300" cy="800" r="28"/>
+    <circle cx="650" cy="900" r="22"/>
+    <circle cx="200" cy="1100" r="32"/>
+    <circle cx="750" cy="1200" r="26"/>
+  </g>
+  
+  <!-- Stars -->
+  <g fill="#ffd166" opacity="0.2">
+    <polygon points="250,150 260,130 270,150 260,170"/>
+    <polygon points="600,250 610,230 620,250 610,270"/>
+    <polygon points="350,450 360,430 370,450 360,470"/>
+    <polygon points="750,550 760,530 770,550 760,570"/>
+    <polygon points="280,750 290,730 300,750 290,770"/>
+    <polygon points="680,850 690,830 700,850 690,870"/>
+    <polygon points="180,1050 190,1030 200,1050 190,1070"/>
+    <polygon points="580,1150 590,1130 600,1150 590,1170"/>
+  </g>
+  
+  <!-- Hearts -->
+  <g fill="#ff6b9d" opacity="0.18">
+    <path d="M450,200 Q450,150 500,200 Q550,150 550,200 Q550,250 500,300 Q450,250 450,200"/>
+    <path d="M200,600 Q200,550 250,600 Q300,550 300,600 Q300,650 250,700 Q200,650 200,600"/>
+    <path d="M600,800 Q600,750 650,800 Q700,750 700,800 Q700,850 650,900 Q600,850 600,800"/>
+    <path d="M350,1000 Q350,950 400,1000 Q450,950 450,1000 Q450,1050 400,1100 Q350,1050 350,1000"/>
+  </g>
+  
+  <!-- Zigzags -->
+  <g stroke="#4ecdc4" stroke-width="4" opacity="0.25" fill="none">
+    <path d="M100,400 L150,350 L200,400 L250,350 L300,400"/>
+    <path d="M500,600 L550,550 L600,600 L650,550 L700,600"/>
+    <path d="M200,900 L250,850 L300,900 L350,850 L400,900"/>
+    <path d="M600,1100 L650,1050 L700,1100 L750,1050 L800,1100"/>
+  </g>
+  
+  <!-- Dots and dashes -->
+  <g opacity="0.3">
+    <!-- Dotted lines -->
+    <g stroke="#f39c12" stroke-width="3" fill="none">
+      <line x1="120" y1="1200" x2="320" y2="1200" stroke-dasharray="5,10"/>
+      <line x1="420" y1="1220" x2="620" y2="1220" stroke-dasharray="5,10"/>
+      <line x1="720" y1="1240" x2="820" y2="1240" stroke-dasharray="5,10"/>
+    </g>
+    
+    <!-- Polka dots -->
+    <g fill="#9b59b6">
+      <circle cx="180" cy="1250" r="4"/>
+      <circle cx="480" cy="1270" r="4"/>
+      <circle cx="780" cy="1290" r="4"/>
+      <circle cx="280" cy="1290" r="4"/>
+      <circle cx="580" cy="1310" r="4"/>
+    </g>
+  </g>
+  
+  <!-- Wavy lines -->
+  <g stroke="#e74c3c" stroke-width="2" opacity="0.2" fill="none">
+    <path d="M50,300 Q150,250 250,300 Q350,350 450,300 Q550,250 650,300 Q750,350 850,300"/>
+    <path d="M50,700 Q150,650 250,700 Q350,750 450,700 Q550,650 650,700 Q750,750 850,700"/>
+    <path d="M50,1000 Q150,950 250,1000 Q350,1050 450,1000 Q550,950 650,1000 Q750,1050 850,1000"/>
+  </g>
+</svg>

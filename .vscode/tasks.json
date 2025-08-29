@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Rename Assets",
+        "type": "shell",
+        "command": "powershell.exe",
+        "args": [
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\rename-event-assets.ps1"
+        ],
+        "group": "build",
+        "problemMatcher": []
+      }
+    ]
+  }
+  

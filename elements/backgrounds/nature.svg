@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <radialGradient id="nature1" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#a8e6cf" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#dcedc1" stop-opacity="0.08"/>
+    </radialGradient>
+    <radialGradient id="nature2" cx="60%" cy="70%" r="50%">
+      <stop offset="0%" stop-color="#ffd3b6" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ffaaa5" stop-opacity="0.06"/>
+    </radialGradient>
+  </defs>
+  
+  <rect width="900" height="1350" fill="url(#nature1)"/>
+  <rect width="900" height="1350" fill="url(#nature2)"/>
+  
+  <!-- Leaf shapes -->
+  <g fill="#4caf50" opacity="0.15">
+    <path d="M100,150 Q150,100 200,150 Q150,200 100,150"/>
+    <path d="M650,200 Q700,150 750,200 Q700,250 650,200"/>
+    <path d="M300,400 Q350,350 400,400 Q350,450 300,400"/>
+    <path d="M750,500 Q800,450 850,500 Q800,550 750,500"/>
+    <path d="M200,700 Q250,650 300,700 Q250,750 200,700"/>
+    <path d="M600,800 Q650,750 700,800 Q650,850 600,800"/>
+    <path d="M150,1000 Q200,950 250,1000 Q200,1050 150,1000"/>
+    <path d="M700,1100 Q750,1050 800,1100 Q750,1150 700,1100"/>
+  </g>
+  
+  <!-- Flower petals -->
+  <g fill="#ff9800" opacity="0.12">
+    <circle cx="400" cy="300" r="25"/>
+    <circle cx="450" cy="280" r="20"/>
+    <circle cx="500" cy="300" r="25"/>
+    <circle cx="450" cy="320" r="20"/>
+    <circle cx="450" cy="300" r="15" fill="#ffeb3b"/>
+    
+    <circle cx="250" cy="600" r="22"/>
+    <circle cx="300" cy="580" r="18"/>
+    <circle cx="350" cy="600" r="22"/>
+    <circle cx="300" cy="620" r="18"/>
+    <circle cx="300" cy="600" r="12" fill="#ffeb3b"/>
+    
+    <circle cx="550" cy="900" r="24"/>
+    <circle cx="600" cy="880" r="19"/>
+    <circle cx="650" cy="900" r="24"/>
+    <circle cx="600" cy="920" r="19"/>
+    <circle cx="600" cy="900" r="14" fill="#ffeb3b"/>
+  </g>
+  
+  <!-- Tree branches -->
+  <g stroke="#8d6e63" stroke-width="3" opacity="0.2" fill="none">
+    <path d="M150,200 Q200,150 250,200 Q300,180 350,200"/>
+    <path d="M500,350 Q550,300 600,350 Q650,330 700,350"/>
+    <path d="M200,600 Q250,550 300,600 Q350,580 400,600"/>
+    <path d="M600,750 Q650,700 700,750 Q750,730 800,750"/>
+    <path d="M100,900 Q150,850 200,900 Q250,880 300,900"/>
+    <path d="M500,1050 Q550,1000 600,1050 Q650,1030 700,1050"/>
+  </g>
+  
+  <!-- Grass blades -->
+  <g stroke="#66bb6a" stroke-width="1" opacity="0.25" fill="none">
+    <line x1="120" y1="1200" x2="120" y2="1250"/>
+    <line x1="140" y1="1210" x2="140" y2="1260"/>
+    <line x1="160" y1="1195" x2="160" y2="1245"/>
+    <line x1="180" y1="1205" x2="180" y2="1255"/>
+    <line x1="200" y1="1190" x2="200" y2="1240"/>
+    
+    <line x1="320" y1="1200" x2="320" y2="1250"/>
+    <line x1="340" y1="1210" x2="340" y2="1260"/>
+    <line x1="360" y1="1195" x2="360" y2="1245"/>
+    <line x1="380" y1="1205" x2="380" y2="1255"/>
+    <line x1="400" y1="1190" x2="400" y2="1240"/>
+    
+    <line x1="520" y1="1200" x2="520" y2="1250"/>
+    <line x1="540" y1="1210" x2="540" y2="1260"/>
+    <line x1="560" y1="1195" x2="560" y2="1245"/>
+    <line x1="580" y1="1205" x2="580" y2="1255"/>
+    <line x1="600" y1="1190" x2="600" y2="1240"/>
+    
+    <line x1="720" y1="1200" x2="720" y2="1250"/>
+    <line x1="740" y1="1210" x2="740" y2="1260"/>
+    <line x1="760" y1="1195" x2="760" y2="1245"/>
+    <line x1="780" y1="1205" x2="780" y2="1255"/>
+    <line x1="800" y1="1190" x2="800" y2="1240"/>
+  </g>
+  
+  <!-- Organic circles -->
+  <g opacity="0.08">
+    <circle cx="450" cy="675" r="200" fill="#4caf50"/>
+    <circle cx="300" cy="400" r="150" fill="#8bc34a"/>
+    <circle cx="600" cy="950" r="180" fill="#cddc39"/>
+  </g>
+</svg>

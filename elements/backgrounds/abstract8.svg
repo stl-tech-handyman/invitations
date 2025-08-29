@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="abs8-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <linearGradient id="hex1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#4f46e5" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="hex2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#db2777" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="hex3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0d9488" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="1350" fill="url(#abs8-bg)"/>
+  
+  <!-- Hexagonal pattern -->
+  <g>
+    <!-- Row 1 -->
+    <polygon points="150,50 200,75 200,125 150,150 100,125 100,75" fill="url(#hex1)"/>
+    <polygon points="350,50 400,75 400,125 350,150 300,125 300,75" fill="url(#hex2)"/>
+    <polygon points="550,50 600,75 600,125 550,150 500,125 500,75" fill="url(#hex3)"/>
+    <polygon points="750,50 800,75 800,125 750,150 700,125 700,75" fill="url(#hex1)" opacity="0.8"/>
+    
+    <!-- Row 2 -->
+    <polygon points="250,100 300,125 300,175 250,200 200,175 200,125" fill="url(#hex2)"/>
+    <polygon points="450,100 500,125 500,175 450,200 400,175 400,125" fill="url(#hex3)"/>
+    <polygon points="650,100 700,125 700,175 650,200 600,175 600,125" fill="url(#hex1)"/>
+    <polygon points="850,100 900,125 900,175 850,200 800,175 800,125" fill="url(#hex2)" opacity="0.8"/>
+    
+    <!-- Row 3 -->
+    <polygon points="150,200 200,225 200,275 150,300 100,275 100,225" fill="url(#hex3)"/>
+    <polygon points="350,200 400,225 400,275 350,300 300,275 300,225" fill="url(#hex1)"/>
+    <polygon points="550,200 600,225 600,275 550,300 500,275 500,225" fill="url(#hex2)"/>
+    <polygon points="750,200 800,225 800,275 750,300 700,275 700,225" fill="url(#hex3)" opacity="0.8"/>
+    
+    <!-- Row 4 -->
+    <polygon points="250,250 300,275 300,325 250,350 200,325 200,275" fill="url(#hex1)"/>
+    <polygon points="450,250 500,275 500,325 450,350 400,325 400,275" fill="url(#hex2)"/>
+    <polygon points="650,250 700,275 700,325 650,350 600,325 600,275" fill="url(#hex3)"/>
+    <polygon points="850,250 900,275 900,325 850,350 800,325 800,275" fill="url(#hex1)" opacity="0.8"/>
+    
+    <!-- Row 5 -->
+    <polygon points="150,350 200,375 200,425 150,450 100,425 100,375" fill="url(#hex2)"/>
+    <polygon points="350,350 400,375 400,425 350,450 300,425 300,375" fill="url(#hex3)"/>
+    <polygon points="550,350 600,375 600,425 550,450 500,425 500,375" fill="url(#hex1)"/>
+    <polygon points="750,350 800,375 800,425 750,450 700,425 700,375" fill="url(#hex2)" opacity="0.8"/>
+    
+    <!-- Row 6 -->
+    <polygon points="250,400 300,425 300,475 250,500 200,475 200,425" fill="url(#hex3)"/>
+    <polygon points="450,400 500,425 500,475 450,500 400,475 400,425" fill="url(#hex1)"/>
+    <polygon points="650,400 700,425 700,475 650,500 600,475 600,425" fill="url(#hex2)"/>
+    <polygon points="850,400 900,425 900,475 850,500 800,475 800,425" fill="url(#hex3)" opacity="0.8"/>
+    
+    <!-- Row 7 -->
+    <polygon points="150,500 200,525 200,575 150,600 100,575 100,525" fill="url(#hex1)"/>
+    <polygon points="350,500 400,525 400,575 350,600 300,575 300,525" fill="url(#hex2)"/>
+    <polygon points="550,500 600,525 600,575 550,600 500,575 500,525" fill="url(#hex3)"/>
+    <polygon points="750,500 800,525 800,575 750,600 700,575 700,525" fill="url(#hex1)" opacity="0.8"/>
+    
+    <!-- Row 8 -->
+    <polygon points="250,550 300,575 300,625 250,650 200,625 200,575" fill="url(#hex2)"/>
+    <polygon points="450,550 500,575 500,625 450,650 400,625 400,575" fill="url(#hex3)"/>
+    <polygon points="650,550 700,575 700,625 650,650 600,625 600,575" fill="url(#hex1)"/>
+    <polygon points="850,550 900,575 900,625 850,650 800,625 800,575" fill="url(#hex2)" opacity="0.8"/>
+    
+    <!-- Row 9 -->
+    <polygon points="150,650 200,675 200,725 150,750 100,725 100,675" fill="url(#hex3)"/>
+    <polygon points="350,650 400,675 400,725 350,750 300,725 300,675" fill="url(#hex1)"/>
+    <polygon points="550,650 600,675 600,725 550,750 500,725 500,675" fill="url(#hex2)"/>
+    <polygon points="750,650 800,675 800,725 750,750 700,725 700,675" fill="url(#hex3)" opacity="0.8"/>
+    
+    <!-- Row 10 -->
+    <polygon points="250,700 300,725 300,775 250,800 200,775 200,725" fill="url(#hex1)"/>
+    <polygon points="450,700 500,725 500,775 450,800 400,775 400,725" fill="url(#hex2)"/>
+    <polygon points="650,700 700,725 700,775 650,800 600,775 600,725" fill="url(#hex3)"/>
+    <polygon points="850,700 900,725 900,775 850,800 800,775 800,725" fill="url(#hex1)" opacity="0.8"/>
+    
+    <!-- Row 11 -->
+    <polygon points="150,800 200,825 200,875 150,900 100,875 100,825" fill="url(#hex2)"/>
+    <polygon points="350,800 400,825 400,875 350,900 300,875 300,825" fill="url(#hex3)"/>
+    <polygon points="550,800 600,825 600,875 550,900 500,875 500,825" fill="url(#hex1)"/>
+    <polygon points="750,800 800,825 800,875 750,900 700,875 700,825" fill="url(#hex2)" opacity="0.8"/>
+    
+    <!-- Row 12 -->
+    <polygon points="250,850 300,875 300,925 250,950 200,925 200,875" fill="url(#hex3)"/>
+    <polygon points="450,850 500,875 500,925 450,950 400,925 400,875" fill="url(#hex1)"/>
+    <polygon points="650,850 700,875 700,925 650,950 600,925 600,875" fill="url(#hex2)"/>
+    <polygon points="850,850 900,875 900,925 850,950 800,925 800,875" fill="url(#hex3)" opacity="0.8"/>
+    
+    <!-- Row 13 -->
+    <polygon points="150,950 200,975 200,1025 150,1050 100,1025 100,975" fill="url(#hex1)"/>
+    <polygon points="350,950 400,975 400,1025 350,1050 300,1025 300,975" fill="url(#hex2)"/>
+    <polygon points="550,950 600,975 600,1025 550,1050 500,1025 500,975" fill="url(#hex3)"/>
+    <polygon points="750,950 800,975 800,1025 750,1050 700,1025 700,975" fill="url(#hex1)" opacity="0.8"/>
+    
+    <!-- Row 14 -->
+    <polygon points="250,1000 300,1025 300,1075 250,1100 200,1075 200,1025" fill="url(#hex2)"/>
+    <polygon points="450,1000 500,1025 500,1075 450,1100 400,1075 400,1025" fill="url(#hex3)"/>
+    <polygon points="650,1000 700,1025 700,1075 650,1100 600,1075 600,1025" fill="url(#hex1)"/>
+    <polygon points="850,1000 900,1025 900,1075 850,1100 800,1075 800,1025" fill="url(#hex2)" opacity="0.8"/>
+    
+    <!-- Row 15 -->
+    <polygon points="150,1100 200,1125 200,1175 150,1200 100,1175 100,1125" fill="url(#hex3)"/>
+    <polygon points="350,1100 400,1125 400,1175 350,1200 300,1175 300,1125" fill="url(#hex1)"/>
+    <polygon points="550,1100 600,1125 600,1175 550,1200 500,1175 500,1125" fill="url(#hex2)"/>
+    <polygon points="750,1100 800,1125 800,1175 750,1200 700,1175 700,1125" fill="url(#hex3)" opacity="0.8"/>
+    
+    <!-- Row 16 -->
+    <polygon points="250,1150 300,1175 300,1225 250,1250 200,1225 200,1175" fill="url(#hex1)"/>
+    <polygon points="450,1150 500,1175 500,1225 450,1250 400,1225 400,1175" fill="url(#hex2)"/>
+    <polygon points="650,1150 700,1175 700,1225 650,1250 600,1225 600,1175" fill="url(#hex3)"/>
+    <polygon points="850,1150 900,1175 900,1225 850,1250 800,1225 800,1175" fill="url(#hex1)" opacity="0.8"/>
+    
+    <!-- Row 17 -->
+    <polygon points="150,1250 200,1275 200,1325 150,1350 100,1325 100,1275" fill="url(#hex2)"/>
+    <polygon points="350,1250 400,1275 400,1325 350,1350 300,1325 300,1275" fill="url(#hex3)"/>
+    <polygon points="550,1250 600,1275 600,1325 550,1350 500,1325 500,1275" fill="url(#hex1)"/>
+    <polygon points="750,1250 800,1275 800,1325 750,1350 700,1325 700,1275" fill="url(#hex2)" opacity="0.8"/>
+  </g>
+  
+  <!-- Subtle grid lines -->
+  <g stroke="#e2e8f0" stroke-width="0.5" opacity="0.3">
+    <line x1="0" y1="0" x2="900" y2="0"/>
+    <line x1="0" y1="150" x2="900" y2="150"/>
+    <line x1="0" y1="300" x2="900" y2="300"/>
+    <line x1="0" y1="450" x2="900" y2="450"/>
+    <line x1="0" y1="600" x2="900" y2="600"/>
+    <line x1="0" y1="750" x2="900" y2="750"/>
+    <line x1="0" y1="900" x2="900" y2="900"/>
+    <line x1="0" y1="1050" x2="900" y2="1050"/>
+    <line x1="0" y1="1200" x2="900" y2="1200"/>
+    <line x1="0" y1="1350" x2="900" y2="1350"/>
+    
+    <line x1="0" y1="0" x2="0" y2="1350"/>
+    <line x1="150" y1="0" x2="150" y2="1350"/>
+    <line x1="300" y1="0" x2="300" y2="1350"/>
+    <line x1="450" y1="0" x2="450" y2="1350"/>
+    <line x1="600" y1="0" x2="600" y2="1350"/>
+    <line x1="750" y1="0" x2="750" y2="1350"/>
+    <line x1="900" y1="0" x2="900" y2="1350"/>
+  </g>
+</svg>

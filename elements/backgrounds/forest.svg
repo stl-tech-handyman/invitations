@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="forest-sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#98FB98;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="forest-ground" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#228B22;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#006400;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky -->
+  <rect width="900" height="600" fill="url(#forest-sky)"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="600" width="900" height="750" fill="url(#forest-ground)"/>
+  
+  <!-- Trees -->
+  <g fill="#228B22">
+    <!-- Tree 1 -->
+    <circle cx="150" cy="500" r="120" opacity="0.8"/>
+    <rect x="140" y="600" width="20" height="200" fill="#8B4513"/>
+    
+    <!-- Tree 2 -->
+    <circle cx="300" cy="450" r="100" opacity="0.8"/>
+    <rect x="290" y="550" width="20" height="200" fill="#8B4513"/>
+    
+    <!-- Tree 3 -->
+    <circle cx="450" cy="480" r="110" opacity="0.8"/>
+    <rect x="440" y="580" width="20" height="200" fill="#8B4513"/>
+    
+    <!-- Tree 4 -->
+    <circle cx="600" cy="520" r="130" opacity="0.8"/>
+    <rect x="590" y="620" width="20" height="200" fill="#8B4513"/>
+    
+    <!-- Tree 5 -->
+    <circle cx="750" cy="460" r="95" opacity="0.8"/>
+    <rect x="740" y="560" width="20" height="200" fill="#8B4513"/>
+  </g>
+  
+  <!-- Sun rays -->
+  <g fill="#FFD700" opacity="0.7">
+    <circle cx="750" cy="150" r="60"/>
+    <line x1="750" y1="90" x2="750" y2="50" stroke="#FFD700" stroke-width="3"/>
+    <line x1="750" y1="210" x2="750" y2="250" stroke="#FFD700" stroke-width="3"/>
+    <line x1="690" y1="150" x2="650" y2="150" stroke="#FFD700" stroke-width="3"/>
+    <line x1="810" y1="150" x2="850" y2="150" stroke="#FFD700" stroke-width="3"/>
+  </g>
+</svg>
+

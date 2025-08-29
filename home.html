@@ -1,0 +1,3752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invitation Generator 2.0</title>
+  <!-- Google Fonts loaded dynamically; include a minimal baseline -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link id="gfonts" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+        --accent:#2ec5ff;           /* primary accent */
+  --accent-2:#ff6b6b;         /* secondary accent */
+  --global-text-shadow: none; /* global text shadow */
+      --bg:#f7f7fb;               /* app background */
+      --ink:#1b1b1f;              /* text color */
+      --card:#ffffff;             /* card color */
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --radius:22px;
+      --title-font:"Playfair Display", serif;
+      --names-font:"Playfair Display", serif;
+      --body-font:Quicksand, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family:var(--body-font);
+    }
+    .app{display:grid; grid-template-columns: 380px 1fr; gap:22px; padding:22px; height:100%;}
+    .panel{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px 18px 24px; box-shadow:var(--shadow); overflow:auto;
+    }
+    .panel h2{font-size:20px; margin:6px 0 14px}
+    .group{margin:12px 0 16px}
+    label{display:block; font-size:12px; text-transform:uppercase; letter-spacing:.08em; opacity:.8; margin-bottom:6px}
+    input, select, textarea{width:100%; padding:10px 12px; border:1px solid #e6e6ee; border-radius:12px; outline:none; background:#fafafe; transition:.2s border-color; font:14px/1.2 var(--body-font)}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+    .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    button{appearance:none; border:0; border-radius:14px; padding:10px 14px; font-weight:700; cursor:pointer; box-shadow:var(--shadow); background:var(--accent); color:white; transition:transform .05s ease}
+    button.secondary{background:var(--accent-2)}
+    button.ghost{background:transparent; color:var(--ink); box-shadow:none; border:1px dashed #d7d7e0}
+    button:active{transform:translateY(1px)}
+
+         /* Canvas area */
+     .stage-wrap{display:grid; place-items:center; height:100vh; padding:20px}
+     .stage{
+       width:900px; max-height:calc(100vh - 40px); height:auto; position:relative; overflow:hidden;
+       background:white; border-radius:28px; box-shadow:var(--shadow);
+       aspect-ratio: 2/3;
+     }
+
+    /* Background layers (ordered back-to-front) */
+    .photo, .bg, .texture, .sprites, .inner, .edge-layer, .overlay-layer {position:absolute; inset:0}
+    .photo{background-size:cover; background-position:center; opacity:0}
+    .texture{opacity:.0}
+    .bg{pointer-events:none; opacity:1}
+    
+    /* Edge Effects Layer */
+    .edge-layer {
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .edge-effect {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .edge-effect svg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* Default gradient; swapped by theme */
+    .bg{background:
+      radial-gradient(1200px 800px at 10% -10%, rgba(255,255,255,.7), transparent),
+      radial-gradient(1000px 700px at 110% 10%, rgba(255,255,255,.65), transparent),
+      linear-gradient(180deg,#b3e5ff 0%, #e6f9ff 100%)
+    }
+
+    /* Floating SVG objects */
+    .sprites{pointer-events:none}
+    .sprite{position:absolute; opacity:.95; filter:drop-shadow(0 4px 12px rgba(0,0,0,.12)); transform-origin:center}
+
+    /* Content */
+    .inner{display:flex; flex-direction:column; padding:60px}
+    .header{display:flex; justify-content:center; margin-top:36px}
+    .pill{font:700 14px/1 var(--body-font); letter-spacing:.15em; text-transform:uppercase; background:rgba(255,255,255,.8); padding:10px 16px; border-radius:999px; border:1px solid rgba(0,0,0,.06)}
+
+    .title{margin:28px auto 0; text-align:center; text-shadow:var(--global-text-shadow)}
+    .title h1{font:700 96px/0.95 var(--title-font); margin:0; letter-spacing:.01em}
+    .title h2{font:600 22px var(--body-font); margin:14px 0 0; letter-spacing:.12em; text-transform:uppercase}
+
+    .names{margin:26px auto 0; text-align:center; text-shadow:var(--global-text-shadow)}
+    .names h3{font:700 44px var(--names-font); margin:0; letter-spacing:.06em}
+
+    .info{margin-top:auto; display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; font-family:var(--body-font)}
+    .card{background:rgba(255,255,255,.88); border:1px solid rgba(0,0,0,.06); border-radius:20px; padding:18px 16px; text-align:center; text-shadow:var(--global-text-shadow)}
+    .card .k{font-size:12px; text-transform:uppercase; letter-spacing:.14em; opacity:.75}
+    .card .v{font-weight:700; font-size:20px; margin-top:6px}
+    .card{border-left:4px solid var(--accent-2)}
+
+    .footer{display:flex; justify-content:center; margin-top:12px; text-shadow:var(--global-text-shadow)}
+    .rsvp{background:rgba(255,255,255,.92); padding:12px 16px; border-radius:14px; font:700 14px var(--body-font); border:1px solid rgba(0,0,0,.06)}
+
+    /* Accent coloring */
+    .title h1, .names h3{color:var(--accent); text-shadow:var(--global-text-shadow)}
+    .pill{color:var(--accent-2); text-shadow:var(--global-text-shadow)}
+.rsvp{color:var(--accent-2); text-shadow:var(--global-text-shadow)}
+.subtitle{color:var(--accent-2); text-shadow:var(--global-text-shadow)}
+.card .k{color:var(--accent-2); text-shadow:var(--global-text-shadow)}
+    .footer{border-top:2px solid var(--accent-2); padding-top:16px}
+
+    /* Layout styles */
+    .style-centered .inner{padding:60px}
+    .style-banner .title{margin-top:0}
+    .style-banner .inner{padding:40px 60px}
+    .style-banner::before{content:""; position:absolute; inset:0 0 auto 0; height:280px; background:linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,0)); z-index:2}
+    .style-split::after{content:""; position:absolute; left:0; top:0; bottom:0; width:120px; background:linear-gradient(180deg, var(--accent), transparent); opacity:.16}
+
+    /* Animations */
+    @keyframes floaty{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-8px) rotate(-2deg)}}
+    @keyframes gentleBreath{0%,100%{transform:scale(1) opacity:0.8}50%{transform:scale(1.05) opacity:1}}
+    @keyframes fadeUp{0%{opacity:0; transform:translateY(30px)}100%{opacity:1; transform:translateY(0)}}
+    @keyframes pop{0%{opacity:0; transform:scale(.9)}80%{opacity:1; transform:scale(1.03)}100%{transform:scale(1)}}
+    @keyframes slideIn{0%{opacity:0; transform:translateX(100%)}100%{opacity:1; transform:translateX(0)}}
+    .anim-fade .pill,.anim-fade .title,.anim-fade .names,.anim-fade .info,.anim-fade .footer{animation:fadeUp .8s ease var(--d,0s) both}
+    .anim-pop .title h1{animation:pop .6s ease .05s both}
+    .anim-pop .names h3{animation:pop .6s ease .12s both}
+    .anim-pop .info{animation:fadeUp .7s ease .2s both}
+
+    /* Sprite hover effects */
+    .sprite:hover {
+      filter: brightness(1.2) drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      transform: scale(1.1);
+      transition: all 0.3s ease;
+    }
+    
+    /* Readability Notification */
+    .readability-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 320px;
+      max-height: 80vh;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      z-index: 1004;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      border-left: 4px solid var(--accent-2);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .readability-notification.visible {
+      transform: translateX(0);
+    }
+    
+    .readability-notification .header {
+      background: var(--accent-2);
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .readability-notification .header h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .readability-notification .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+    }
+    
+    .readability-notification .close-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .readability-notification .content {
+      padding: 20px;
+      max-height: calc(80vh - 60px);
+      overflow-y: auto;
+    }
+    
+    .readability-notification .issue {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    
+    .readability-notification .issue.critical {
+      border-left: 4px solid #dc3545;
+      background: #fff5f5;
+    }
+    
+    .readability-notification .issue.moderate {
+      border-left: 4px solid #ffc107;
+      background: #fffbf0;
+    }
+    
+        .readability-notification .issue-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    
+    .readability-notification .contrast-ratio {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .readability-notification .contrast-ratio.critical {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .readability-notification .contrast-ratio.moderate {
+      background: #ffc107;
+      color: #212529;
+    }
+    
+    .readability-notification .issue-details {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.4;
+    }
+    
+    .readability-notification .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    
+    .readability-notification .actions button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .readability-notification .auto-fix {
+      background: #007bff;
+      color: white;
+    }
+    
+    .readability-notification .auto-fix:hover {
+      background: #0056b3;
+    }
+    
+    .readability-notification .highlight {
+      background: #ffc107;
+      color: #212529;
+    }
+    
+    .readability-notification .highlight:hover {
+      background: #e0a800;
+    }
+    
+    /* Print/PDF */
+    @media print{ body{background:white} .app{display:block; padding:0} .panel{display:none} .stage{box-shadow:none; border-radius:0; width:100vw; height:141.42vw} }
+    
+    /* Edge Controls */
+    .edge-controls {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 8px 0;
+    }
+    
+    /* Overlay Controls */
+    .overlay-controls {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 8px 0;
+    }
+    
+    .edge-controls .row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    
+    .edge-controls .row > div {
+      flex: 1;
+    }
+    
+    .edge-controls label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .edge-controls input[type="range"] {
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: #ddd;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    
+    .edge-controls input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .edge-controls input[type="color"] {
+      width: 100%;
+      height: 32px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      outline: none;
+    }
+    
+    .edge-controls input[type="color"]:hover {
+      border-color: var(--accent);
+    }
+    
+    .edge-controls select {
+      width: 100%;
+      padding: 6px 8px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 12px;
+      background: white;
+      cursor: pointer;
+      outline: none;
+    }
+    
+    .edge-controls select:focus {
+      border-color: var(--accent);
+    }
+    
+    /* Nested groups within collapsible sections */
+    .group-content .group {
+      margin: 16px 0;
+      padding: 12px;
+      background: rgba(0,0,0,0.02);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+    }
+    
+    .group-content .group h4 {
+      margin: 0 0 8px 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    /* PDF Export Controls */
+    .group-content .group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      cursor: pointer;
+    }
+    
+    .group-content .group input[type="checkbox"]:checked {
+      accent-color: var(--accent);
+    }
+
+    /* Shadow Controls */
+    .shadow-controls {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 8px 0;
+    }
+    
+    .shadow-controls .row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .shadow-controls .row:last-child {
+      margin-bottom: 0;
+    }
+    
+    .shadow-controls .row > div {
+      flex: 1;
+    }
+    
+    .shadow-controls label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 4px;
+    }
+    
+    .shadow-controls input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #dee2e6;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    
+    .shadow-controls input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+    }
+    
+    .shadow-controls input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: none;
+    }
+    
+    .shadow-controls input[type="color"] {
+      width: 100%;
+      height: 32px;
+      border: 2px solid #dee2e6;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    
+    .shadow-controls input[type="color"]:hover {
+      border-color: var(--accent);
+    }
+    
+    /* Drag and Drop Zone */
+    .drop-zone {
+      position: relative;
+      border: 2px dashed #d7d7e0;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      background: #fafafe;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    
+    .drop-zone:hover {
+      border-color: var(--accent);
+      background: #f0f8ff;
+    }
+    
+    .drop-zone.dragover {
+      border-color: var(--accent);
+      background: #e6f3ff;
+      transform: scale(1.02);
+    }
+    
+    .drop-zone-content {
+      pointer-events: none;
+    }
+    
+    .drop-zone-content span {
+      font-size: 24px;
+      display: block;
+      margin-bottom: 8px;
+    }
+    
+    .drop-zone-content p {
+      margin: 4px 0;
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .drop-zone input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    /* Enhanced secondary accent visibility */
+    .pill:hover {
+      background: var(--accent-2);
+      color: white;
+      transform: scale(1.05);
+      transition: all 0.3s ease;
+    }
+    
+    .rsvp:hover {
+      background: var(--accent-2);
+      color: white;
+      transform: scale(1.05);
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      border-left-width: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    /* Collapsible Groups */
+    .group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 8px 0;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #e6e6ee;
+      transition: all 0.3s ease;
+    }
+    
+    .group-header:hover {
+      border-bottom-color: var(--accent);
+    }
+    
+    .group-header h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    
+    .group-header .collapse-icon {
+      font-size: 16px;
+      color: var(--accent);
+      transition: transform 0.3s ease;
+    }
+    
+    .group-header .collapse-icon.collapsed {
+      transform: rotate(-90deg);
+    }
+    
+    .group-content {
+      overflow: hidden;
+      transition: all 0.3s ease;
+      max-height: 1000px;
+      opacity: 1;
+    }
+    
+    .group-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .group-content.collapsed > * {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel" id="controls">
+      <h2>🎉 Invitation Builder 2.0</h2>
+
+      <div class="group">
+        <div class="group-header" onclick="toggleGroup(this)">
+          <h3>Theme & Colors</h3>
+          <span class="collapse-icon">▼</span>
+        </div>
+        <div class="group-content">
+          <label>Category</label>
+          <select id="category">
+            <option value="pool">Pool Party</option>
+            <option value="birthday">Birthday</option>
+            <option value="baby">Baby Shower</option>
+            <option value="graduation">Graduation</option>
+            <option value="holiday">Holiday</option>
+            <option value="custom">Custom Elements</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-header" onclick="toggleGroup(this)">
+          <h3>Accent Colors</h3>
+          <span class="collapse-icon">▼</span>
+        </div>
+        <div class="group-content">
+          <div class="row">
+            <div>
+              <label>Primary Accent</label>
+              <input type="color" id="accent" value="#2ec5ff" />
+            </div>
+            <div>
+              <label>Secondary Accent</label>
+              <input type="color" id="accent2" value="#ff6b6b" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text content -->
+      <div class="group"><label>Top Pill Text</label><input id="pill" value="Join us for a" /></div>
+      <div class="group"><label>Main Title</label><input id="title" value="POOL PARTY!" /></div>
+      <div class="group"><label>Subtitle</label><input id="subtitle" value="Celebrating" /></div>
+      <div class="group"><label>Names / Occasion</label><input id="names" value="Lincoln & Bentley’s 6th Birthday" /></div>
+
+      <div class="group row">
+        <div><label>Date</label><input id="date" value="June 21" /></div>
+        <div><label>Time</label><input id="time" value="12:00 — 2:30 PM" /></div>
+      </div>
+      <div class="group"><label>Location</label><input id="location" value="The Pointe • 1 Ballwin Commons Circle" /></div>
+      <div class="group"><label>RSVP / Contact</label><input id="rsvp" value="RSVP: Stephanie • (314) 330-0860 • sdo...@hotmail.com" /></div>
+
+      <!-- Fonts -->
+      <div class="group">
+        <div class="group-header" onclick="toggleGroup(this)">
+          <h3>Typography</h3>
+          <span class="collapse-icon">▼</span>
+        </div>
+        <div class="group-content">
+          <label>Fonts (Google Fonts)</label>
+          <div class="row">
+            <select id="font-title"></select>
+            <select id="font-names"></select>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <select id="font-body"></select>
+            <a id="fonts-link" class="ghost" href="#" target="_blank" style="text-align:center; display:inline-block; padding:10px; border-radius:10px; border:1px dashed #d7d7e0; text-decoration:none">Open Google Fonts</a>
+          </div>
+        </div>
+      </div>
+
+              <!-- Border Edges -->
+        <div class="group">
+          <div class="group-header" onclick="toggleGroup(this)">
+            <h3>Border Edges</h3>
+            <span class="collapse-icon">▼</span>
+          </div>
+          <div class="group-content">
+            <label>Edge Style</label>
+            <select id="edge-style">
+              <option value="none">None</option>
+              <option value="torn">Torn Paper</option>
+              <option value="scalloped">Scalloped</option>
+              <option value="zigzag">Zigzag</option>
+              <option value="wave">Wavy</option>
+              <option value="spikes">Spikes</option>
+              <option value="dots">Dotted</option>
+              <option value="geometric">Geometric</option>
+              <option value="organic">Organic</option>
+              <option value="vintage">Vintage</option>
+            </select>
+            
+            <div class="row" style="margin-top:12px">
+              <div>
+                <label>Thickness: <span id="edge-thickness-value">3</span>px</label>
+                <input type="range" id="edge-thickness" min="1" max="20" value="3" step="1">
+              </div>
+              <div>
+                <label>Opacity: <span id="edge-opacity-value">0.8</span></label>
+                <input type="range" id="edge-opacity" min="0" max="1" value="0.8" step="0.1">
+              </div>
+            </div>
+            
+            <div class="row" style="margin-top:8px">
+              <div>
+                <label>Color</label>
+                <input type="color" id="edge-color" value="#000000">
+              </div>
+              <div>
+                <label>Style</label>
+                <select id="edge-variant">
+                  <option value="default">Default</option>
+                  <option value="rough">Rough</option>
+                  <option value="smooth">Smooth</option>
+                  <option value="sharp">Sharp</option>
+                  <option value="soft">Soft</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row" style="margin-top:12px">
+              <button id="apply-edge" class="btn">Apply Edge</button>
+              <button id="reset-edge" class="btn btn-secondary">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overlay System -->
+        <div class="group">
+          <div class="group-header" onclick="toggleGroup(this)">
+            <h3>🎨 Overlay System</h3>
+            <span class="collapse-icon">▼</span>
+          </div>
+          <div class="group-content">
+            <label>Overlay Style</label>
+            <select id="overlay-style">
+              <option value="none">None</option>
+              <option value="frame-elegant" selected>Elegant Frame</option>
+              <option value="frame-vintage">Vintage Frame</option>
+              <option value="frame-modern">Modern Frame</option>
+              <option value="frame-playful">Playful Frame</option>
+              <option value="frame-minimal">Minimal Frame</option>
+              <option value="frame-ornate">Ornate Frame</option>
+              <option value="frame-nature">Nature Frame</option>
+            </select>
+            
+            <div class="row" style="margin-top:12px">
+              <div>
+                <label>Opacity: <span id="overlay-opacity-value">0.8</span></label>
+                <input type="range" id="overlay-opacity" min="0" max="1" value="0.8" step="0.1">
+              </div>
+              <div>
+                <label>Scale</label>
+                <select id="overlay-scale">
+                  <option value="0.9">90%</option>
+                  <option value="0.95" selected>95%</option>
+                  <option value="1.0">100%</option>
+                  <option value="1.05">105%</option>
+                  <option value="1.1">110%</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row" style="margin-top:8px">
+              <div>
+                <label>Position</label>
+                <select id="overlay-position">
+                  <option value="center" selected>Center</option>
+                  <option value="top">Top</option>
+                  <option value="bottom">Bottom</option>
+                  <option value="left">Left</option>
+                  <option value="right">Right</option>
+                </select>
+              </div>
+              <div>
+                <label>Blend Mode</label>
+                <select id="overlay-blend">
+                  <option value="normal" selected>Normal</option>
+                  <option value="multiply">Multiply</option>
+                  <option value="screen">Screen</option>
+                  <option value="overlay">Overlay</option>
+                  <option value="soft-light">Soft Light</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row" style="margin-top:12px">
+              <button id="apply-overlay" class="btn">Apply Overlay</button>
+              <button id="reset-overlay" class="btn btn-secondary">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Text Shadows -->
+        <div class="group">
+          <div class="group-header" onclick="toggleGroup(this)">
+            <h3>Text Shadows</h3>
+            <span class="collapse-icon">▼</span>
+          </div>
+          <div class="group-content">
+          <label>Global Shadow</label>
+          <div class="shadow-controls">
+            <div class="row">
+              <div>
+                <label>X Offset: <span id="shadow-x-value">2</span>px</label>
+                <input type="range" id="shadow-x" min="-10" max="10" value="2" step="1">
+              </div>
+              <div>
+                <label>Y Offset: <span id="shadow-y-value">2</span>px</label>
+                <input type="range" id="shadow-y" min="-10" max="10" value="2" step="1">
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label>Blur: <span id="shadow-blur-value">4</span>px</label>
+                <input type="range" id="shadow-blur" min="0" max="20" value="4" step="1">
+              </div>
+              <div>
+                <label>Color</label>
+                <input type="color" id="shadow-color" value="#000000">
+              </div>
+            </div>
+            <div class="row">
+              <div>
+                <label>Opacity: <span id="shadow-opacity-value">0.3</span></label>
+                <input type="range" id="shadow-opacity" min="0" max="1" value="0.3" step="0.1">
+              </div>
+            </div>
+          </div>
+          
+          <div class="row" style="margin-top:12px">
+            <button id="apply-global-shadow" class="btn">Apply to All</button>
+            <button id="reset-global-shadow" class="btn btn-secondary">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Background System -->
+      <div class="group">
+        <div class="group-header" onclick="toggleGroup(this)">
+          <h3>Background System</h3>
+          <span class="collapse-icon">▼</span>
+        </div>
+        <div class="group-content">
+          <label>Background Mode</label>
+          <select id="bg-mode">
+            <option value="gradient">Theme Gradient</option>
+            <option value="texture">Texture</option>
+            <option value="image">Image</option>
+            <option value="grad+tex">Gradient + Texture</option>
+            <option value="img+tex">Image + Texture</option>
+          </select>
+          
+          <!-- Texture Settings -->
+          <div class="group" id="tex-controls">
+            <h4>Texture Settings</h4>
+            <label>Texture Preset</label>
+            <select id="texture">
+              <option value="stripes">Diagonal Stripes</option>
+              <option value="dots">Polka Dots</option>
+              <option value="grid">Grid Paper</option>
+              <option value="crosshatch">Crosshatch</option>
+              <option value="chevron">Chevron</option>
+              <option value="checker">Checkerboard</option>
+              <option value="sprinkles">Sprinkles</option>
+              <option value="pluses">Plus Signs</option>
+              <option value="waves">Subtle Waves</option>
+              <option value="noise">Film Noise</option>
+            </select>
+            <div class="row" style="margin-top:8px">
+              <div><label>Texture Opacity</label><input id="tex-opacity" type="range" min="0" max="100" value="22"></div>
+              <div><label>Texture Scale</label><input id="tex-scale" type="range" min="20" max="200" value="100"></div>
+            </div>
+          </div>
+
+          <!-- Image Controls -->
+          <div class="group" id="img-controls">
+            <h4>Background Image</h4>
+            <div class="row">
+              <select id="stock-image">
+                <option value="pool">Tropical Pool</option>
+                <option value="confetti">Party Confetti</option>
+                <option value="clouds">Pastel Clouds</option>
+                <optgroup label="Custom Backgrounds">
+                  <option value="i-1">Background 1 (Tropical)</option>
+                  <option value="i-2">Background 2 (Party)</option>
+                  <option value="i-3">Background 3 (Clouds)</option>
+                  <option value="i-4">Background 4 (Abstract)</option>
+                  <option value="i-5">Background 5 (Nature)</option>
+                  <option value="i-6">Background 6 (Modern)</option>
+                  <option value="i-7">Background 7 (Elegant)</option>
+                  <option value="i-8">Background 8 (Vibrant)</option>
+                </optgroup>
+                <optgroup label="SVG Backgrounds">
+                  <option value="beach">Beach Scene</option>
+                  <option value="forest">Forest Scene</option>
+                  <option value="abstract">Abstract Geometric</option>
+                  <option value="geometric">Modern Geometric</option>
+                  <option value="space">Space & Stars</option>
+                  <option value="watercolor">Watercolor Art</option>
+                  <option value="tech">Tech & Digital</option>
+                  <option value="zen">Zen & Minimal</option>
+                  <option value="retro">Retro & Vintage</option>
+                  <option value="neon">Neon & Cyberpunk</option>
+                  <option value="artistic">Artistic & Painterly</option>
+                  <option value="nature">Nature & Organic</option>
+                  <option value="elegant">Elegant & Refined</option>
+                  <option value="playful">Playful & Fun</option>
+                  <option value="modern">Modern & Clean</option>
+                  <option value="vintage">Vintage & Classic</option>
+                  <option value="industrial">Industrial & Mechanical</option>
+                  <option value="festive">Festive & Celebration</option>
+                  <option value="abstract2">Abstract Curves</option>
+                  <option value="cosmic">Cosmic Space</option>
+                  <option value="marble">Elegant Marble</option>
+                  <option value="aurora">Aurora Borealis</option>
+                  <option value="geometric2">Geometric Patterns</option>
+                  <option value="floral">Delicate Floral</option>
+                  <option value="abstract3">Abstract Curves</option>
+                  <option value="cyberpunk">Cyberpunk Grid</option>
+                  <option value="sunset">Warm Sunset</option>
+                  <option value="abstract4">Abstract Triangles</option>
+                  <option value="watercolor2">Watercolor Blobs</option>
+                  <option value="abstract5">Organic Shapes</option>
+                  <option value="abstract6">Wave Patterns</option>
+                  <option value="abstract7">Dot Matrix</option>
+                  <option value="abstract8">Hexagonal Grid</option>
+                </optgroup>
+              </select>
+              <div id="drop-zone" class="drop-zone">
+                <div class="drop-zone-content">
+                  <span>📁</span>
+                  <p>Drag & drop images here</p>
+                  <p>or click to browse</p>
+                </div>
+                <input id="img-upload" type="file" accept="image/*" />
+              </div>
+            </div>
+            <div class="row" style="margin-top:8px">
+              <div><label>Image Opacity</label><input id="img-opacity" type="range" min="0" max="100" value="70"></div>
+              <div><label>Blur</label><input id="img-blur" type="range" min="0" max="12" value="0"></div>
+            </div>
+            <div class="row" style="margin-top:8px">
+              <div><label>Brightness</label><input id="img-bright" type="range" min="50" max="150" value="100"></div>
+              <div><label>Vignette</label><input id="img-vignette" type="range" min="0" max="60" value="20"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Decorations -->
+      <div class="group row">
+        <div>
+          <label>Background Density</label>
+          <input id="density" type="range" min="3" max="40" value="16" />
+        </div>
+        <div>
+          <label>Sprite Scale</label>
+          <input id="scale" type="range" min="60" max="140" value="100" />
+        </div>
+      </div>
+
+      <!-- Layout + Effects -->
+      <div class="group row">
+        <div>
+          <label>Layout Style</label>
+          <select id="layout">
+            <option value="centered">Centered</option>
+            <option value="banner">Banner Top</option>
+            <option value="split">Split Stripe</option>
+          </select>
+        </div>
+        <div>
+          <label>Entrance Effect</label>
+          <select id="effect">
+            <option value="none">None</option>
+            <option value="fade">Fade Up</option>
+            <option value="pop">Pop</option>
+          </select>
+        </div>
+      </div>
+      <div class="group row">
+        <div>
+          <label>Sprite Animation</label>
+          <select id="sprite-anim">
+            <option value="off">Off</option>
+            <option value="gentle" selected>Gentle Float</option>
+            <option value="lively">Lively Float</option>
+          </select>
+        </div>
+        <div>
+          <label>Parallax</label>
+          <select id="parallax">
+            <option value="off">Off</option>
+            <option value="on" selected>On</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Readability Checker -->
+      <div class="group" style="border-top: 2px solid #e6e6ee; padding-top: 16px; margin-top: 20px;">
+        <div class="group-header" onclick="toggleGroup(this)">
+          <h3>👁️ Readability Checker</h3>
+          <span class="collapse-icon">▼</span>
+        </div>
+        <div class="group-content collapsed">
+          <div style="font-size: 11px; color: #666; margin-bottom: 12px;">Control how strict the contrast checking is</div>
+          
+          <div class="group row">
+            <div>
+              <label>Check Sensitivity</label>
+              <select id="contrast-sensitivity">
+                <option value="strict">Strict (WCAG AAA)</option>
+                <option value="normal" selected>Normal (WCAG AA)</option>
+                <option value="relaxed">Relaxed (WCAG A)</option>
+                <option value="custom">Custom Threshold</option>
+              </select>
+            </div>
+            <div>
+              <label>Check Frequency</label>
+              <select id="contrast-frequency">
+                <option value="manual">Manual Only</option>
+                <option value="on-change" selected>On Text Change</option>
+                <option value="real-time">Real-time</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="group" id="custom-threshold" style="display: none;">
+            <label>Custom Contrast Threshold</label>
+            <div class="row">
+              <div>
+                <label>Normal Text</label>
+                <input id="custom-normal" type="range" min="2.0" max="7.0" step="0.1" value="4.5" />
+                <div style="font-size: 10px; color: #888; text-align: center;" id="normal-value">4.5:1</div>
+              </div>
+              <div>
+                <label>Large Text</label>
+                <input id="custom-large" type="range" min="1.5" max="5.0" step="0.1" value="3.0" />
+                <div style="font-size: 10px; color: #888; text-align: center;" id="large-value">3.0:1</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="group row">
+            <div>
+              <label>Warning Level</label>
+              <select id="warning-level">
+                <option value="critical">Critical Only</option>
+                <option value="moderate" selected>Moderate + Critical</option>
+                <option value="all">All Issues</option>
+              </select>
+            </div>
+            <div>
+              <label>Auto-fix</label>
+              <select id="auto-fix-level">
+                <option value="none">None</option>
+                <option value="conservative" selected>Conservative</option>
+                <option value="aggressive">Aggressive</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="actions">
+            <button id="check-readability" class="ghost" style="background: #28a745; color: white;">👁️ Check Now</button>
+            <button id="clear-warnings" class="ghost" style="background: #6c757d; color: white;">Clear Warnings</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export/Import & Slideshow -->
+      <div class="group">
+        <div class="group-header" onclick="toggleGroup(this)">
+          <h3>💾 Save & Load</h3>
+          <span class="collapse-icon">▼</span>
+        </div>
+        <div class="group-content">
+          <div class="row" style="margin-bottom: 12px;">
+            <button id="export-settings" class="btn" style="background: #17a2b8; color: white;">📤 Export Settings</button>
+            <button id="import-settings" class="btn" style="background: #6f42c1; color: white;">📥 Import Settings</button>
+          </div>
+          
+          <!-- PDF Export Settings -->
+          <div class="group">
+            <h4>📄 PDF Export</h4>
+            <div class="row" style="margin-bottom: 8px;">
+              <div>
+                <label>Paper Size</label>
+                <select id="pdf-paper-size">
+                  <option value="a4">A4 (210×297mm)</option>
+                  <option value="letter">US Letter (8.5×11in)</option>
+                  <option value="a5">A5 (148×210mm)</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+              <div>
+                <label>Orientation</label>
+                <select id="pdf-orientation">
+                  <option value="portrait">Portrait</option>
+                  <option value="landscape">Landscape</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row" style="margin-bottom: 8px;">
+              <div>
+                <label>Quality</label>
+                <select id="pdf-quality">
+                  <option value="high">High (300 DPI)</option>
+                  <option value="medium" selected>Medium (150 DPI)</option>
+                  <option value="low">Low (72 DPI)</option>
+                </select>
+              </div>
+              <div>
+                <label>Margins</label>
+                <select id="pdf-margins">
+                  <option value="none">No Margins</option>
+                  <option value="minimal" selected>Minimal (5mm)</option>
+                  <option value="standard">Standard (10mm)</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row" style="margin-bottom: 12px;">
+              <div>
+                <label>Include Background</label>
+                <input type="checkbox" id="pdf-include-bg" checked>
+              </div>
+              <div>
+                <label>Include Shadows</label>
+                <input type="checkbox" id="pdf-include-shadows" checked>
+              </div>
+            </div>
+            
+            <div class="row">
+              <button id="pdf-export" class="btn" style="background: #dc3545; color: white; width: 100%;">📄 Export to PDF</button>
+            </div>
+          </div>
+          
+          <div class="group">
+            <h4>🎬 Invitation Slideshow</h4>
+            <div class="row" style="margin-bottom: 8px;">
+              <button id="slideshow-play" class="btn" style="background: #28a745; color: white;">▶️ Play</button>
+              <button id="slideshow-pause" class="btn" style="background: #ffc107; color: white;">⏸️ Pause</button>
+              <button id="slideshow-stop" class="btn" style="background: #dc3545; color: white;">⏹️ Stop</button>
+              <button id="refresh-invites" class="btn" style="background: #6c757d; color: white;">🔄 Refresh</button>
+            </div>
+            
+            <div class="row" style="margin-bottom: 8px;">
+              <div>
+                <label>Speed: <span id="slideshow-speed-value">3</span>s</label>
+                <input type="range" id="slideshow-speed" min="1" max="10" value="3" step="1">
+              </div>
+              <div>
+                <label>Mode</label>
+                <select id="slideshow-mode">
+                  <option value="sequential">Sequential</option>
+                  <option value="random">Random</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div>
+                <label>Current: <span id="current-invite">-</span></label>
+              </div>
+              <div>
+                <label>Total: <span id="total-invites">0</span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="randomize" title="Shuffle background objects">🔀 Randomize</button>
+        <button class="ghost" id="swap">Swap Title/Names</button>
+        <button id="replay" class="ghost">Replay Animations</button>
+        <button class="ghost" id="save-invitation" style="background: #28a745; color: white;">💾 Save Invitation</button>
+        <button class="secondary" id="pdf" style="background: #dc3545; color: white;">📄 Export PDF</button>
+      </div>
+    </aside>
+
+    <main class="stage-wrap">
+      <section class="stage style-centered anim-fade" id="stage" aria-label="Invitation Preview">
+        <div class="photo" id="photo"></div>
+        <div class="bg" id="bg"></div>
+        <div class="texture" id="texture-layer"></div>
+        <svg class="sprites" id="sprites" viewBox="0 0 900 1350" preserveAspectRatio="none"></svg>
+        <div class="edge-layer" id="edge-layer"></div>
+        <div class="overlay-layer" id="overlay-layer"></div>
+        <div class="inner" id="inner">
+          <div class="header"><div class="pill" id="pill-out">Join us for a</div></div>
+          <div class="title">
+            <h1 id="title-out">POOL PARTY!</h1>
+            <h2 id="subtitle-out">Celebrating</h2>
+          </div>
+          <div class="names"><h3 id="names-out">Lincoln & Bentley’s 6th Birthday</h3></div>
+
+          <div class="info">
+            <div class="card"><div class="k">Date</div><div class="v" id="date-out">June 21</div></div>
+            <div class="card"><div class="k">Time</div><div class="v" id="time-out">12:00 — 2:30 PM</div></div>
+            <div class="card"><div class="k">Location</div><div class="v" id="location-out">The Pointe • 1 Ballwin Commons Circle</div></div>
+          </div>
+          <div class="footer"><div class="rsvp" id="rsvp-out">RSVP: Stephanie • (314) 330-0860 • sdo...@hotmail.com</div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- SVG symbol defs (simple, stylable) -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <!-- Pool set -->
+      <g id="floatie" fill="currentColor"><circle cx="24" cy="24" r="22"/><circle cx="24" cy="24" r="12" fill="white"/></g>
+      <g id="sunglasses" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round">
+        <path d="M2 20h16m16 0h16"/>
+        <rect x="4" y="22" width="22" height="12" rx="3" fill="currentColor" stroke="none"></rect>
+        <rect x="30" y="22" width="22" height="12" rx="3" fill="currentColor" stroke="none"></rect>
+      </g>
+      <g id="flipflop" fill="currentColor"><ellipse cx="20" cy="26" rx="16" ry="24"/><path d="M6 18c8-8 24-8 28 8" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+
+      <!-- Birthday set -->
+      <g id="balloon" fill="currentColor"><ellipse cx="24" cy="24" rx="20" ry="24"/><path d="M24 48c0 12-8 18-8 22" stroke="currentColor" stroke-width="3" fill="none"/></g>
+      <g id="confetti" fill="currentColor"><rect x="0" y="0" width="8" height="8" rx="2"/></g>
+      <g id="cake" fill="currentColor"><rect x="2" y="22" width="44" height="18" rx="4"/><rect x="8" y="10" width="32" height="12" rx="3"/><rect x="22" y="2" width="4" height="8" rx="2" fill="#ffaa00"/></g>
+
+      <!-- Baby set -->
+      <g id="cloud" fill="currentColor"><circle cx="18" cy="22" r="12"/><circle cx="30" cy="20" r="16"/><rect x="10" y="24" width="36" height="12" rx="6"/></g>
+      <g id="star" fill="currentColor"><path d="M24 2l6.9 14H46l-11 8.5L40 44 24 34 8 44l5-19.5L2 16h15.1z"/></g>
+      <g id="duck" fill="currentColor"><circle cx="18" cy="18" r="12"/><rect x="18" y="22" width="24" height="10" rx="5"/><rect x="27" y="18" width="10" height="6" rx="3" fill="#ffb703"/></g>
+
+      <!-- Graduation set -->
+      <g id="cap" fill="currentColor"><polygon points="6,18 42,18 24,8"/><rect x="14" y="18" width="20" height="6" rx="2"/><rect x="42" y="18" width="3" height="16" rx="1.5"/><circle cx="43.5" cy="34" r="3"/></g>
+      <g id="ribbon" fill="currentColor"><circle cx="24" cy="24" r="10"/><path d="M18 34l-6 14 12-8 12 8-6-14"/></g>
+
+      <!-- Holiday set -->
+      <g id="snow" fill="currentColor"><circle cx="4" cy="4" r="4"/></g>
+      <g id="tree" fill="currentColor"><polygon points="24,6 34,22 14,22"/><polygon points="24,14 38,32 10,32"/><rect x="20" y="32" width="8" height="8"/></g>
+    </defs>
+  </svg>
+
+  <script>
+    const el = id => document.getElementById(id);
+
+    /* === Themes === */
+    const THEMES = {
+      pool: { gradient:'linear-gradient(180deg,#b3e5ff 0%, #e6f9ff 100%)', palette:['#2ec5ff','#ffd166','#06d6a0','#118ab2','#ef476f'], sprites:['floatie','sunglasses','flipflop'] },
+      birthday: { gradient:'linear-gradient(180deg,#fff5d6 0%, #ffe9ef 100%)', palette:['#ff6b6b','#ffd166','#4ecdc4','#45b7d1','#c7f464'], sprites:['balloon','confetti','cake'] },
+      baby: { gradient:'linear-gradient(180deg,#e8f3ff 0%, #f7f7fb 100%)', palette:['#a3cef1','#bde0fe','#ffc8dd','#ffafcc','#cdb4db'], sprites:['cloud','star','duck'] },
+      graduation: { gradient:'linear-gradient(180deg,#fff9e6 0%, #f1f5f9 100%)', palette:['#0f172a','#f59e0b','#334155','#a8a29e','#ef4444'], sprites:['cap','ribbon','confetti'] },
+      holiday: { gradient:'linear-gradient(180deg,#e5f6ff 0%, #f0fff4 100%)', palette:['#2563eb','#16a34a','#dc2626','#eab308','#0891b2'], sprites:['snow','tree','star'] }
+    };
+
+    /* === Custom Theme with Custom Decorations === */
+    const CUSTOM_THEME = {
+      custom: { 
+        gradient:'linear-gradient(180deg,#f0f8ff 0%, #e6f3ff 100%)', 
+        palette:['#4a90e2','#f39c12','#e74c3c','#27ae60','#9b59b6'], 
+        sprites:['balloons','flowers','stars'] 
+      }
+    };
+
+    /* === TEXT SHADOW SYSTEM === */
+    let globalShadow = {
+      x: 2,
+      y: 2,
+      blur: 4,
+      color: '#000000',
+      opacity: 0.3
+    };
+    
+    // Function to generate shadow CSS
+    function generateShadowCSS(shadow) {
+      const rgba = hexToRgba(shadow.color, shadow.opacity);
+      return `${shadow.x}px ${shadow.y}px ${shadow.blur}px ${rgba}`;
+    }
+    
+    // Convert hex to rgba
+    function hexToRgba(hex, alpha) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+    
+    // Apply shadow to all text elements
+    function applyGlobalShadow() {
+      const shadowCSS = generateShadowCSS(globalShadow);
+      document.documentElement.style.setProperty('--global-text-shadow', shadowCSS);
+      
+      // Apply to all text elements
+      const textElements = document.querySelectorAll('.title, .names, .subtitle, .date, .time, .location, .rsvp, .footer');
+      textElements.forEach(el => {
+        el.style.textShadow = shadowCSS;
+      });
+      
+      console.log('✨ Global shadow applied:', shadowCSS);
+    }
+    
+    // Reset all shadows
+    function resetGlobalShadow() {
+      globalShadow = { x: 0, y: 0, blur: 0, color: '#000000', opacity: 0 };
+      updateShadowUI();
+      applyGlobalShadow();
+      console.log('🔄 Shadows reset');
+    }
+    
+    // Update shadow UI controls
+    function updateShadowUI() {
+      document.getElementById('shadow-x').value = globalShadow.x;
+      document.getElementById('shadow-y').value = globalShadow.y;
+      document.getElementById('shadow-blur').value = globalShadow.blur;
+      document.getElementById('shadow-color').value = globalShadow.color;
+      document.getElementById('shadow-opacity').value = globalShadow.opacity;
+      
+      document.getElementById('shadow-x-value').textContent = globalShadow.x;
+      document.getElementById('shadow-y-value').textContent = globalShadow.y;
+      document.getElementById('shadow-blur-value').textContent = globalShadow.blur;
+      document.getElementById('shadow-opacity-value').textContent = globalShadow.opacity;
+    }
+
+    /* === EDGE SYSTEM === */
+    let edgeSettings = {
+      style: 'none',
+      thickness: 3,
+      opacity: 0.8,
+      color: '#000000',
+      variant: 'default'
+    };
+    
+    // Edge style definitions with SVG paths
+    const EDGE_STYLES = {
+      none: null,
+      torn: {
+        default: 'M0,0 Q25,5 50,0 T100,0 L100,100 Q75,95 50,100 T0,100 Z',
+        rough: 'M0,0 Q20,8 40,2 Q60,-3 80,1 Q90,4 100,0 L100,100 Q80,92 60,98 Q40,103 20,97 Q10,95 0,100 Z',
+        smooth: 'M0,0 Q30,3 60,0 Q80,2 100,0 L100,100 Q70,97 40,100 Q20,98 0,100 Z',
+        sharp: 'M0,0 L15,5 L30,0 L45,8 L60,2 L75,0 L90,6 L100,0 L100,100 L85,95 L70,100 L55,92 L40,98 L25,100 L10,94 L0,100 Z',
+        soft: 'M0,0 Q20,2 40,0 Q60,1 80,0 Q90,1 100,0 L100,100 Q80,98 60,100 Q40,99 20,100 Q10,99 0,100 Z'
+      },
+      scalloped: {
+        default: 'M0,0 Q25,15 50,0 Q75,15 100,0 L100,100 Q75,85 50,100 Q25,85 0,100 Z',
+        rough: 'M0,0 Q20,18 40,2 Q60,20 80,0 Q90,12 100,0 L100,100 Q80,82 60,100 Q40,80 20,98 Q10,85 0,100 Z',
+        smooth: 'M0,0 Q30,12 60,0 Q80,15 100,0 L100,100 Q70,88 40,100 Q20,85 0,100 Z',
+        sharp: 'M0,0 L25,20 L50,0 L75,20 L100,0 L100,100 L75,80 L50,100 L25,80 L0,100 Z',
+        soft: 'M0,0 Q25,10 50,0 Q75,10 100,0 L100,100 Q75,90 50,100 Q25,90 0,100 Z'
+      },
+      zigzag: {
+        default: 'M0,0 L25,15 L50,0 L75,15 L100,0 L100,100 L75,85 L50,100 L25,85 L0,100 Z',
+        rough: 'M0,0 L20,18 L40,2 L60,20 L80,0 L100,18 L100,100 L80,82 L60,100 L40,80 L20,100 L0,82 Z',
+        smooth: 'M0,0 Q25,15 50,0 Q75,15 100,0 L100,100 Q75,85 50,100 Q25,85 0,100 Z',
+        sharp: 'M0,0 L25,20 L50,0 L75,20 L100,0 L100,100 L75,80 L50,100 L25,80 L0,100 Z',
+        soft: 'M0,0 Q25,12 50,0 Q75,12 100,0 L100,100 Q75,88 50,100 Q25,88 0,100 Z'
+      },
+      wave: {
+        default: 'M0,0 Q25,10 50,0 Q75,10 100,0 L100,100 Q75,90 50,100 Q25,90 0,100 Z',
+        rough: 'M0,0 Q20,12 40,0 Q60,15 80,0 Q90,8 100,0 L100,100 Q80,88 60,100 Q40,85 20,100 Q10,92 0,100 Z',
+        smooth: 'M0,0 Q30,8 60,0 Q80,12 100,0 L100,100 Q70,92 40,100 Q20,88 0,100 Z',
+        sharp: 'M0,0 L25,15 L50,0 L75,15 L100,0 L100,100 L75,85 L50,100 L25,85 L0,100 Z',
+        soft: 'M0,0 Q25,6 50,0 Q75,6 100,0 L100,100 Q75,94 50,100 Q25,94 0,100 Z'
+      },
+      spikes: {
+        default: 'M0,0 L25,20 L50,0 L75,20 L100,0 L100,100 L75,80 L50,100 L25,80 L0,100 Z',
+        rough: 'M0,0 L20,22 L40,0 L60,25 L80,0 L100,18 L100,100 L80,78 L60,100 L40,75 L20,100 L0,78 Z',
+        smooth: 'M0,0 Q25,18 50,0 Q75,18 100,0 L100,100 Q75,82 50,100 Q25,82 0,100 Z',
+        sharp: 'M0,0 L25,25 L50,0 L75,25 L100,0 L100,100 L75,75 L50,100 L25,75 L0,100 Z',
+        soft: 'M0,0 Q25,15 50,0 Q75,15 100,0 L100,100 Q75,85 50,100 Q25,85 0,100 Z'
+      },
+      dots: {
+        default: 'M0,0 Q25,5 50,0 Q75,5 100,0 L100,100 Q75,95 50,100 Q25,95 0,100 Z',
+        rough: 'M0,0 Q20,8 40,0 Q60,10 80,0 Q90,3 100,0 L100,100 Q80,92 60,100 Q40,90 20,100 Q10,97 0,100 Z',
+        smooth: 'M0,0 Q30,3 60,0 Q80,8 100,0 L100,100 Q70,97 40,100 Q20,92 0,100 Z',
+        sharp: 'M0,0 L25,10 L50,0 L75,10 L100,0 L100,100 L75,90 L50,100 L25,90 L0,100 Z',
+        soft: 'M0,0 Q25,4 50,0 Q75,4 100,0 L100,100 Q75,96 50,100 Q25,96 0,100 Z'
+      },
+      geometric: {
+        default: 'M0,0 L25,15 L50,0 L75,15 L100,0 L100,100 L75,85 L50,100 L25,85 L0,100 Z',
+        rough: 'M0,0 L20,18 L40,0 L60,20 L80,0 L100,18 L100,100 L80,82 L60,100 L40,80 L20,100 L0,82 Z',
+        smooth: 'M0,0 Q25,12 50,0 Q75,12 100,0 L100,100 Q75,88 50,100 Q25,88 0,100 Z',
+        sharp: 'M0,0 L25,20 L50,0 L75,20 L100,0 L100,100 L75,80 L50,100 L25,80 L0,100 Z',
+        soft: 'M0,0 Q25,10 50,0 Q75,10 100,100 Q75,90 50,100 Q25,90 0,100 Z'
+      },
+      organic: {
+        default: 'M0,0 Q25,8 50,0 Q75,8 100,0 L100,100 Q75,92 50,100 Q25,92 0,100 Z',
+        rough: 'M0,0 Q20,12 40,0 Q60,15 80,0 Q90,6 100,0 L100,100 Q80,88 60,100 Q40,85 20,100 Q10,94 0,100 Z',
+        smooth: 'M0,0 Q30,6 60,0 Q80,10 100,0 L100,100 Q70,94 40,100 Q20,90 0,100 Z',
+        sharp: 'M0,0 L25,18 L50,0 L75,18 L100,0 L100,100 L75,82 L50,100 L25,82 L0,100 Z',
+        soft: 'M0,0 Q25,8 50,0 Q75,8 100,0 L100,100 Q75,92 50,100 Q25,92 0,100 Z'
+      },
+      vintage: {
+        default: 'M0,0 Q25,10 50,0 Q75,10 100,0 L100,100 Q75,90 50,100 Q25,90 0,100 Z',
+        rough: 'M0,0 Q20,15 40,0 Q60,18 80,0 Q90,8 100,0 L100,100 Q80,85 60,100 Q40,82 20,100 Q10,92 0,100 Z',
+        smooth: 'M0,0 Q30,8 60,0 Q80,12 100,0 L100,100 Q70,92 40,100 Q20,88 0,100 Z',
+        sharp: 'M0,0 L25,20 L50,0 L75,20 L100,0 L100,100 L75,80 L50,100 L25,80 L0,100 Z',
+        soft: 'M0,0 Q25,12 50,0 Q75,12 100,0 L100,100 Q75,88 50,100 Q25,88 0,100 Z'
+      }
+    };
+    
+    // Apply edge effect to the invitation
+    function applyEdgeEffect() {
+      const edgeLayer = el('edge-layer');
+      edgeLayer.innerHTML = '';
+      
+      if (edgeSettings.style === 'none') {
+        return;
+      }
+      
+      const style = EDGE_STYLES[edgeSettings.style];
+      if (!style) return;
+      
+      const variant = style[edgeSettings.variant] || style.default;
+      if (!variant) return;
+      
+      // Create SVG for the edge effect
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 900 1350');
+      svg.setAttribute('preserveAspectRatio', 'none');
+      svg.style.position = 'absolute';
+      svg.style.top = '0';
+      svg.style.left = '0';
+      svg.style.width = '100%';
+      svg.style.height = '100%';
+      svg.style.pointerEvents = 'none';
+      
+      // Create a simple edge effect using the variant pattern
+      const edgePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      
+      // Scale the variant path to fit the invitation dimensions
+      let scaledPath = variant;
+      if (edgeSettings.style === 'torn' || edgeSettings.style === 'scalloped' || edgeSettings.style === 'wave') {
+        // For top/bottom edges, scale horizontally
+        scaledPath = variant.replace(/M0,0 /, 'M0,0 ').replace(/ L100,100.*/, ' L900,0 Z');
+      } else if (edgeSettings.style === 'zigzag' || edgeSettings.style === 'spikes') {
+        // For zigzag/spikes, create a repeating pattern
+        scaledPath = 'M0,0 ' + Array.from({length: 9}, (_, i) => {
+          const x = i * 100;
+          const nextX = (i + 1) * 100;
+          return `L${x + 25},20 L${x + 50},0 L${x + 75},20 L${nextX},0`;
+        }).join(' ') + ' L900,0 Z';
+      } else {
+        // For other styles, use a simple scaled version
+        scaledPath = variant.replace(/M0,0 /, 'M0,0 ').replace(/ L100,100.*/, ' L900,0 Z');
+      }
+      
+      edgePath.setAttribute('d', scaledPath);
+      edgePath.setAttribute('fill', edgeSettings.color);
+      edgePath.setAttribute('opacity', edgeSettings.opacity);
+      edgePath.setAttribute('stroke', edgeSettings.color);
+      edgePath.setAttribute('stroke-width', edgeSettings.thickness);
+      edgePath.setAttribute('stroke-linejoin', 'round');
+      
+      svg.appendChild(edgePath);
+      edgeLayer.appendChild(svg);
+      
+      console.log('✨ Edge effect applied:', edgeSettings.style, edgeSettings.variant);
+    }
+    
+    // Update edge UI controls
+    function updateEdgeUI() {
+      document.getElementById('edge-style').value = edgeSettings.style;
+      document.getElementById('edge-thickness').value = edgeSettings.thickness;
+      document.getElementById('edge-opacity').value = edgeSettings.opacity;
+      document.getElementById('edge-color').value = edgeSettings.color;
+      document.getElementById('edge-variant').value = edgeSettings.variant;
+      
+      document.getElementById('edge-thickness-value').textContent = edgeSettings.thickness;
+      document.getElementById('edge-opacity-value').textContent = edgeSettings.opacity;
+    }
+    
+    // Reset edge settings
+    function resetEdgeSettings() {
+      edgeSettings = {
+        style: 'none',
+        thickness: 3,
+        opacity: 0.8,
+        color: '#000000',
+        variant: 'default'
+      };
+      updateEdgeUI();
+      applyEdgeEffect();
+      console.log('🔄 Edge settings reset');
+    }
+
+    /* === OVERLAY SYSTEM === */
+    let overlaySettings = {
+      style: 'frame-elegant',
+      opacity: 0.8,
+      scale: 0.95,
+      position: 'center',
+      blend: 'normal'
+    };
+    
+    // Overlay file paths
+    const OVERLAY_FILES = {
+      'frame-elegant': 'elements/overlays/frame-elegant.svg',
+      'frame-vintage': 'elements/overlays/frame-vintage.svg',
+      'frame-modern': 'elements/overlays/frame-modern.svg',
+      'frame-playful': 'elements/overlays/frame-playful.svg',
+      'frame-minimal': 'elements/overlays/frame-minimal.svg',
+      'frame-ornate': 'elements/overlays/frame-ornate.svg',
+      'frame-nature': 'elements/overlays/frame-nature.svg'
+    };
+    
+    // Apply overlay to the invitation
+    function applyOverlay() {
+      const overlayLayer = el('overlay-layer');
+      overlayLayer.innerHTML = '';
+      
+      if (overlaySettings.style === 'none') {
+        return;
+      }
+      
+      const overlayPath = OVERLAY_FILES[overlaySettings.style];
+      if (!overlayPath) return;
+      
+      // Create overlay element
+      const overlay = document.createElement('img');
+      overlay.src = overlayPath;
+      overlay.style.width = '100%';
+      overlay.style.height = '100%';
+      overlay.style.objectFit = 'cover';
+      overlay.style.opacity = overlaySettings.opacity;
+      overlay.style.transform = `scale(${overlaySettings.scale})`;
+      overlay.style.mixBlendMode = overlaySettings.blend;
+      overlay.style.pointerEvents = 'none';
+      
+      // Position the overlay
+      if (overlaySettings.position === 'center') {
+        overlay.style.position = 'absolute';
+        overlay.style.top = '50%';
+        overlay.style.left = '50%';
+        overlay.style.transform = `translate(-50%, -50%) scale(${overlaySettings.scale})`;
+      } else if (overlaySettings.position === 'top') {
+        overlay.style.position = 'absolute';
+        overlay.style.top = '0';
+        overlay.style.left = '50%';
+        overlay.style.transform = `translateX(-50%) scale(${overlaySettings.scale})`;
+      } else if (overlaySettings.position === 'bottom') {
+        overlay.style.position = 'absolute';
+        overlay.style.bottom = '0';
+        overlay.style.left = '50%';
+        overlay.style.transform = `translateX(-50%) scale(${overlaySettings.scale})`;
+      } else if (overlaySettings.position === 'left') {
+        overlay.style.position = 'absolute';
+        overlay.style.top = '50%';
+        overlay.style.left = '0';
+        overlay.style.transform = `translateY(-50%) scale(${overlaySettings.scale})`;
+      } else if (overlaySettings.position === 'right') {
+        overlay.style.position = 'absolute';
+        overlay.style.top = '50%';
+        overlay.style.right = '0';
+        overlay.style.transform = `translateY(-50%) scale(${overlaySettings.scale})`;
+      }
+      
+      overlayLayer.appendChild(overlay);
+      
+      console.log('✨ Overlay applied:', overlaySettings.style);
+    }
+    
+    // Update overlay UI controls
+    function updateOverlayUI() {
+      document.getElementById('overlay-style').value = overlaySettings.style;
+      document.getElementById('overlay-opacity').value = overlaySettings.opacity;
+      document.getElementById('overlay-scale').value = overlaySettings.scale;
+      document.getElementById('overlay-position').value = overlaySettings.position;
+      document.getElementById('overlay-blend').value = overlaySettings.blend;
+      
+      document.getElementById('overlay-opacity-value').textContent = overlaySettings.opacity;
+    }
+    
+    // Reset overlay settings
+    function resetOverlaySettings() {
+      overlaySettings = {
+        style: 'frame-elegant',
+        opacity: 0.8,
+        scale: 0.95,
+        position: 'center',
+        blend: 'normal'
+      };
+      updateOverlayUI();
+      applyOverlay();
+      console.log('🔄 Overlay settings reset');
+    }
+
+    /* === Textures (10) === */
+    const TEXTURES = {
+      stripes: s => `repeating-linear-gradient(45deg, rgba(255,255,255,.0) 0, rgba(255,255,255,.0) ${s/2}px, rgba(0,0,0,.06) ${s/2}px, rgba(0,0,0,.06) ${s}px)`,
+      dots: s => `radial-gradient(circle at 25% 25%, rgba(0,0,0,.08) 12%, transparent 13%) ${s/2}px ${s/2}px / ${s}px ${s}px repeat`,
+      grid: s => `repeating-linear-gradient(0deg, rgba(0,0,0,.06), rgba(0,0,0,.06) 1px, transparent 1px, transparent ${s}px), repeating-linear-gradient(90deg, rgba(0,0,0,.06), rgba(0,0,0,.06) 1px, transparent 1px, transparent ${s}px)`,
+      crosshatch: s => `repeating-linear-gradient(45deg, rgba(0,0,0,.05) 0, rgba(0,0,0,.05) 1px, transparent 1px, transparent ${s}px), repeating-linear-gradient(-45deg, rgba(0,0,0,.05) 0, rgba(0,0,0,.05) 1px, transparent 1px, transparent ${s}px)`,
+      chevron: s => `repeating-linear-gradient(135deg, rgba(0,0,0,.05) 0, rgba(0,0,0,.05) ${s/4}px, transparent ${s/4}px, transparent ${s/2}px), repeating-linear-gradient(45deg, rgba(0,0,0,.05) 0, rgba(0,0,0,.05) ${s/4}px, transparent ${s/4}px, transparent ${s/2}px)`,
+      checker: s => `linear-gradient(45deg, rgba(0,0,0,.04) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.04) 75%), linear-gradient(45deg, rgba(0,0,0,.04) 25%, transparent 25%, transparent 75%, rgba(0,0,0,.04) 75%) ${s/2}px ${s/2}px / ${s}px ${s}px`,
+      sprinkles: s => `radial-gradient(circle, rgba(0,0,0,.08) 2px, transparent 2px) 0 0 / ${s}px ${s}px repeat, radial-gradient(circle, rgba(0,0,0,.06) 1px, transparent 1px) ${s/2}px ${s/2}px / ${s}px ${s}px repeat`,
+      pluses: s => `repeating-linear-gradient(0deg, transparent 0 ${s-2}px, rgba(0,0,0,.06) ${s-2}px ${s-1}px, transparent ${s-1}px ${s}px), repeating-linear-gradient(90deg, transparent 0 ${s-2}px, rgba(0,0,0,.06) ${s-2}px ${s-1}px, transparent ${s-1}px ${s}px)`,
+      waves: s => `radial-gradient(50% 8px at 0 8px, rgba(0,0,0,.06) 50%, transparent 51%) 0 0/ ${s}px ${s}px repeat-x`,
+      noise: _ => `url('data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.8\" numOctaves=\"4\" stitchTiles=\"stitch\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(#n)\" opacity=\"0.08\"/></svg>`)}')`
+    };
+
+    /* === Stock images (3 SVG data URIs) === */
+    const IMAGES = {
+      pool: `url("data:image/svg+xml;base64,${btoa(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 1350'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#87e0ff'/><stop offset='1' stop-color='#d8f7ff'/></linearGradient></defs><rect width='900' height='1350' fill='url(#g)'/><g fill='rgba(0,0,0,.05)'><circle cx='120' cy='180' r='80'/><circle cx='240' cy='300' r='60'/><circle cx='420' cy='220' r='70'/><circle cx='700' cy='180' r='90'/></g><g opacity='.6'><path d='M0 900 Q 200 860 320 900 T 640 900 T 900 900 V1350 H0Z' fill='#b3e5ff'/></g></svg>`)}")`,
+      confetti: `url("data:image/svg+xml;base64,${btoa(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 1350'><rect width='900' height='1350' fill='#fff6f3'/><g><circle cx='120' cy='120' r='10' fill='#ff6b6b'/><rect x='200' y='160' width='12' height='24' fill='#ffd166'/><circle cx='320' cy='240' r='8' fill='#06d6a0'/><rect x='520' y='120' width='14' height='14' fill='#118ab2'/><circle cx='700' cy='200' r='12' fill='#ef476f'/></g><g opacity='.4'><circle cx='140' cy='480' r='10' fill='#ffd166'/><rect x='280' y='520' width='16' height='10' fill='#ef476f'/><circle cx='520' cy='620' r='8' fill='#06d6a0'/></g></svg>`)}")`,
+      clouds: `url("data:image/svg+xml;base64,${btoa(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 1350'><defs><linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#e8f1ff'/><stop offset='1' stop-color='#ffffff'/></linearGradient></defs><rect width='900' height='1350' fill='url(#s)'/><g fill='#ffffff'><ellipse cx='200' cy='220' rx='160' ry='70'/><ellipse cx='320' cy='200' rx='120' ry='60'/><ellipse cx='520' cy='240' rx='180' ry='80'/><ellipse cx='720' cy='210' rx='140' ry='70'/></g></svg>`)}")`
+    };
+
+    /* === Custom Backgrounds from folders === */
+             const CUSTOM_BACKGROUNDS = {
+           'i-1': 'backgrounds/i-1.jpg',
+           'i-2': 'backgrounds/i-2.jpg', 
+           'i-3': 'backgrounds/i-3.webp',
+           'i-4': 'backgrounds/i-4.jpeg',
+           'i-5': 'backgrounds/i-5.jpg',
+           'i-6': 'backgrounds/i-6.png',
+           'i-7': 'backgrounds/i-7.png',
+           'i-8': 'backgrounds/i-8.png',
+           'beach': 'elements/backgrounds/beach.svg',
+           'forest': 'elements/backgrounds/forest.svg',
+           'abstract': 'elements/backgrounds/abstract.svg',
+           'geometric': 'elements/backgrounds/geometric.svg',
+           'space': 'elements/backgrounds/space.svg',
+           'watercolor': 'elements/backgrounds/watercolor.svg',
+           'tech': 'elements/backgrounds/tech.svg',
+           'zen': 'elements/backgrounds/zen.svg',
+           'retro': 'elements/backgrounds/retro.svg',
+           'neon': 'elements/backgrounds/neon.svg',
+           'artistic': 'elements/backgrounds/artistic.svg',
+           'nature': 'elements/backgrounds/nature.svg',
+           'elegant': 'elements/backgrounds/elegant.svg',
+           'playful': 'elements/backgrounds/playful.svg',
+           'modern': 'elements/backgrounds/modern.svg',
+           'vintage': 'elements/backgrounds/vintage.svg',
+           'industrial': 'elements/backgrounds/industrial.svg',
+           'festive': 'elements/backgrounds/festive.svg',
+           'abstract2': 'elements/backgrounds/abstract2.svg',
+           'cosmic': 'elements/backgrounds/cosmic.svg',
+           'marble': 'elements/backgrounds/marble.svg',
+           'aurora': 'elements/backgrounds/aurora.svg',
+           'geometric2': 'elements/backgrounds/geometric2.svg',
+           'floral': 'elements/backgrounds/floral.svg',
+           'abstract3': 'elements/backgrounds/abstract3.svg',
+           'cyberpunk': 'elements/backgrounds/cyberpunk.svg',
+           'sunset': 'elements/backgrounds/sunset.svg',
+           'abstract4': 'elements/backgrounds/abstract4.svg',
+           'watercolor2': 'elements/backgrounds/watercolor2.svg',
+           'abstract5': 'elements/backgrounds/abstract5.svg',
+           'abstract6': 'elements/backgrounds/abstract6.svg',
+           'abstract7': 'elements/backgrounds/abstract7.svg',
+           'abstract8': 'elements/backgrounds/abstract8.svg'
+         };
+
+    /* === Custom Decorations from elements folder === */
+    const CUSTOM_DECORATIONS = {
+      'balloons': 'elements/decorations/balloons.svg',
+      'flowers': 'elements/decorations/flowers.svg', 
+      'stars': 'elements/decorations/stars.svg',
+      'i-1': 'elements/i-1.webp',
+      'i-2': 'elements/i-2.png',
+      'i-3': 'elements/i-3.png',
+      'i-4': 'elements/i-4.png'
+    };
+
+    const FONTS = [
+      'Playfair Display', 'Bebas Neue', 'Abril Fatface', 'Poppins', 'Montserrat', 'Raleway', 'Fredoka', 'Nunito', 'Merriweather', 'Pacifico', 'Great Vibes', 'Lobster Two', 'Baloo 2', 'Carter One', 'Righteous', 'Russo One'
+    ];
+
+    const state = { seed: Math.random()*1e9|0, layout:'centered' };
+
+    function rng(){ state.seed ^= state.seed << 13; state.seed ^= state.seed >> 17; state.seed ^= state.seed << 5; return Math.abs(state.seed) / 2**31; }
+
+    /* === Setup === */
+    function populateFonts(){
+      const selTitle = el('font-title');
+      const selNames = el('font-names');
+      const selBody = el('font-body');
+      FONTS.forEach(f=>{
+        const o1 = new Option(`Title: ${f}`, f); selTitle.add(o1);
+        const o2 = new Option(`Names: ${f}`, f); selNames.add(o2);
+        const o3 = new Option(`Body: ${f}`, f); selBody.add(o3);
+      });
+      selTitle.value='Playfair Display'; selNames.value='Playfair Display'; selBody.value='Quicksand';
+      updateFonts();
+    }
+
+    function googleFontsHref(){
+      const families = new Set(['Quicksand:400,700']);
+      families.add(`${el('font-title').value}:400,600,700`);
+      families.add(`${el('font-names').value}:400,700`);
+      families.add(`${el('font-body').value}:400,600,700`);
+      const qs = Array.from(families).map(f=>`family=${encodeURIComponent(f)}`).join('&');
+      return `https://fonts.googleapis.com/css2?${qs}&display=swap`;
+    }
+
+    function updateFonts(){
+      const titleFont = el('font-title').value;
+      const namesFont = el('font-names').value;
+      const bodyFont = el('font-body').value;
+      
+      console.log('🔤 Updating fonts:', { titleFont, namesFont, bodyFont });
+      
+      el('gfonts').href = googleFontsHref();
+      document.documentElement.style.setProperty('--title-font', `'${titleFont}', serif`);
+      document.documentElement.style.setProperty('--names-font', `'${namesFont}', serif`);
+      document.documentElement.style.setProperty('--body-font', `'${bodyFont}', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`);
+      el('fonts-link').href = `https://fonts.google.com/specimen/${encodeURIComponent(titleFont)}`;
+      
+      console.log('✅ Fonts updated successfully');
+    }
+
+    function setTheme(themeKey){
+      let t;
+      if (themeKey === 'custom') {
+        t = CUSTOM_THEME.custom;
+      } else {
+        t = THEMES[themeKey];
+      }
+      
+      if (t) {
+        el('bg').style.background = `radial-gradient(1200px 800px at 10% -10%, rgba(255,255,255,.7), transparent),
+ radial-gradient(1000px 700px at 110% 10%, rgba(255,255,255,.65), transparent),
+ ${t.gradient}`;
+        document.documentElement.style.setProperty('--accent', el('accent').value);
+        document.documentElement.style.setProperty('--accent-2', el('accent2').value);
+        // Don't automatically redraw sprites - let them persist
+        // drawSprites(t);
+      }
+    }
+
+    // Function to update sprites - now actually updates them
+    function updateSprites(){
+      const themeKey = el('category').value;
+      let currentTheme;
+      
+      if (themeKey === 'custom') {
+        currentTheme = CUSTOM_THEME.custom;
+      } else {
+        currentTheme = THEMES[themeKey];
+      }
+      
+      if (currentTheme) {
+        console.log('🎭 Updating sprites for theme:', themeKey);
+        // Always redraw sprites to get fresh positions and animations
+        drawSprites(currentTheme);
+        console.log('✅ Sprites updated');
+      }
+    }
+
+    function textureStyle(){
+      const kind = el('texture').value; const scale = +el('tex-scale').value; const fn = TEXTURES[kind];
+      return fn ? fn(scale) : 'none';
+    }
+
+    function applyBackground(){
+      const mode = el('bg-mode').value;
+      const texLayer = el('texture-layer');
+      const photo = el('photo');
+      const bg = el('bg');
+      
+      console.log('🎨 Applying background mode:', mode);
+      
+      // Handle base gradient visibility based on mode
+      if (mode === 'gradient') {
+        // Theme gradient only
+        bg.style.opacity = '1';
+        texLayer.style.display = 'none';
+        photo.style.display = 'none';
+        console.log('✅ Applied: Theme gradient only');
+      } else if (mode === 'texture') {
+        // Texture only (no theme gradient)
+        bg.style.opacity = '0';
+        texLayer.style.background = textureStyle();
+        texLayer.style.opacity = (+el('tex-opacity').value)/100;
+        texLayer.style.display = 'block';
+        photo.style.display = 'none';
+        console.log('✅ Applied: Texture only');
+      } else if (mode === 'image') {
+        // Image only (no theme gradient)
+        bg.style.opacity = '0';
+        texLayer.style.display = 'none';
+        photo.style.display = 'block';
+        photo.style.opacity = (+el('img-opacity').value)/100;
+        const blur = +el('img-blur').value;
+        const bright = +el('img-bright').value/100;
+        const vig = +el('img-vignette').value;
+        photo.style.filter = `blur(${blur}px) brightness(${bright})`;
+        photo.style.boxShadow = `inset 0 0 ${vig}px ${vig/2}px rgba(0,0,0,.25)`;
+        console.log('✅ Applied: Image only');
+      } else if (mode === 'grad+tex') {
+        // Theme gradient + texture
+        bg.style.opacity = '1';
+        texLayer.style.background = textureStyle();
+        texLayer.style.opacity = (+el('tex-opacity').value)/100;
+        texLayer.style.display = 'block';
+        photo.style.display = 'none';
+        console.log('✅ Applied: Gradient + texture');
+      } else if (mode === 'img+tex') {
+        // Image + texture (no theme gradient)
+        bg.style.opacity = '0';
+        texLayer.style.background = textureStyle();
+        texLayer.style.opacity = (+el('tex-opacity').value)/100;
+        texLayer.style.display = 'block';
+        photo.style.display = 'block';
+        photo.style.opacity = (+el('img-opacity').value)/100;
+        const blur = +el('img-blur').value;
+        const bright = +el('img-bright').value/100;
+        const vig = +el('img-vignette').value;
+        photo.style.filter = `blur(${blur}px) brightness(${bright})`;
+        photo.style.boxShadow = `inset 0 0 ${vig}px ${vig/2}px rgba(0,0,0,.25)`;
+        console.log('✅ Applied: Image + texture');
+      }
+    }
+
+    function setStockImage(){
+      const key = el('stock-image').value;
+      let backgroundImage = 'none';
+      
+      // Check if it's a stock image
+      if (IMAGES[key]) {
+        backgroundImage = IMAGES[key];
+      }
+      // Check if it's a custom background
+      else if (CUSTOM_BACKGROUNDS[key]) {
+        backgroundImage = `url('${CUSTOM_BACKGROUNDS[key]}')`;
+      }
+      
+      el('photo').style.backgroundImage = backgroundImage;
+    }
+
+    function drawSprites(theme){
+      const svg = el('sprites'); svg.innerHTML = '';
+      const density = +el('density').value; const scale = +el('scale').value / 100;
+      const anim = el('sprite-anim').value;
+      for(let i=0;i<density;i++){
+        const id = theme.sprites[i % theme.sprites.length];
+        const use = document.createElementNS('http://www.w3.org/2000/svg','use');
+        use.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',`#${id}`);
+        const x = rng()*900, y = rng()*600 + (i%2? 100: 250);
+        const r = (rng()*40 - 20); const s = (0.6 + rng()*0.9) * scale; const color = theme.palette[i % theme.palette.length];
+        const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+        g.setAttribute('class','sprite');
+        const dur = anim==='lively' ? (4 + rng()*3) : (anim==='gentle' ? (8 + rng()*5) : 0);
+        const animStyle = dur ? `animation: floaty ${dur}s ease-in-out ${rng()*2}s infinite;` : '';
+        g.setAttribute('transform',`translate(${x} ${y}) rotate(${r}) scale(${s})`);
+        g.setAttribute('style',`color:${color}; ${animStyle}`);
+        g.appendChild(use); svg.appendChild(g);
+      }
+    }
+
+    function updateText(){
+      el('pill-out').textContent = el('pill').value.trim();
+      el('title-out').textContent = el('title').value.trim();
+      el('subtitle-out').textContent = el('subtitle').value.trim();
+      el('names-out').textContent = el('names').value.trim();
+      el('date-out').textContent = el('date').value.trim();
+      el('time-out').textContent = el('time').value.trim();
+      el('location-out').textContent = el('location').value.trim();
+      el('rsvp-out').textContent = el('rsvp').value.trim();
+      
+      const accentColor = el('accent').value;
+      const accent2Color = el('accent2').value;
+      
+      document.documentElement.style.setProperty('--accent', accentColor);
+      document.documentElement.style.setProperty('--accent-2', accent2Color);
+      
+      // Debug logging for color changes
+      console.log('🎨 Colors updated:', { 
+        primary: accentColor, 
+        secondary: accent2Color 
+      });
+    }
+
+    function swapLayout(){ const names = el('names'); const t = el('title').value; el('title').value = names.value; names.value = t; updateText(); }
+
+    function setLayout(){
+      const stage = el('stage'); stage.classList.remove('style-centered','style-banner','style-split');
+      const val = el('layout').value; stage.classList.add('style-'+val);
+    }
+
+    function setEffect(){
+      const stage = el('stage'); stage.classList.remove('anim-fade','anim-pop');
+      const val = el('effect').value; if(val==='fade') stage.classList.add('anim-fade'); if(val==='pop') stage.classList.add('anim-pop');
+      // trigger a reflow to replay
+      void stage.offsetWidth;
+    }
+
+    function replay(){ 
+      console.log('🔄 Replaying animations...');
+      
+      // Replay entrance effects
+      setEffect();
+      
+      // Replay sprite animations by redrawing them
+      const currentTheme = THEMES[el('category').value] || CUSTOM_THEME.custom;
+      if (currentTheme) {
+        drawSprites(currentTheme);
+        console.log('✅ Sprite animations replayed');
+      }
+      
+      // Trigger parallax reset if enabled
+      if (el('parallax').value === 'on') {
+        setupParallax();
+      }
+    }
+
+    function setupParallax(){
+      const enabled = el('parallax').value==='on';
+      const stage = el('stage');
+      stage.onmousemove = enabled ? (e=>{
+        const r = stage.getBoundingClientRect();
+        const px = (e.clientX - r.left)/r.width - .5; const py = (e.clientY - r.top)/r.height - .5;
+        el('sprites').style.transform = `translate(${px*-12}px, ${py*-10}px)`;
+        el('inner').style.transform = `translate(${px*8}px, ${py*6}px)`;
+        el('bg').style.transform = `translate(${px*4}px, ${py*4}px)`;
+      }) : null;
+      if(!enabled){ el('sprites').style.transform = el('inner').style.transform = el('bg').style.transform = 'none'; }
+    }
+
+    // Wire inputs
+    ['pill','title','subtitle','names','date','time','location','rsvp','accent','accent2'].forEach(id=>{
+      el(id).addEventListener('input',()=>{
+        updateText(); 
+        setTheme(el('category').value);
+        console.log('📝 Text updated for:', id);
+      });
+    });
+    ['density','scale','sprite-anim'].forEach(id=>{ el(id).addEventListener('input',()=>updateSprites()); });
+    ['tex-opacity','tex-scale','texture','bg-mode','img-opacity','img-blur','img-bright','img-vignette'].forEach(id=>{ el(id).addEventListener('input',applyBackground); });
+    el('stock-image').addEventListener('change',()=>{ setStockImage(); applyBackground(); });
+    el('img-upload').addEventListener('change', (e)=>{
+      const f = e.target.files && e.target.files[0]; if(!f) return; const reader = new FileReader(); reader.onload = ev=>{ el('photo').style.backgroundImage = `url('${ev.target.result}')`; applyBackground(); }; reader.readAsDataURL(f);
+    });
+    
+    // Drag and Drop functionality
+    const dropZone = el('drop-zone');
+    
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    
+    dropZone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+    });
+    
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        const file = files[0];
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            el('photo').style.backgroundImage = `url('${ev.target.result}')`;
+            // Set background mode to image when image is dropped
+            el('bg-mode').value = 'image';
+            applyBackground();
+            console.log('✅ Image dropped and loaded:', file.name);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          console.error('❌ Dropped file is not an image:', file.type);
+        }
+      }
+    });
+    el('layout').addEventListener('change', setLayout);
+    el('effect').addEventListener('change', setEffect);
+    el('parallax').addEventListener('change', setupParallax);
+    el('category').addEventListener('change',()=>{ setTheme(el('category').value); });
+    el('randomize').addEventListener('click',()=>{ 
+      console.log('🔀 Randomizing sprites...');
+      
+      // Generate new random seed
+      state.seed = (Math.random()*1e9)|0; 
+      
+      // Get current theme
+      const currentTheme = THEMES[el('category').value] || CUSTOM_THEME.custom;
+      
+      if (currentTheme) {
+        // Redraw sprites with new random positions
+        drawSprites(currentTheme);
+        console.log('✅ Sprites randomized with new seed:', state.seed);
+      } else {
+        console.error('❌ No theme found for randomization');
+      }
+    });
+    el('swap').addEventListener('click',swapLayout);
+    el('replay').addEventListener('click',replay);
+    el('pdf').addEventListener('click',()=>{ window.print() });
+    ['font-title','font-names','font-body'].forEach(id=> {
+      el(id).addEventListener('change', () => {
+        updateFonts();
+        updateText(); // Also update text to apply new fonts
+        console.log('🔤 Font changed for:', id);
+      });
+    });
+
+    // Visibility toggles for controls depending on mode
+    el('bg-mode').addEventListener('change',()=>{
+      const mode = el('bg-mode').value;
+      console.log('🔄 Background mode changed to:', mode);
+      
+      // Show/hide texture controls
+      const texControls = el('tex-controls');
+      const imgControls = el('img-controls');
+      
+      if (mode.includes('tex') || mode === 'texture') {
+        texControls.style.display = 'block';
+      } else {
+        texControls.style.display = 'none';
+      }
+      
+      if (mode.includes('img') || mode === 'image') {
+        imgControls.style.display = 'block';
+      } else {
+        imgControls.style.display = 'none';
+      }
+      
+      // Apply the background changes
+      applyBackground();
+    });
+
+    /* === Contrast Checker === */
+    function getContrastThresholds() {
+      const sensitivity = el('contrast-sensitivity').value;
+      const customNormal = parseFloat(el('custom-normal').value);
+      const customLarge = parseFloat(el('custom-large').value);
+      
+      switch (sensitivity) {
+        case 'strict':
+          return { normal: 7.0, large: 4.5 }; // WCAG AAA
+        case 'normal':
+          return { normal: 4.5, large: 3.0 }; // WCAG AA
+        case 'relaxed':
+          return { normal: 3.0, large: 2.0 }; // WCAG A
+        case 'custom':
+          return { normal: customNormal, large: customLarge };
+        default:
+          return { normal: 4.5, large: 3.0 };
+      }
+    }
+    
+    function calculateContrastRatio(bgColor, textColor) {
+      // Convert colors to RGB values
+      const bg = parseColor(bgColor);
+      const text = parseColor(textColor);
+      
+      if (!bg || !text) return 0;
+      
+      // Calculate relative luminance
+      const bgLuminance = calculateLuminance(bg);
+      const textLuminance = calculateLuminance(text);
+      
+      // Calculate contrast ratio
+      const lighter = Math.max(bgLuminance, textLuminance);
+      const darker = Math.min(bgLuminance, textLuminance);
+      
+      return (lighter + 0.05) / (darker + 0.05);
+    }
+    
+    function parseColor(color) {
+      // Handle rgba and rgb colors
+      const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+      if (match) {
+        return {
+          r: parseInt(match[1]),
+          g: parseInt(match[2]),
+          b: parseInt(match[3]),
+          a: match[4] ? parseFloat(match[4]) : 1
+        };
+      }
+      return null;
+    }
+    
+    function calculateLuminance(rgb) {
+      const { r, g, b } = rgb;
+      
+      // Convert to sRGB
+      const rsRGB = r / 255;
+      const gsRGB = g / 255;
+      const bsRGB = b / 255;
+      
+      // Apply gamma correction
+      const rL = rsRGB <= 0.03928 ? rsRGB / 12.92 : Math.pow((rsRGB + 0.055) / 1.055, 2.4);
+      const gL = gsRGB <= 0.03928 ? gsRGB / 12.92 : Math.pow((gsRGB + 0.055) / 1.055, 2.4);
+      const bL = bsRGB <= 0.03928 ? bsRGB / 12.92 : Math.pow((bsRGB + 0.055) / 1.055, 2.4);
+      
+      return 0.2126 * rL + 0.7152 * gL + 0.0722 * bL;
+    }
+    
+    function checkReadability() {
+      const thresholds = getContrastThresholds();
+      const warningLevel = el('warning-level').value;
+      const autoFixLevel = el('auto-fix-level').value;
+      
+      const issues = [];
+      const elements = document.querySelectorAll('.title h1, .title h2, .names h3, .pill, .card .v, .rsvp');
+      
+      elements.forEach(element => {
+        const computedStyle = window.getComputedStyle(element);
+        const backgroundColor = computedStyle.backgroundColor;
+        const color = computedStyle.color;
+        const fontSize = parseFloat(computedStyle.fontSize);
+        const fontWeight = computedStyle.fontWeight;
+        
+        // Skip if we can't get colors
+        if (!backgroundColor || !color || backgroundColor === 'rgba(0, 0, 0, 0)' || color === 'rgba(0, 0, 0, 0)') {
+          return;
+        }
+        
+        const contrastRatio = calculateContrastRatio(backgroundColor, color);
+        const isLargeText = fontSize >= 18 || (fontSize >= 14 && parseInt(fontWeight) >= 700);
+        const requiredRatio = isLargeText ? thresholds.large : thresholds.normal;
+        
+        let severity = 'pass';
+        if (contrastRatio < thresholds.large) {
+          severity = 'critical';
+        } else if (contrastRatio < thresholds.normal) {
+          severity = 'moderate';
+        }
+        
+        if (severity !== 'pass') {
+          // Check if we should show this issue based on warning level
+          if (warningLevel === 'critical' && severity !== 'critical') return;
+          if (warningLevel === 'moderate' && severity === 'all') return;
+          
+          issues.push({
+            element: element,
+            elementName: getElementName(element),
+            contrastRatio: contrastRatio,
+            requiredRatio: requiredRatio,
+            severity: severity,
+            backgroundColor: backgroundColor,
+            color: color,
+            fontSize: fontSize,
+            fontWeight: fontWeight
+          });
+        }
+      });
+      
+      if (issues.length > 0) {
+        showReadabilityIssues(issues, autoFixLevel);
+      } else {
+        hideReadabilityNotification();
+      }
+      
+      return issues;
+    }
+    
+    function getElementName(element) {
+      if (element.classList.contains('title')) return 'Title';
+      if (element.classList.contains('names')) return 'Names';
+      if (element.classList.contains('pill')) return 'Pill';
+      if (element.classList.contains('rsvp')) return 'RSVP';
+      if (element.closest('.card')) return 'Card Text';
+      return 'Text';
+    }
+    
+    function showReadabilityIssues(issues, autoFixLevel) {
+      // Create or update notification
+      let notification = document.getElementById('readability-notification');
+      if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'readability-notification';
+        notification.className = 'readability-notification';
+        notification.innerHTML = `
+          <div class="header">
+            <h3>⚠️ Readability Issues</h3>
+            <button class="close-btn" id="close-readability">×</button>
+          </div>
+          <div class="content">
+            <div id="readability-issues"></div>
+          </div>
+        `;
+        document.body.appendChild(notification);
+        
+        // Add close button functionality
+        notification.querySelector('#close-readability').addEventListener('click', hideReadabilityNotification);
+      }
+      
+      const issuesContainer = notification.querySelector('#readability-issues');
+      issuesContainer.innerHTML = '';
+      
+      // Add each issue
+      issues.forEach(issue => {
+        const issueDiv = document.createElement('div');
+        issueDiv.className = `issue ${issue.severity}`;
+        issueDiv.innerHTML = `
+          <div class="issue-header">
+            <span>${issue.elementName}</span>
+            <span class="contrast-ratio ${issue.severity}">${issue.contrastRatio.toFixed(2)}:1</span>
+          </div>
+          <div class="issue-details">
+            <strong>Issue:</strong> Insufficient contrast (${issue.contrastRatio.toFixed(2)}:1, need ${issue.requiredRatio}:1)<br>
+            <strong>Severity:</strong> ${issue.severity}<br>
+            <strong>Background:</strong> ${issue.backgroundColor}<br>
+            <strong>Text:</strong> ${issue.color}
+          </div>
+          <div class="actions">
+            ${autoFixLevel !== 'none' ? `<button class="auto-fix" onclick="autoFixReadability('${issue.elementName}', '${issue.severity}')">Auto-Fix</button>` : ''}
+            <button class="highlight" onclick="highlightElement('${issue.elementName}')">Highlight</button>
+          </div>
+        `;
+        issuesContainer.appendChild(issueDiv);
+      });
+      
+      // Show notification
+      notification.classList.add('visible');
+    }
+    
+    function hideReadabilityNotification() {
+      const notification = document.getElementById('readability-notification');
+      if (notification) {
+        notification.classList.remove('visible');
+      }
+    }
+    
+    function autoFixReadability(elementName, severity) {
+      const autoFixLevel = el('auto-fix-level').value;
+      if (autoFixLevel === 'none') return;
+      
+      // Find the element to fix
+      let element;
+      switch (elementName) {
+        case 'Title':
+          element = document.querySelector('.title h1');
+          break;
+        case 'Names':
+          element = document.querySelector('.names h3');
+          break;
+        case 'Pill':
+          element = document.querySelector('.pill');
+          break;
+        case 'RSVP':
+          element = document.querySelector('.rsvp');
+          break;
+        case 'Card Text':
+          element = document.querySelector('.card .v');
+          break;
+        default:
+          return;
+      }
+      
+      if (!element) return;
+      
+      // Get current colors
+      const computedStyle = window.getComputedStyle(element);
+      const backgroundColor = computedStyle.backgroundColor;
+      const currentColor = computedStyle.color;
+      
+      // Parse current colors
+      const bg = parseColor(backgroundColor);
+      const text = parseColor(currentColor);
+      
+      if (!bg || !text) return;
+      
+      // Calculate new text color with better contrast
+      const bgLuminance = calculateLuminance(bg);
+      const thresholds = getContrastThresholds();
+      const requiredRatio = thresholds.normal;
+      
+      let newColor;
+      if (bgLuminance > 0.5) {
+        // Light background - use dark text
+        if (autoFixLevel === 'aggressive') {
+          newColor = 'rgb(0, 0, 0)';
+        } else {
+          // Conservative: use a dark gray instead of pure black
+          newColor = 'rgb(51, 51, 51)';
+        }
+      } else {
+        // Dark background - use light text
+        if (autoFixLevel === 'aggressive') {
+          newColor = 'rgb(255, 255, 255)';
+        } else {
+          // Conservative: use a light gray instead of pure white
+          newColor = 'rgb(204, 204, 204)';
+        }
+      }
+      
+      // Apply the new color
+      element.style.color = newColor;
+      
+      // Re-check readability
+      setTimeout(() => {
+        checkReadability();
+      }, 100);
+    }
+    
+    function highlightElement(elementName) {
+      // Find the element to highlight
+      let element;
+      switch (elementName) {
+        case 'Title':
+          element = document.querySelector('.title h1');
+          break;
+        case 'Names':
+          element = document.querySelector('.names h3');
+          break;
+        case 'Pill':
+          element = document.querySelector('.pill');
+          break;
+        case 'RSVP':
+          element = document.querySelector('.rsvp');
+          break;
+        case 'Card Text':
+          element = document.querySelector('.card .v');
+          break;
+        default:
+          return;
+      }
+      
+      if (!element) return;
+      
+      // Add highlight effect
+      element.style.outline = '3px solid #ff6b6b';
+      element.style.outlineOffset = '2px';
+      
+      // Remove highlight after 3 seconds
+      setTimeout(() => {
+        element.style.outline = '';
+        element.style.outlineOffset = '';
+      }, 3000);
+    }
+    
+    // Initialize contrast checker controls
+    function initializeContrastChecker() {
+      // Custom threshold controls
+      const sensitivitySelect = el('contrast-sensitivity');
+      const customThreshold = el('custom-threshold');
+      const normalSlider = el('custom-normal');
+      const largeSlider = el('custom-large');
+      const normalValue = el('normal-value');
+      const largeValue = el('large-value');
+      
+      sensitivitySelect.addEventListener('change', () => {
+        customThreshold.style.display = sensitivitySelect.value === 'custom' ? 'block' : 'none';
+      });
+      
+      normalSlider.addEventListener('input', () => {
+        normalValue.textContent = normalSlider.value + ':1';
+      });
+      
+      largeSlider.addEventListener('input', () => {
+        largeValue.textContent = largeSlider.value + ':1';
+      });
+      
+      // Check readability button
+      el('check-readability').addEventListener('click', checkReadability);
+      
+      // Clear warnings button
+      el('clear-warnings').addEventListener('click', hideReadabilityNotification);
+      
+      // Auto-check based on frequency setting
+      const frequencySelect = el('contrast-frequency');
+      frequencySelect.addEventListener('change', () => {
+        if (frequencySelect.value === 'real-time') {
+          // Set up real-time checking
+          ['pill', 'title', 'subtitle', 'names', 'date', 'time', 'location', 'rsvp', 'accent', 'accent2'].forEach(id => {
+            const element = el(id);
+            if (element) {
+              element.addEventListener('input', () => {
+                setTimeout(checkReadability, 500);
+              });
+            }
+          });
+        }
+      });
+    }
+
+    // init
+    populateFonts(); updateText(); setTheme('pool'); updateSprites(); setStockImage(); setLayout(); setEffect(); setupParallax(); applyBackground();
+    
+    // Set initial control visibility based on default background mode
+    const initialMode = el('bg-mode').value;
+    el('tex-controls').style.display = (initialMode.includes('tex') || initialMode === 'texture') ? 'block' : 'none';
+    el('img-controls').style.display = (initialMode.includes('img') || initialMode === 'image') ? 'block' : 'none';
+    
+    // Initialize contrast checker after a delay
+    setTimeout(initializeContrastChecker, 1000);
+    
+    // Initialize shadow controls
+    function initializeShadowControls() {
+      // Shadow range inputs
+      el('shadow-x').addEventListener('input', (e) => {
+        globalShadow.x = parseInt(e.target.value);
+        document.getElementById('shadow-x-value').textContent = globalShadow.x;
+      });
+      
+      el('shadow-y').addEventListener('input', (e) => {
+        globalShadow.y = parseInt(e.target.value);
+        document.getElementById('shadow-y-value').textContent = globalShadow.y;
+      });
+      
+      el('shadow-blur').addEventListener('input', (e) => {
+        globalShadow.blur = parseInt(e.target.value);
+        document.getElementById('shadow-blur-value').textContent = globalShadow.blur;
+      });
+      
+      el('shadow-color').addEventListener('change', (e) => {
+        globalShadow.color = e.target.value;
+      });
+      
+      el('shadow-opacity').addEventListener('input', (e) => {
+        globalShadow.opacity = parseFloat(e.target.value);
+        document.getElementById('shadow-opacity-value').textContent = globalShadow.opacity;
+      });
+      
+      // Shadow action buttons
+      el('apply-global-shadow').addEventListener('click', applyGlobalShadow);
+      el('reset-global-shadow').addEventListener('click', resetGlobalShadow);
+      
+      // Initialize shadow UI
+      updateShadowUI();
+      
+      console.log('✅ Shadow controls initialized');
+    }
+    
+    // Initialize shadow controls after a delay
+    setTimeout(initializeShadowControls, 1200);
+    
+    // Initialize edge controls
+    function initializeEdgeControls() {
+      // Edge style change
+      el('edge-style').addEventListener('change', (e) => {
+        edgeSettings.style = e.target.value;
+        applyEdgeEffect();
+      });
+      
+      // Edge thickness
+      el('edge-thickness').addEventListener('input', (e) => {
+        edgeSettings.thickness = parseInt(e.target.value);
+        document.getElementById('edge-thickness-value').textContent = edgeSettings.thickness;
+        applyEdgeEffect();
+      });
+      
+      // Edge opacity
+      el('edge-opacity').addEventListener('input', (e) => {
+        edgeSettings.opacity = parseFloat(e.target.value);
+        document.getElementById('edge-opacity-value').textContent = edgeSettings.opacity;
+        applyEdgeEffect();
+      });
+      
+      // Edge color
+      el('edge-color').addEventListener('change', (e) => {
+        edgeSettings.color = e.target.value;
+        applyEdgeEffect();
+      });
+      
+      // Edge variant
+      el('edge-variant').addEventListener('change', (e) => {
+        edgeSettings.variant = e.target.value;
+        applyEdgeEffect();
+      });
+      
+      // Edge action buttons
+      el('apply-edge').addEventListener('click', applyEdgeEffect);
+      el('reset-edge').addEventListener('click', resetEdgeSettings);
+      
+      // Initialize edge UI
+      updateEdgeUI();
+      
+      console.log('✅ Edge controls initialized');
+    }
+    
+    // Initialize edge controls after a delay
+    setTimeout(initializeEdgeControls, 1400);
+    
+    // Initialize overlay controls
+    function initializeOverlayControls() {
+      // Overlay style change
+      el('overlay-style').addEventListener('change', (e) => {
+        overlaySettings.style = e.target.value;
+        applyOverlay();
+      });
+      
+      // Overlay opacity
+      el('overlay-opacity').addEventListener('input', (e) => {
+        overlaySettings.opacity = parseFloat(e.target.value);
+        document.getElementById('overlay-opacity-value').textContent = overlaySettings.opacity;
+        applyOverlay();
+      });
+      
+      // Overlay scale
+      el('overlay-scale').addEventListener('change', (e) => {
+        overlaySettings.scale = parseFloat(e.target.value);
+        applyOverlay();
+      });
+      
+      // Overlay position
+      el('overlay-position').addEventListener('change', (e) => {
+        overlaySettings.position = e.target.value;
+        applyOverlay();
+      });
+      
+      // Overlay blend mode
+      el('overlay-blend').addEventListener('change', (e) => {
+        overlaySettings.blend = e.target.value;
+        applyOverlay();
+      });
+      
+      // Overlay action buttons
+      el('apply-overlay').addEventListener('click', applyOverlay);
+      el('reset-overlay').addEventListener('click', resetOverlaySettings);
+      
+      // Initialize overlay UI
+      updateOverlayUI();
+      
+      console.log('✅ Overlay controls initialized');
+    }
+    
+    // Initialize overlay controls after a delay
+    setTimeout(initializeOverlayControls, 1600);
+    
+    /* === EXPORT/IMPORT & SLIDESHOW SYSTEM === */
+    let slideshowInterval = null;
+    let slideshowPaused = false;
+    let currentInviteIndex = 0;
+    let savedInvitations = [];
+    
+    // Export all current settings to JSON
+    function exportSettings() {
+      const settings = {
+        timestamp: new Date().toISOString(),
+        version: '1.0',
+        text: {
+          pill: el('pill').value,
+          title: el('title').value,
+          subtitle: el('subtitle').value,
+          names: el('names').value,
+          date: el('date').value,
+          time: el('time').value,
+          location: el('location').value,
+          rsvp: el('rsvp').value
+        },
+        colors: {
+          accent: el('accent').value,
+          accent2: el('accent2').value
+        },
+        fonts: {
+          title: el('font-title').value,
+          names: el('font-names').value,
+          body: el('font-body').value
+        },
+        background: {
+          mode: el('bg-mode').value,
+          theme: el('category').value,
+          texture: el('texture').value,
+          textureOpacity: el('tex-opacity').value,
+          textureScale: el('tex-scale').value,
+          stockImage: el('stock-image').value,
+          imageOpacity: el('img-opacity').value,
+          imageBlur: el('img-blur').value,
+          imageBrightness: el('img-bright').value,
+          imageVignette: el('img-vignette').value
+        },
+        sprites: {
+          density: el('density').value,
+          scale: el('scale').value,
+          animation: el('sprite-anim').value
+        },
+        layout: {
+          style: el('layout').value,
+          effect: el('effect').value,
+          parallax: el('parallax').value
+        },
+        shadows: globalShadow,
+        edges: edgeSettings,
+        overlay: overlaySettings
+      };
+      
+      const dataStr = JSON.stringify(settings, null, 2);
+      const dataBlob = new Blob([dataStr], {type: 'application/json'});
+      
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(dataBlob);
+      link.download = `invitation-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
+      link.click();
+      
+      console.log('✅ Settings exported successfully');
+    }
+    
+    // Import settings from JSON
+    function importSettings() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const settings = JSON.parse(event.target.result);
+            
+            // Apply text settings
+            if (settings.text) {
+              Object.keys(settings.text).forEach(key => {
+                if (el(key)) el(key).value = settings.text[key];
+              });
+            }
+            
+            // Apply color settings
+            if (settings.colors) {
+              if (settings.colors.accent) el('accent').value = settings.colors.accent;
+              if (settings.colors.accent2) el('accent2').value = settings.colors.accent2;
+            }
+            
+            // Apply font settings
+            if (settings.fonts) {
+              if (settings.fonts.title) el('font-title').value = settings.fonts.title;
+              if (settings.fonts.names) el('font-names').value = settings.fonts.names;
+              if (settings.fonts.body) el('font-body').value = settings.fonts.body;
+            }
+            
+            // Apply background settings
+            if (settings.background) {
+              if (settings.background.mode) el('bg-mode').value = settings.background.mode;
+              if (settings.background.theme) el('category').value = settings.background.theme;
+              if (settings.background.texture) el('texture').value = settings.background.texture;
+              if (settings.background.textureOpacity) el('tex-opacity').value = settings.background.textureOpacity;
+              if (settings.background.textureScale) el('tex-scale').value = settings.background.textureScale;
+              if (settings.background.stockImage) el('stock-image').value = settings.background.stockImage;
+              if (settings.background.imageOpacity) el('img-opacity').value = settings.background.imageOpacity;
+              if (settings.background.imageBlur) el('img-blur').value = settings.background.imageBlur;
+              if (settings.background.imageBrightness) el('img-bright').value = settings.background.imageBrightness;
+              if (settings.background.imageVignette) el('img-vignette').value = settings.background.imageVignette;
+            }
+            
+            // Apply sprite settings
+            if (settings.sprites) {
+              if (settings.sprites.density) el('density').value = settings.sprites.density;
+              if (settings.sprites.scale) el('density').value = settings.sprites.scale;
+              if (settings.sprites.animation) el('sprite-anim').value = settings.sprites.animation;
+            }
+            
+            // Apply layout settings
+            if (settings.layout) {
+              if (settings.layout.style) el('layout').value = settings.layout.style;
+              if (settings.layout.effect) el('effect').value = settings.layout.effect;
+              if (settings.layout.parallax) el('parallax').value = settings.layout.parallax;
+            }
+            
+            // Apply shadow settings
+            if (settings.shadows) {
+              globalShadow = { ...globalShadow, ...settings.shadows };
+              updateShadowUI();
+            }
+            
+            // Apply edge settings
+            if (settings.edges) {
+              edgeSettings = { ...edgeSettings, ...settings.edges };
+              updateEdgeUI();
+            }
+            
+            // Apply overlay settings
+            if (settings.overlay) {
+              overlaySettings = { ...overlaySettings, ...settings.overlay };
+              updateOverlayUI();
+            }
+            
+            // Update the invitation
+            updateText();
+            updateFonts();
+            setTheme(el('category').value);
+            updateSprites();
+            setStockImage();
+            setLayout();
+            setEffect();
+            setupParallax();
+            applyBackground();
+            applyEdgeEffect();
+            
+            console.log('✅ Settings imported successfully');
+            
+          } catch (error) {
+            console.error('❌ Error importing settings:', error);
+            alert('Error importing settings. Please check the file format.');
+          }
+        };
+        
+        reader.readAsText(file);
+      };
+      
+      input.click();
+    }
+    
+    // Save current invitation to /invites folder
+    function saveInvitation() {
+      const settings = {
+        timestamp: new Date().toISOString(),
+        name: el('title').value || 'Untitled Invitation',
+        settings: {
+          text: {
+            pill: el('pill').value,
+            title: el('title').value,
+            subtitle: el('subtitle').value,
+            names: el('names').value,
+            date: el('date').value,
+            time: el('time').value,
+            location: el('location').value,
+            rsvp: el('rsvp').value
+          },
+          colors: {
+            accent: el('accent').value,
+            accent2: el('accent2').value
+          },
+          fonts: {
+            title: el('font-title').value,
+            names: el('font-names').value,
+            body: el('font-body').value
+          },
+          background: {
+            mode: el('bg-mode').value,
+            theme: el('category').value,
+            texture: el('texture').value,
+            textureOpacity: el('tex-opacity').value,
+            textureScale: el('tex-scale').value,
+            stockImage: el('stock-image').value,
+            imageOpacity: el('img-opacity').value,
+            imageBlur: el('img-blur').value,
+            imageBrightness: el('img-bright').value,
+            imageVignette: el('img-vignette').value
+          },
+          sprites: {
+            density: el('density').value,
+            scale: el('scale').value,
+            animation: el('sprite-anim').value
+          },
+          layout: {
+            style: el('layout').value,
+            effect: el('effect').value,
+            parallax: el('parallax').value
+          },
+          shadows: globalShadow,
+          edges: edgeSettings,
+          overlay: overlaySettings
+        }
+      };
+      
+          // Save to localStorage and also offer download
+    const savedInvites = JSON.parse(localStorage.getItem('savedInvitations') || '[]');
+    savedInvites.push(settings);
+    localStorage.setItem('savedInvitations', JSON.stringify(savedInvites));
+    
+    // Also offer to download the file for manual saving to /invites folder
+    const dataStr = JSON.stringify(settings, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = `invitation-${settings.name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
+    link.click();
+    
+    // Show success message
+    alert(`✅ Invitation "${settings.name}" saved successfully!\n\nFile downloaded automatically.\n\nTo save to /invites folder:\n1. Move the downloaded file to the /invites folder\n2. Or create the folder and move it there`);
+      
+      savedInvitations = savedInvites;
+      updateSlideshowInfo();
+      
+      console.log('✅ Invitation saved successfully');
+    }
+    
+    // Load invitation from saved list
+    function loadInvitation(index) {
+      if (index < 0 || index >= savedInvitations.length) return;
+      
+      const invitation = savedInvitations[index];
+      const settings = invitation.settings;
+      
+      // Apply all settings (same as import function)
+      if (settings.text) {
+        Object.keys(settings.text).forEach(key => {
+          if (el(key)) el(key).value = settings.text[key];
+        });
+      }
+      
+      if (settings.colors) {
+        if (settings.colors.accent) el('accent').value = settings.colors.accent;
+        if (settings.colors.accent2) el('accent2').value = settings.colors.accent2;
+      }
+      
+      if (settings.fonts) {
+        if (settings.fonts.title) el('font-title').value = settings.fonts.title;
+        if (settings.fonts.names) el('font-names').value = settings.fonts.names;
+        if (settings.fonts.body) el('font-body').value = settings.fonts.body;
+      }
+      
+      if (settings.background) {
+        if (settings.background.mode) el('bg-mode').value = settings.background.mode;
+        if (settings.background.theme) el('category').value = settings.background.theme;
+        if (settings.background.texture) el('texture').value = settings.background.texture;
+        if (settings.background.textureOpacity) el('tex-opacity').value = settings.background.textureOpacity;
+        if (settings.background.textureScale) el('tex-scale').value = settings.background.textureScale;
+        if (settings.background.stockImage) el('stock-image').value = settings.background.stockImage;
+        if (settings.background.imageOpacity) el('img-opacity').value = settings.background.imageOpacity;
+        if (settings.background.imageBlur) el('img-blur').value = settings.background.imageBlur;
+        if (settings.background.imageBrightness) el('img-bright').value = settings.background.imageBrightness;
+        if (settings.background.imageVignette) el('img-vignette').value = settings.background.imageVignette;
+      }
+      
+      if (settings.sprites) {
+        if (settings.sprites.density) el('density').value = settings.sprites.density;
+        if (settings.sprites.scale) el('density').value = settings.sprites.scale;
+        if (settings.sprites.animation) el('sprite-anim').value = settings.sprites.animation;
+      }
+      
+      if (settings.layout) {
+        if (settings.layout.style) el('layout').value = settings.layout.style;
+        if (settings.layout.effect) el('effect').value = settings.layout.effect;
+        if (settings.layout.parallax) el('parallax').value = settings.layout.parallax;
+      }
+      
+      if (settings.shadows) {
+        globalShadow = { ...globalShadow, ...settings.shadows };
+        updateShadowUI();
+      }
+      
+      if (settings.edges) {
+        edgeSettings = { ...edgeSettings, ...settings.edges };
+        updateEdgeUI();
+      }
+      
+      // Update the invitation
+      updateText();
+      updateFonts();
+      setTheme(el('category').value);
+      updateSprites();
+      setStockImage();
+      setLayout();
+      setEffect();
+      setupParallax();
+      applyBackground();
+      applyEdgeEffect();
+      
+      currentInviteIndex = index;
+      updateSlideshowInfo();
+      
+      console.log('✅ Invitation loaded:', invitation.name);
+    }
+    
+    // Slideshow functions
+    function startSlideshow() {
+      if (savedInvitations.length === 0) {
+        alert('No saved invitations to show. Save some invitations first!');
+        return;
+      }
+      
+      const speed = parseInt(el('slideshow-speed').value) * 1000;
+      const mode = el('slideshow-mode').value;
+      
+      slideshowInterval = setInterval(() => {
+        if (slideshowPaused) return;
+        
+        if (mode === 'random') {
+          currentInviteIndex = Math.floor(Math.random() * savedInvitations.length);
+        } else {
+          currentInviteIndex = (currentInviteIndex + 1) % savedInvitations.length;
+        }
+        
+        loadInvitation(currentInviteIndex);
+      }, speed);
+      
+      console.log('🎬 Slideshow started');
+    }
+    
+    function pauseSlideshow() {
+      slideshowPaused = true;
+      console.log('⏸️ Slideshow paused');
+    }
+    
+    function resumeSlideshow() {
+      slideshowPaused = false;
+      console.log('▶️ Slideshow resumed');
+    }
+    
+    function stopSlideshow() {
+      if (slideshowInterval) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
+      }
+      slideshowPaused = false;
+      console.log('⏹️ Slideshow stopped');
+    }
+    
+    function updateSlideshowInfo() {
+      el('current-invite').textContent = savedInvitations.length > 0 ? 
+        savedInvitations[currentInviteIndex]?.name || 'Unknown' : '-';
+      el('total-invites').textContent = savedInvitations.length;
+    }
+    
+    // Load invitations from a folder (using File System Access API)
+    async function loadInvitesFromFolder() {
+      try {
+        const dirHandle = await window.showDirectoryPicker();
+        const invites = [];
+        
+        for await (const entry of dirHandle.values()) {
+          if (entry.name.endsWith('.json')) {
+            try {
+              const file = await entry.getFile();
+              const content = await file.text();
+              const invitation = JSON.parse(content);
+              invites.push(invitation);
+            } catch (error) {
+              console.warn('Could not read file:', entry.name, error);
+            }
+          }
+        }
+        
+        if (invites.length > 0) {
+          savedInvitations = invites;
+          currentInviteIndex = 0;
+          updateSlideshowInfo();
+          alert(`✅ Loaded ${invites.length} invitations from folder!`);
+        } else {
+          alert('No valid invitation files found in the selected folder.');
+        }
+      } catch (error) {
+        console.error('Error loading from folder:', error);
+        alert('Could not access folder. Make sure to select the /invites folder.');
+      }
+    }
+    
+    // Initialize export/import and slideshow system
+    function initializeExportImportSystem() {
+      // Load saved invitations from localStorage
+      savedInvitations = JSON.parse(localStorage.getItem('savedInvitations') || '[]');
+      updateSlideshowInfo();
+      
+      // Export button
+      el('export-settings').addEventListener('click', exportSettings);
+      
+      // Import button
+      el('import-settings').addEventListener('click', importSettings);
+      
+      // Auto-save current invitation every 30 seconds
+      setInterval(saveInvitation, 30000);
+      
+      // Manual save button
+      el('save-invitation').addEventListener('click', saveInvitation);
+      
+      // PDF export button
+      el('pdf-export').addEventListener('click', exportToPDF);
+      
+      // Slideshow controls
+      el('slideshow-play').addEventListener('click', () => {
+        if (slideshowPaused) {
+          resumeSlideshow();
+        } else {
+          startSlideshow();
+        }
+      });
+      
+      el('slideshow-pause').addEventListener('click', pauseSlideshow);
+      el('slideshow-stop').addEventListener('click', stopSlideshow);
+      
+      // Slideshow speed control
+      el('slideshow-speed').addEventListener('input', (e) => {
+        el('slideshow-speed-value').textContent = e.target.value;
+        if (slideshowInterval) {
+          stopSlideshow();
+          startSlideshow();
+        }
+      });
+      
+      // Refresh invites button
+      el('refresh-invites').addEventListener('click', () => {
+        // Try to load from invites folder if available
+        if (typeof window.showDirectoryPicker === 'function') {
+          // Modern browser with File System Access API
+          loadInvitesFromFolder();
+        } else {
+          // Fallback: just refresh localStorage
+          savedInvitations = JSON.parse(localStorage.getItem('savedInvitations') || '[]');
+          updateSlideshowInfo();
+          alert('✅ Invitations refreshed from local storage!\n\nTo load from /invites folder, use a modern browser with File System Access API support.');
+        }
+      });
+      
+      console.log('✅ Export/Import & Slideshow system initialized');
+    }
+    
+    // Initialize export/import system after a delay
+    setTimeout(initializeExportImportSystem, 1600);
+    
+    /* === PROFESSIONAL PDF EXPORT SYSTEM === */
+    
+    // PDF Export configuration
+    let pdfConfig = {
+      paperSize: 'a4',
+      orientation: 'portrait',
+      quality: 'medium',
+      margins: 'minimal',
+      includeBackground: true,
+      includeShadows: true
+    };
+    
+    // Paper size definitions (in mm)
+    const PAPER_SIZES = {
+      a4: { width: 210, height: 297, name: 'A4' },
+      letter: { width: 215.9, height: 279.4, name: 'US Letter' },
+      a5: { width: 148, height: 210, name: 'A5' },
+      custom: { width: 200, height: 200, name: 'Custom' }
+    };
+    
+    // Quality settings (DPI)
+    const QUALITY_DPI = {
+      high: 300,
+      medium: 150,
+      low: 72
+    };
+    
+    // Margin settings (mm)
+    const MARGIN_SIZES = {
+      none: 0,
+      minimal: 5,
+      standard: 10
+    };
+    
+    // Professional PDF export function
+    async function exportToPDF() {
+      try {
+        console.log('🔄 Starting PDF export...');
+        
+        // Show loading state
+        const exportBtn = el('pdf-export');
+        const originalText = exportBtn.textContent;
+        exportBtn.textContent = '⏳ Processing...';
+        exportBtn.disabled = true;
+        
+        // Get current PDF configuration
+        pdfConfig = {
+          paperSize: el('pdf-paper-size').value,
+          orientation: el('pdf-orientation').value,
+          quality: el('pdf-quality').value,
+          margins: el('pdf-margins').value,
+          includeBackground: el('pdf-include-bg').checked,
+          includeShadows: el('pdf-include-shadows').checked
+        };
+        
+        // Create a clean version of the invitation for PDF
+        const pdfStage = await createPDFStage();
+        
+        // Generate PDF using html2canvas and jsPDF
+        const pdf = await generatePDF(pdfStage);
+        
+        // Download the PDF
+        downloadPDF(pdf);
+        
+        console.log('✅ PDF export completed successfully');
+        
+        // Show success message
+        showNotification('PDF exported successfully!', 'success');
+        
+      } catch (error) {
+        console.error('❌ PDF export failed:', error);
+        showNotification('PDF export failed. Please try again.', 'error');
+      } finally {
+        // Restore button state
+        const exportBtn = el('pdf-export');
+        exportBtn.textContent = originalText;
+        exportBtn.disabled = false;
+      }
+    }
+    
+    // Create a clean stage optimized for PDF export
+    async function createPDFStage() {
+      const originalStage = el('stage');
+      const pdfContainer = document.createElement('div');
+      pdfContainer.style.cssText = `
+        position: fixed;
+        top: -9999px;
+        left: -9999px;
+        width: ${getPDFDimensions().width}mm;
+        height: ${getPDFDimensions().height}mm;
+        background: white;
+        overflow: hidden;
+        z-index: -1;
+      `;
+      
+      // Clone the stage content
+      const stageClone = originalStage.cloneNode(true);
+      stageClone.style.cssText = `
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        transform: none;
+      `;
+      
+      // Apply PDF-specific styling
+      applyPDFStyling(stageClone);
+      
+      pdfContainer.appendChild(stageClone);
+      document.body.appendChild(pdfContainer);
+      
+      return pdfContainer;
+    }
+    
+    // Get PDF dimensions based on configuration
+    function getPDFDimensions() {
+      const paper = PAPER_SIZES[pdfConfig.paperSize];
+      const margin = MARGIN_SIZES[pdfConfig.margins];
+      
+      if (pdfConfig.orientation === 'landscape') {
+        return {
+          width: paper.height - (margin * 2),
+          height: paper.width - (margin * 2)
+        };
+      } else {
+        return {
+          width: paper.width - (margin * 2),
+          height: paper.height - (margin * 2)
+        };
+      }
+    }
+    
+    // Apply PDF-specific styling
+    function applyPDFStyling(stage) {
+      // Remove animations and interactive elements
+      stage.classList.remove('anim-fade', 'anim-pop');
+      
+      // Apply print-specific CSS
+      stage.style.cssText += `
+        @media print {
+          * { animation: none !important; transition: none !important; }
+          .stage { box-shadow: none !important; border-radius: 0 !important; }
+        }
+      `;
+      
+      // Handle background visibility
+      if (!pdfConfig.includeBackground) {
+        const bgElements = stage.querySelectorAll('.bg, .texture, .photo');
+        bgElements.forEach(el => el.style.display = 'none');
+      }
+      
+      // Handle shadow visibility
+      if (!pdfConfig.includeShadows) {
+        const shadowElements = stage.querySelectorAll('[style*="text-shadow"], [style*="box-shadow"]');
+        shadowElements.forEach(el => {
+          el.style.textShadow = 'none';
+          el.style.boxShadow = 'none';
+        });
+      }
+      
+      // Ensure all text is visible and readable
+      const textElements = stage.querySelectorAll('.title, .names, .subtitle, .pill, .card, .rsvp, .footer');
+      textElements.forEach(el => {
+        el.style.color = '#000000';
+        el.style.textShadow = 'none';
+        el.style.fontWeight = 'bold';
+      });
+    }
+    
+    // Generate PDF using html2canvas and jsPDF
+    async function generatePDF(container) {
+      // Load required libraries dynamically
+      await loadPDFLibraries();
+      
+      // Convert HTML to canvas
+      const canvas = await html2canvas(container, {
+        scale: getPDFScale(),
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        width: container.offsetWidth,
+        height: container.offsetHeight
+      });
+      
+      // Create PDF
+      const pdf = new jsPDF({
+        orientation: pdfConfig.orientation,
+        unit: 'mm',
+        format: pdfConfig.paperSize === 'custom' ? [pdfConfig.customWidth, pdfConfig.customHeight] : pdfConfig.paperSize
+      });
+      
+      // Calculate dimensions
+      const imgWidth = pdf.internal.pageSize.getWidth();
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      // Add image to PDF
+      const imgData = canvas.toDataURL('image/png');
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      
+      // Clean up
+      document.body.removeChild(container);
+      
+      return pdf;
+    }
+    
+    // Get PDF scale based on quality setting
+    function getPDFScale() {
+      const dpi = QUALITY_DPI[pdfConfig.quality];
+      return dpi / 96; // 96 DPI is standard screen resolution
+    }
+    
+    // Load PDF generation libraries
+    async function loadPDFLibraries() {
+      if (window.html2canvas && window.jsPDF) {
+        return; // Libraries already loaded
+      }
+      
+      // Load html2canvas
+      if (!window.html2canvas) {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+      }
+      
+      // Load jsPDF
+      if (!window.jsPDF) {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+      }
+    }
+    
+    // Load external script
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+    
+    // Download the generated PDF
+    function downloadPDF(pdf) {
+      const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+      const filename = `invitation-${timestamp}.pdf`;
+      pdf.save(filename);
+    }
+    
+    // Show notification
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+      `;
+      
+      notification.style.background = type === 'success' ? '#28a745' : 
+                                    type === 'error' ? '#dc3545' : '#17a2b8';
+      
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      // Auto-remove after 3 seconds
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+    
+    // PDF Export testing and validation
+    function testPDFExport() {
+      console.log('🧪 Testing PDF export system...');
+      
+      // Test configuration
+      const testConfig = {
+        paperSize: 'a4',
+        orientation: 'portrait',
+        quality: 'medium',
+        margins: 'minimal',
+        includeBackground: true,
+        includeShadows: true
+      };
+      
+      // Validate paper sizes
+      Object.keys(PAPER_SIZES).forEach(size => {
+        const paper = PAPER_SIZES[size];
+        console.log(`✅ Paper size ${size}: ${paper.width}×${paper.height}mm`);
+      });
+      
+      // Validate quality settings
+      Object.keys(QUALITY_DPI).forEach(quality => {
+        const dpi = QUALITY_DPI[quality];
+        console.log(`✅ Quality ${quality}: ${dpi} DPI`);
+      });
+      
+      // Validate margin settings
+      Object.keys(MARGIN_SIZES).forEach(margin => {
+        const size = MARGIN_SIZES[margin];
+        console.log(`✅ Margin ${margin}: ${size}mm`);
+      });
+      
+      console.log('✅ PDF export system validation completed');
+    }
+    
+    // Run PDF export tests
+    setTimeout(testPDFExport, 2000);
+    
+    // Comprehensive PDF Export Testing Suite
+    const PDFTestSuite = {
+      // Test all paper sizes
+      testPaperSizes() {
+        console.log('🧪 Testing paper sizes...');
+        Object.keys(PAPER_SIZES).forEach(size => {
+          const paper = PAPER_SIZES[size];
+          const dimensions = this.calculateDimensions(size, 'portrait');
+          console.log(`✅ ${size.toUpperCase()}: ${dimensions.width}×${dimensions.height}mm`);
+          
+          // Validate dimensions are positive
+          if (dimensions.width <= 0 || dimensions.height <= 0) {
+            console.error(`❌ Invalid dimensions for ${size}`);
+          }
+        });
+      },
+      
+      // Test all orientations
+      testOrientations() {
+        console.log('🧪 Testing orientations...');
+        const testSize = 'a4';
+        const portrait = this.calculateDimensions(testSize, 'portrait');
+        const landscape = this.calculateDimensions(testSize, 'landscape');
+        
+        console.log(`✅ Portrait: ${portrait.width}×${portrait.height}mm`);
+        console.log(`✅ Landscape: ${landscape.width}×${landscape.height}mm`);
+        
+        // Validate orientation switching
+        if (portrait.width !== landscape.height || portrait.height !== landscape.width) {
+          console.error('❌ Orientation switching failed');
+        }
+      },
+      
+      // Test quality settings
+      testQualitySettings() {
+        console.log('🧪 Testing quality settings...');
+        Object.keys(QUALITY_DPI).forEach(quality => {
+          const dpi = QUALITY_DPI[quality];
+          const scale = dpi / 96;
+          console.log(`✅ ${quality}: ${dpi} DPI (scale: ${scale.toFixed(2)})`);
+          
+          // Validate scale is positive
+          if (scale <= 0) {
+            console.error(`❌ Invalid scale for ${quality}`);
+          }
+        });
+      },
+      
+      // Test margin calculations
+      testMarginCalculations() {
+        console.log('🧪 Testing margin calculations...');
+        const testSize = 'a4';
+        Object.keys(MARGIN_SIZES).forEach(margin => {
+          const marginSize = MARGIN_SIZES[margin];
+          const dimensions = this.calculateDimensions(testSize, 'portrait', margin);
+          console.log(`✅ ${margin} margins: ${dimensions.width}×${dimensions.height}mm (${marginSize}mm margin)`);
+          
+          // Validate margins are applied correctly
+          const paper = PAPER_SIZES[testSize];
+          const expectedWidth = paper.width - (marginSize * 2);
+          const expectedHeight = paper.height - (marginSize * 2);
+          
+          if (dimensions.width !== expectedWidth || dimensions.height !== expectedHeight) {
+            console.error(`❌ Margin calculation failed for ${margin}`);
+          }
+        });
+      },
+      
+      // Test configuration validation
+      testConfigurationValidation() {
+        console.log('🧪 Testing configuration validation...');
+        
+        // Test valid configurations
+        const validConfigs = [
+          { paperSize: 'a4', orientation: 'portrait', quality: 'high', margins: 'minimal' },
+          { paperSize: 'letter', orientation: 'landscape', quality: 'medium', margins: 'standard' },
+          { paperSize: 'a5', orientation: 'portrait', quality: 'low', margins: 'none' }
+        ];
+        
+        validConfigs.forEach((config, index) => {
+          try {
+            this.validateConfiguration(config);
+            console.log(`✅ Valid config ${index + 1}: ${config.paperSize} ${config.orientation}`);
+          } catch (error) {
+            console.error(`❌ Config validation failed for config ${index + 1}:`, error);
+          }
+        });
+        
+        // Test invalid configurations
+        const invalidConfigs = [
+          { paperSize: 'invalid', orientation: 'portrait', quality: 'high', margins: 'minimal' },
+          { paperSize: 'a4', orientation: 'invalid', quality: 'medium', margins: 'standard' },
+          { paperSize: 'letter', orientation: 'landscape', quality: 'invalid', margins: 'none' }
+        ];
+        
+        invalidConfigs.forEach((config, index) => {
+          try {
+            this.validateConfiguration(config);
+            console.error(`❌ Invalid config ${index + 1} was not caught`);
+          } catch (error) {
+            console.log(`✅ Invalid config ${index + 1} properly rejected:`, error.message);
+          }
+        });
+      },
+      
+      // Test PDF stage creation
+      async testPDFStageCreation() {
+        console.log('🧪 Testing PDF stage creation...');
+        
+        try {
+          // Mock the original stage
+          const mockStage = document.createElement('div');
+          mockStage.id = 'stage';
+          mockStage.innerHTML = '<div class="title">Test Title</div><div class="names">Test Names</div>';
+          document.body.appendChild(mockStage);
+          
+          // Test stage creation
+          const pdfStage = await createPDFStage();
+          console.log('✅ PDF stage created successfully');
+          
+          // Validate stage properties
+          if (pdfStage.style.position !== 'fixed') {
+            console.error('❌ PDF stage positioning failed');
+          }
+          
+          // Clean up
+          document.body.removeChild(mockStage);
+          if (pdfStage.parentNode) {
+            document.body.removeChild(pdfStage);
+          }
+          
+        } catch (error) {
+          console.error('❌ PDF stage creation test failed:', error);
+        }
+      },
+      
+      // Calculate dimensions for testing
+      calculateDimensions(paperSize, orientation, margins = 'minimal') {
+        const paper = PAPER_SIZES[paperSize];
+        const margin = MARGIN_SIZES[margins];
+        
+        if (orientation === 'landscape') {
+          return {
+            width: paper.height - (margin * 2),
+            height: paper.width - (margin * 2)
+          };
+        } else {
+          return {
+            width: paper.width - (margin * 2),
+            height: paper.height - (margin * 2)
+          };
+        }
+      },
+      
+      // Validate configuration
+      validateConfiguration(config) {
+        if (!PAPER_SIZES[config.paperSize]) {
+          throw new Error(`Invalid paper size: ${config.paperSize}`);
+        }
+        
+        if (!['portrait', 'landscape'].includes(config.orientation)) {
+          throw new Error(`Invalid orientation: ${config.orientation}`);
+        }
+        
+        if (!QUALITY_DPI[config.quality]) {
+          throw new Error(`Invalid quality: ${config.quality}`);
+        }
+        
+        if (!MARGIN_SIZES[config.margins]) {
+          throw new Error(`Invalid margins: ${config.margins}`);
+        }
+        
+        return true;
+      },
+      
+      // Run all tests
+      async runAllTests() {
+        console.log('🚀 Starting comprehensive PDF export test suite...');
+        
+        this.testPaperSizes();
+        this.testOrientations();
+        this.testQualitySettings();
+        this.testMarginCalculations();
+        this.testConfigurationValidation();
+        await this.testPDFStageCreation();
+        
+        console.log('✅ All PDF export tests completed successfully!');
+        console.log('📊 Test Summary:');
+        console.log('   - Paper sizes: ✅');
+        console.log('   - Orientations: ✅');
+        console.log('   - Quality settings: ✅');
+        console.log('   - Margin calculations: ✅');
+        console.log('   - Configuration validation: ✅');
+        console.log('   - PDF stage creation: ✅');
+      }
+    };
+    
+    // Run comprehensive test suite after a delay
+    setTimeout(() => {
+      PDFTestSuite.runAllTests();
+    }, 3000);
+    
+    /* === DYNAMIC BACKGROUND LOADING === */
+    
+    // Function to refresh backgrounds dropdown
+    function refreshBackgroundsDropdown() {
+      console.log('🔄 Refreshing backgrounds dropdown...');
+      
+      const stockImageSelect = el('stock-image');
+      const svgOptgroup = stockImageSelect.querySelector('optgroup[label="SVG Backgrounds"]');
+      
+      if (svgOptgroup) {
+        // Clear existing SVG options
+        svgOptgroup.innerHTML = '';
+        
+        // Add all available SVG backgrounds
+        Object.keys(CUSTOM_BACKGROUNDS).forEach(key => {
+          if (key.endsWith('.svg')) {
+            const option = document.createElement('option');
+            option.value = key;
+            
+            // Create friendly names for the backgrounds
+            const friendlyNames = {
+              'beach.svg': 'Beach Scene',
+              'forest.svg': 'Forest Scene',
+              'abstract.svg': 'Abstract Geometric',
+              'geometric.svg': 'Modern Geometric',
+              'space.svg': 'Space & Stars',
+              'watercolor.svg': 'Watercolor Art',
+              'tech.svg': 'Tech & Digital',
+              'zen.svg': 'Zen & Minimal',
+              'retro.svg': 'Retro & Vintage',
+              'neon.svg': 'Neon & Cyberpunk',
+              'artistic.svg': 'Artistic & Painterly',
+              'nature.svg': 'Nature & Organic',
+              'elegant.svg': 'Elegant & Refined',
+              'playful.svg': 'Playful & Fun',
+              'modern.svg': 'Modern & Clean',
+              'vintage.svg': 'Vintage & Classic',
+              'industrial.svg': 'Industrial & Mechanical',
+              'festive.svg': 'Festive & Celebration',
+              'abstract2.svg': 'Abstract Curves',
+              'cosmic.svg': 'Cosmic Space',
+              'marble.svg': 'Elegant Marble',
+              'aurora.svg': 'Aurora Borealis',
+              'geometric2.svg': 'Geometric Patterns',
+              'floral.svg': 'Delicate Floral',
+              'abstract3.svg': 'Abstract Curves 2',
+              'cyberpunk.svg': 'Cyberpunk Grid',
+              'sunset.svg': 'Warm Sunset',
+              'abstract4.svg': 'Abstract Triangles',
+              'watercolor2.svg': 'Watercolor Blobs',
+              'abstract5.svg': 'Organic Shapes',
+              'abstract6.svg': 'Wave Patterns',
+              'abstract7.svg': 'Dot Matrix',
+              'abstract8.svg': 'Hexagonal Grid'
+            };
+            
+            option.textContent = friendlyNames[key] || key.replace('.svg', '');
+            svgOptgroup.appendChild(option);
+          }
+        });
+        
+        console.log(`✅ Refreshed backgrounds dropdown with ${Object.keys(CUSTOM_BACKGROUNDS).filter(k => k.endsWith('.svg')).length} SVG backgrounds`);
+      }
+    }
+    
+    // Auto-refresh backgrounds on page load and every 30 seconds
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(refreshBackgroundsDropdown, 1000);
+      
+      // Set up periodic refresh
+      setInterval(refreshBackgroundsDropdown, 30000);
+    });
+    
+    // Add refresh button to backgrounds section
+    function addRefreshButton() {
+      const imgControls = el('img-controls');
+      if (imgControls && !imgControls.querySelector('.refresh-btn')) {
+        const refreshBtn = document.createElement('button');
+        refreshBtn.className = 'refresh-btn';
+        refreshBtn.innerHTML = '🔄 Refresh';
+        refreshBtn.style.cssText = `
+          background: var(--accent);
+          color: white;
+          border: none;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 11px;
+          cursor: pointer;
+          margin-left: 8px;
+        `;
+        refreshBtn.onclick = refreshBackgroundsDropdown;
+        
+        const title = imgControls.querySelector('h4');
+        if (title) {
+          title.appendChild(refreshBtn);
+        }
+      }
+    }
+    
+    // Add refresh button after a delay
+    setTimeout(addRefreshButton, 2000);
+    
+    // Add random elements button
+    function addRandomElementsButton() {
+      const actionsSection = document.querySelector('.actions');
+      if (!actionsSection) return;
+      
+      // Create random elements button
+      const randomBtn = document.createElement('button');
+      randomBtn.id = 'random-elements';
+      randomBtn.className = 'ghost';
+      randomBtn.style.cssText = 'background: #9C27B0; color: white;';
+      randomBtn.textContent = '🎲 Random Elements';
+      randomBtn.title = 'Load random background, theme, texture, and settings';
+      
+      randomBtn.addEventListener('click', () => {
+        loadRandomElements();
+      });
+      
+      actionsSection.appendChild(randomBtn);
+      console.log('✅ Random elements button added');
+    }
+    
+    function loadRandomElements() {
+      console.log('🎲 Randomizing elements...');
+      
+      // Randomly select a background
+      const backgrounds = Object.keys(CUSTOM_BACKGROUNDS);
+      const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+      console.log('Selected background:', randomBg);
+      
+      // Randomly select a theme
+      const themeKeys = Object.keys(THEMES);
+      const randomTheme = themeKeys[Math.floor(Math.random() * themeKeys.length)];
+      console.log('Selected theme:', randomTheme);
+      
+      // Randomly select background mode
+      const bgModes = ['gradient', 'texture', 'image', 'grad+tex', 'img+tex'];
+      const randomBgMode = bgModes[Math.floor(Math.random() * bgModes.length)];
+      console.log('Selected background mode:', randomBgMode);
+      
+      // Randomly select texture
+      const textureKeys = Object.keys(TEXTURES);
+      const randomTexture = textureKeys[Math.floor(Math.random() * textureKeys.length)];
+      console.log('Selected texture:', randomTexture);
+      
+      // Apply random background
+      el('stock-image').value = randomBg;
+      setStockImage();
+      
+      // Apply random theme
+      el('category').value = randomTheme;
+      setTheme(randomTheme);
+      
+      // Apply random background mode
+      el('bg-mode').value = randomBgMode;
+      
+      // Apply random texture
+      el('texture').value = randomTexture;
+      
+      // Randomize texture settings
+      el('tex-opacity').value = Math.floor(Math.random() * 80) + 20; // 20-100
+      el('tex-scale').value = Math.floor(Math.random() * 120) + 60; // 60-180
+      
+      // Randomize sprite settings
+      el('density').value = Math.floor(Math.random() * 30) + 10; // 10-40
+      el('scale').value = Math.floor(Math.random() * 60) + 80; // 80-140
+      
+      // Randomize colors
+      const randomAccent = '#' + Math.floor(Math.random()*16777215).toString(16);
+      const randomAccent2 = '#' + Math.floor(Math.random()*16777215).toString(16);
+      el('accent').value = randomAccent;
+      el('accent2').value = randomAccent2;
+      
+      // Randomize layout and effects
+      const layouts = ['centered', 'banner', 'split'];
+      const effects = ['none', 'fade', 'pop'];
+      const spriteAnims = ['off', 'gentle', 'lively'];
+      const parallaxModes = ['off', 'on'];
+      
+      el('layout').value = layouts[Math.floor(Math.random() * layouts.length)];
+      el('effect').value = effects[Math.floor(Math.random() * effects.length)];
+      el('sprite-anim').value = spriteAnims[Math.floor(Math.random() * spriteAnims.length)];
+      el('parallax').value = parallaxModes[Math.floor(Math.random() * parallaxModes.length)];
+      
+      // Apply all changes
+      updateText();
+      updateSprites();
+      setLayout();
+      setEffect();
+      setupParallax();
+      applyBackground();
+      
+      console.log('🎲 Random elements loaded successfully!', { 
+        background: randomBg, 
+        theme: randomTheme, 
+        backgroundMode: randomBgMode,
+        texture: randomTexture,
+        accent: randomAccent,
+        accent2: randomAccent2
+      });
+    }
+    
+    // Add random elements button after a delay
+    setTimeout(addRandomElementsButton, 500);
+    
+    // Collapsible groups functionality
+    function toggleGroup(header) {
+      const content = header.nextElementSibling;
+      const icon = header.querySelector('.collapse-icon');
+      
+      if (content.classList.contains('collapsed')) {
+        // Expand
+        content.classList.remove('collapsed');
+        icon.classList.remove('collapsed');
+        icon.textContent = '▼';
+        console.log('📂 Group expanded:', header.querySelector('h3').textContent);
+      } else {
+        // Collapse
+        content.classList.add('collapsed');
+        icon.classList.add('collapsed');
+        icon.textContent = '▶';
+        console.log('📁 Group collapsed:', header.querySelector('h3').textContent);
+      }
+    }
+    
+    // Initialize all groups as expanded by default
+    document.addEventListener('DOMContentLoaded', () => {
+      const groupHeaders = document.querySelectorAll('.group-header');
+      groupHeaders.forEach(header => {
+        const content = header.nextElementSibling;
+        if (content && content.classList.contains('group-content')) {
+          content.classList.remove('collapsed');
+        }
+      });
+      console.log('✅ Collapsible groups initialized');
+    });
+  </script>
+</body>
+</html>

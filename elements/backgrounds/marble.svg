@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="marble-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8f9fa"/>
+      <stop offset="25%" stop-color="#e9ecef"/>
+      <stop offset="50%" stop-color="#f8f9fa"/>
+      <stop offset="75%" stop-color="#e9ecef"/>
+      <stop offset="100%" stop-color="#f8f9fa"/>
+    </linearGradient>
+    <filter id="marble-noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.1 0"/>
+    </filter>
+    <filter id="marble-veins">
+      <feTurbulence type="fractalNoise" baseFrequency="0.3" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.3 0"/>
+    </filter>
+  </defs>
+  
+  <!-- Base marble background -->
+  <rect width="900" height="1350" fill="url(#marble-bg)"/>
+  
+  <!-- Marble texture -->
+  <rect width="900" height="1350" filter="url(#marble-noise)" opacity="0.1"/>
+  
+  <!-- Marble veining -->
+  <rect width="900" height="1350" filter="url(#marble-veins)" opacity="0.15"/>
+  
+  <!-- Subtle veining patterns -->
+  <g stroke="#d1d5db" stroke-width="0.5" opacity="0.3">
+    <!-- Vertical veins -->
+    <path d="M150,0 Q200,200 180,400 T150,800 T180,1200 T150,1350"/>
+    <path d="M450,0 Q500,300 480,600 T450,900 T480,1200 T450,1350"/>
+    <path d="M750,0 Q800,250 780,500 T750,750 T780,1000 T750,1350"/>
+    
+    <!-- Horizontal veins -->
+    <path d="M0,300 Q200,350 400,330 T800,300"/>
+    <path d="M0,600 Q250,650 450,630 T800,600"/>
+    <path d="M0,900 Q300,950 500,930 T800,900"/>
+    <path d="M0,1200 Q150,1250 350,1230 T800,1200"/>
+  </g>
+  
+  <!-- Subtle highlights -->
+  <ellipse cx="300" cy="400" rx="200" ry="100" fill="#ffffff" opacity="0.1"/>
+  <ellipse cx="600" cy="800" rx="150" ry="80" fill="#ffffff" opacity="0.08"/>
+  <ellipse cx="200" cy="1000" rx="180" ry="90" fill="#ffffff" opacity="0.12"/>
+</svg>

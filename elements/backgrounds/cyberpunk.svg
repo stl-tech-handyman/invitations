@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="cyber-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="100%" stop-color="#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="neon1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00ffff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#00ffff" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="neon2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff00ff" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#ff00ff" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="neon3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffff00" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ffff00" stop-opacity="0.1"/>
+    </linearGradient>
+    <filter id="neon-glow">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="900" height="1350" fill="url(#cyber-bg)"/>
+  
+  <!-- Grid lines -->
+  <g stroke="#00ffff" stroke-width="0.5" opacity="0.3">
+    <line x1="0" y1="0" x2="900" y2="0"/>
+    <line x1="0" y1="150" x2="900" y2="150"/>
+    <line x1="0" y1="300" x2="900" y2="300"/>
+    <line x1="0" y1="450" x2="900" y2="450"/>
+    <line x1="0" y1="600" x2="900" y2="600"/>
+    <line x1="0" y1="750" x2="900" y2="750"/>
+    <line x1="0" y1="900" x2="900" y2="900"/>
+    <line x1="0" y1="1050" x2="900" y2="1050"/>
+    <line x1="0" y1="1200" x2="900" y2="1200"/>
+    <line x1="0" y1="1350" x2="900" y2="1350"/>
+    
+    <line x1="0" y1="0" x2="0" y2="1350"/>
+    <line x1="150" y1="0" x2="150" y2="1350"/>
+    <line x1="300" y1="0" x2="300" y2="1350"/>
+    <line x1="450" y1="0" x2="450" y2="1350"/>
+    <line x1="600" y1="0" x2="600" y2="1350"/>
+    <line x1="750" y1="0" x2="750" y2="1350"/>
+    <line x1="900" y1="0" x2="900" y2="1350"/>
+  </g>
+  
+  <!-- Neon elements -->
+  <g filter="url(#neon-glow)">
+    <!-- Horizontal neon lines -->
+    <line x1="0" y1="200" x2="900" y2="200" stroke="url(#neon1)" stroke-width="2" opacity="0.8"/>
+    <line x1="0" y1="500" x2="900" y2="500" stroke="url(#neon2)" stroke-width="2" opacity="0.7"/>
+    <line x1="0" y1="800" x2="900" y2="800" stroke="url(#neon3)" stroke-width="2" opacity="0.6"/>
+    <line x1="0" y1="1100" x2="900" y2="1100" stroke="url(#neon1)" stroke-width="2" opacity="0.8"/>
+    
+    <!-- Vertical neon lines -->
+    <line x1="200" y1="0" x2="200" y2="1350" stroke="url(#neon2)" stroke-width="2" opacity="0.7"/>
+    <line x1="500" y1="0" x2="500" y2="1350" stroke="url(#neon3)" stroke-width="2" opacity="0.6"/>
+    <line x1="800" y1="0" x2="800" y2="1350" stroke="url(#neon1)" stroke-width="2" opacity="0.8"/>
+  </g>
+  
+  <!-- Circuit patterns -->
+  <g stroke="#00ffff" stroke-width="1" fill="none" opacity="0.4">
+    <path d="M100,100 L200,100 L200,200 L300,200 L300,300 L200,300 L200,400 L100,400 Z"/>
+    <path d="M600,150 L700,150 L700,250 L800,250 L800,350 L700,350 L700,450 L600,450 Z"/>
+    <path d="M150,600 L250,600 L250,700 L350,700 L350,800 L250,800 L250,900 L150,900 Z"/>
+    <path d="M650,700 L750,700 L750,800 L850,800 L850,900 L750,900 L750,1000 L650,1000 Z"/>
+  </g>
+  
+  <!-- Data streams -->
+  <g fill="#00ffff" opacity="0.6">
+    <rect x="50" y="1200" width="2" height="100"/>
+    <rect x="60" y="1180" width="2" height="120"/>
+    <rect x="70" y="1210" width="2" height="90"/>
+    <rect x="80" y="1190" width="2" height="110"/>
+    <rect x="90" y="1205" width="2" height="95"/>
+    
+    <rect x="800" y="1200" width="2" height="100"/>
+    <rect x="810" y="1180" width="2" height="120"/>
+    <rect x="820" y="1210" width="2" height="90"/>
+    <rect x="830" y="1190" width="2" height="110"/>
+    <rect x="840" y="1205" width="2" height="95"/>
+  </g>
+</svg>

@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <radialGradient id="festive1" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ff6b6b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#ff8e8e" stop-opacity="0.08"/>
+    </radialGradient>
+    <radialGradient id="festive2" cx="60%" cy="70%" r="60%">
+      <stop offset="0%" stop-color="#4ecdc4" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#45b7d1" stop-opacity="0.06"/>
+    </radialGradient>
+  </defs>
+  
+  <rect width="900" height="1350" fill="url(#festive1)"/>
+  <rect width="900" height="1350" fill="url(#festive2)"/>
+  
+  <!-- Confetti pieces -->
+  <g opacity="0.6">
+    <!-- Square confetti -->
+    <g fill="#ff6b6b">
+      <rect x="100" y="150" width="8" height="8" transform="rotate(45 104 154)"/>
+      <rect x="700" y="250" width="6" height="6" transform="rotate(30 703 253)"/>
+      <rect x="400" y="450" width="7" height="7" transform="rotate(60 403.5 453.5)"/>
+      <rect x="800" y="550" width="5" height="5" transform="rotate(15 802.5 552.5)"/>
+      <rect x="300" y="750" width="8" height="8" transform="rotate(45 304 754)"/>
+      <rect x="650" y="850" width="6" height="6" transform="rotate(75 653 853)"/>
+      <rect x="200" y="1050" width="7" height="7" transform="rotate(25 203.5 1053.5)"/>
+      <rect x="750" y="1150" width="5" height="5" transform="rotate(55 752.5 1152.5)"/>
+    </g>
+    
+    <!-- Circle confetti -->
+    <g fill="#4ecdc4">
+      <circle cx="250" cy="200" r="4"/>
+      <circle cx="600" cy="300" r="3"/>
+      <circle cx="350" cy="500" r="5"/>
+      <circle cx="750" cy="600" r="4"/>
+      <circle cx="280" cy="800" r="3"/>
+      <circle cx="680" cy="900" r="4"/>
+      <circle cx="180" cy="1100" r="5"/>
+      <circle cx="580" cy="1200" r="3"/>
+    </g>
+    
+    <!-- Triangle confetti -->
+    <g fill="#f39c12">
+      <polygon points="500,180 505,170 510,180"/>
+      <polygon points="200,380 205,370 210,380"/>
+      <polygon points="700,580 705,570 710,580"/>
+      <polygon points="400,780 405,770 410,780"/>
+      <polygon points="800,980 805,970 810,980"/>
+      <polygon points="300,1180 305,1170 310,1180"/>
+    </g>
+  </g>
+  
+  <!-- Streamers -->
+  <g stroke="#9b59b6" stroke-width="3" opacity="0.4" fill="none">
+    <path d="M50,100 Q150,150 250,100 Q350,150 450,100 Q550,150 650,100 Q750,150 850,100"/>
+    <path d="M50,400 Q150,450 250,400 Q350,450 450,400 Q550,450 650,400 Q750,450 850,400"/>
+    <path d="M50,700 Q150,750 250,700 Q350,750 450,700 Q550,750 650,700 Q750,750 850,700"/>
+    <path d="M50,1000 Q150,1050 250,1000 Q350,1050 450,1000 Q550,1050 650,1000 Q750,1050 850,1000"/>
+  </g>
+  
+  <!-- Balloons -->
+  <g opacity="0.5">
+    <!-- Red balloon -->
+    <circle cx="150" cy="300" r="25" fill="#e74c3c"/>
+    <line x1="150" y1="325" x2="150" y2="350" stroke="#34495e" stroke-width="1"/>
+    
+    <!-- Blue balloon -->
+    <circle cx="700" cy="500" r="30" fill="#3498db"/>
+    <line x1="700" y1="530" x2="700" y2="560" stroke="#34495e" stroke-width="1"/>
+    
+    <!-- Yellow balloon -->
+    <circle cx="400" cy="800" r="28" fill="#f1c40f"/>
+    <line x1="400" y1="828" x2="400" y2="858" stroke="#34495e" stroke-width="1"/>
+    
+    <!-- Green balloon -->
+    <circle cx="750" cy="1000" r="26" fill="#2ecc71"/>
+    <line x1="750" y1="1026" x2="750" y2="1056" stroke="#34495e" stroke-width="1"/>
+    
+    <!-- Purple balloon -->
+    <circle cx="300" cy="1100" r="24" fill="#9b59b6"/>
+    <line x1="300" y1="1124" x2="300" y2="1154" stroke="#34495e" stroke-width="1"/>
+  </g>
+  
+  <!-- Party horns -->
+  <g opacity="0.4">
+    <g fill="#e67e22">
+      <ellipse cx="600" cy="200" rx="15" ry="8"/>
+      <ellipse cx="200" cy="600" rx="12" ry="6"/>
+      <ellipse cx="800" cy="800" rx="18" ry="10"/>
+      <ellipse cx="400" cy="1000" rx="14" ry="7"/>
+    </g>
+    
+    <!-- Horn details -->
+    <g stroke="#d35400" stroke-width="1" fill="none">
+      <line x1="600" y1="200" x2="620" y2="190"/>
+      <line x1="200" y1="600" x2="215" y2="595"/>
+      <line x1="800" y1="800" x2="825" y2="790"/>
+      <line x1="400" y1="1000" x2="420" y2="995"/>
+    </g>
+  </g>
+  
+  <!-- Celebration text -->
+  <g fill="#e74c3c" opacity="0.6" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="bold">
+    <text x="50" y="1280">🎉</text>
+    <text x="100" y="1280">CELEBRATE!</text>
+    <text x="250" y="1280">🎊</text>
+    <text x="300" y="1280">PARTY TIME</text>
+    <text x="450" y="1280">🎈</text>
+    <text x="500" y="1280">FUN!</text>
+    <text x="600" y="1280">🎁</text>
+    <text x="650" y="1280">JOY!</text>
+    <text x="750" y="1280">🎪</text>
+    <text x="800" y="1280">YAY!</text>
+  </g>
+</svg>

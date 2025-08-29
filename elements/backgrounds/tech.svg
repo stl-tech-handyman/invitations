@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <linearGradient id="tech1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1445" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#667eea" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="tech2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#764ba2" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#f093fb" stop-opacity="0.08"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="900" height="1350" fill="url(#tech1)"/>
+  <rect width="900" height="1350" fill="url(#tech2)"/>
+  
+  <!-- Circuit paths -->
+  <g stroke="#00d4ff" stroke-width="1" opacity="0.4" fill="none">
+    <!-- Main circuit -->
+    <path d="M50,100 L200,100 L200,200 L400,200 L400,150 L600,150 L600,250 L800,250"/>
+    <path d="M100,300 L300,300 L300,400 L500,400 L500,350 L700,350 L700,450 L850,450"/>
+    <path d="M150,500 L250,500 L250,600 L450,600 L450,550 L650,550 L650,650 L750,650"/>
+    
+    <!-- Vertical connections -->
+    <path d="M200,100 L200,200 L200,300 L200,400"/>
+    <path d="M400,200 L400,250 L400,300 L400,400"/>
+    <path d="M600,150 L600,200 L600,250 L600,300"/>
+    <path d="M800,250 L800,300 L800,350 L800,400"/>
+  </g>
+  
+  <!-- Circuit nodes -->
+  <g fill="#00d4ff" opacity="0.6">
+    <circle cx="200" cy="100" r="3"/>
+    <circle cx="400" cy="200" r="3"/>
+    <circle cx="600" cy="150" r="3"/>
+    <circle cx="800" cy="250" r="3"/>
+    <circle cx="300" cy="300" r="3"/>
+    <circle cx="500" cy="400" r="3"/>
+    <circle cx="700" cy="350" r="3"/>
+    <circle cx="250" cy="500" r="3"/>
+    <circle cx="450" cy="600" r="3"/>
+    <circle cx="650" cy="550" r="3"/>
+  </g>
+  
+  <!-- Data streams -->
+  <g opacity="0.3">
+    <rect x="100" y="700" width="2" height="100" fill="#00d4ff">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="300" y="750" width="2" height="80" fill="#f093fb">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="500" y="800" width="2" height="90" fill="#00d4ff">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="700" y="850" width="2" height="70" fill="#f093fb">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  
+  <!-- Hexagonal grids -->
+  <g fill="none" stroke="#667eea" stroke-width="0.5" opacity="0.2">
+    <polygon points="150,900 180,890 210,900 210,920 180,930 150,920"/>
+    <polygon points="300,950 330,940 360,950 360,970 330,980 300,970"/>
+    <polygon points="450,1000 480,990 510,1000 510,1020 480,1030 450,1020"/>
+    <polygon points="600,1050 630,1040 660,1050 660,1070 630,1080 600,1070"/>
+    <polygon points="750,1100 780,1090 810,1100 810,1120 780,1130 750,1120"/>
+  </g>
+  
+  <!-- Binary code -->
+  <g fill="#00d4ff" opacity="0.4" font-family="monospace" font-size="8">
+    <text x="50" y="1200">10101010</text>
+    <text x="200" y="1220">11001100</text>
+    <text x="350" y="1200">10110110</text>
+    <text x="500" y="1220">11010010</text>
+    <text x="650" y="1200">10101101</text>
+    <text x="800" y="1220">11001011</text>
+  </g>
+</svg>

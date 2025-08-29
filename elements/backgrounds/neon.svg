@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1350">
+  <defs>
+    <radialGradient id="neon1" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#0a0a0a" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#1a1a1a" stop-opacity="0.1"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="900" height="1350" fill="url(#neon1)"/>
+  
+  <!-- Neon lines -->
+  <g stroke="#00ffff" stroke-width="2" opacity="0.8" filter="url(#glow)">
+    <line x1="50" y1="100" x2="250" y2="100"/>
+    <line x1="300" y1="200" x2="500" y2="200"/>
+    <line x1="550" y1="300" x2="750" y2="300"/>
+    <line x1="200" y1="400" x2="400" y2="400"/>
+    <line x1="450" y1="500" x2="650" y2="500"/>
+    <line x1="700" y1="600" x2="850" y2="600"/>
+    <line x1="150" y1="700" x2="350" y2="700"/>
+    <line x1="400" y1="800" x2="600" y2="800"/>
+    <line x1="650" y1="900" x2="800" y2="900"/>
+    <line x1="100" y1="1000" x2="300" y2="1000"/>
+    <line x1="350" y1="1100" x2="550" y2="1100"/>
+    <line x1="600" y1="1200" x2="800" y2="1200"/>
+  </g>
+  
+  <!-- Neon circles -->
+  <g fill="none" stroke="#ff00ff" stroke-width="3" opacity="0.9" filter="url(#glow)">
+    <circle cx="200" cy="150" r="30"/>
+    <circle cx="600" cy="250" r="25"/>
+    <circle cx="400" cy="450" r="35"/>
+    <circle cx="750" cy="550" r="20"/>
+    <circle cx="300" cy="750" r="30"/>
+    <circle cx="650" cy="850" r="25"/>
+    <circle cx="200" cy="1050" r="35"/>
+    <circle cx="550" cy="1150" r="30"/>
+  </g>
+  
+  <!-- Neon squares -->
+  <g fill="none" stroke="#00ff00" stroke-width="2" opacity="0.8" filter="url(#glow)">
+    <rect x="100" y="300" width="40" height="40"/>
+    <rect x="500" y="400" width="35" height="35"/>
+    <rect x="300" y="600" width="45" height="45"/>
+    <rect x="700" y="700" width="30" height="30"/>
+    <rect x="150" y="900" width="40" height="40"/>
+    <rect x="600" y="1000" width="35" height="35"/>
+    <rect x="400" y="1200" width="45" height="45"/>
+  </g>
+  
+  <!-- Glowing dots -->
+  <g fill="#ffff00" opacity="1" filter="url(#glow)">
+    <circle cx="180" cy="180" r="4"/>
+    <circle cx="620" cy="280" r="3"/>
+    <circle cx="420" cy="480" r="4"/>
+    <circle cx="780" cy="580" r="3"/>
+    <circle cx="320" cy="780" r="4"/>
+    <circle cx="680" cy="880" r="3"/>
+    <circle cx="220" cy="1080" r="4"/>
+    <circle cx="580" cy="1180" r="3"/>
+  </g>
+  
+  <!-- Neon text effect -->
+  <g fill="#ff0080" opacity="0.7" filter="url(#glow)" font-family="monospace" font-size="12" font-weight="bold">
+    <text x="50" y="1250">NEON</text>
+    <text x="200" y="1270">CYBER</text>
+    <text x="350" y="1250">PUNK</text>
+    <text x="500" y="1270">FUTURE</text>
+    <text x="650" y="1250">GLOW</text>
+    <text x="800" y="1270">2024</text>
+  </g>
+</svg>
