@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Border Edges System Test</title>
+  <link rel="stylesheet" href="css/border-edges.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .test-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    
+    .controls-panel {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .preview-panel {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .preview-stage {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
+                  linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
+                  linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
+                  linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+    
+    .edge-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .test-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #666;
+      z-index: 100;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+    }
+    
+    .control-group {
+      margin-bottom: 20px;
+    }
+    
+    .control-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .control-group select,
+    .control-group input[type="range"],
+    .control-group input[type="color"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: white;
+      color: #333;
+      font-size: 14px;
+    }
+    
+    .control-group input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: #ddd;
+      border-radius: 3px;
+      outline: none;
+    }
+    
+    .control-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #007bff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    .control-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .control-row > div {
+      flex: 1;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .btn-primary {
+      background: #007bff;
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+    
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      border-left: 4px solid #007bff;
+    }
+    
+    .status h3 {
+      margin: 0 0 10px 0;
+      color: #007bff;
+    }
+    
+    .status p {
+      margin: 5px 0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Border Edges System Test</h1>
+  
+  <div class="test-container">
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+      <h2>✂️ Edge Controls</h2>
+      
+      <div class="control-group">
+        <label>Edge Style</label>
+        <select id="edge-style">
+          <option value="none">None</option>
+          <option value="border">Simple Border</option>
+          <option value="torn">Torn Paper</option>
+          <option value="scalloped">Scalloped</option>
+          <option value="zigzag">Zigzag</option>
+          <option value="wave">Wavy</option>
+          <option value="spikes">Spikes</option>
+          <option value="dots">Dotted</option>
+          <option value="geometric">Geometric</option>
+          <option value="organic">Organic</option>
+          <option value="vintage">Vintage</option>
+        </select>
+      </div>
+      
+      <div class="control-group">
+        <label>Edge Variant</label>
+        <select id="edge-variant">
+          <option value="default">Default</option>
+          <option value="rough">Rough</option>
+          <option value="smooth">Smooth</option>
+          <option value="sharp">Sharp</option>
+          <option value="soft">Soft</option>
+        </select>
+      </div>
+      
+      <div class="control-row">
+        <div>
+          <label>Thickness: <span id="edge-thickness-value">3</span>px</label>
+          <input type="range" id="edge-thickness" min="1" max="20" value="3" step="1">
+        </div>
+        <div>
+          <label>Opacity: <span id="edge-opacity-value">0.8</span></label>
+          <input type="range" id="edge-opacity" min="0" max="1" value="0.8" step="0.1">
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label>Edge Color</label>
+        <input type="color" id="edge-color" value="#000000">
+      </div>
+      
+      <div class="button-group">
+        <button id="reset-edge" class="btn btn-secondary">Reset</button>
+        <button id="test-edge" class="btn btn-success">Test Edge</button>
+        <button id="debug-test" class="btn btn-danger">Debug Test</button>
+      </div>
+      
+      <div class="status">
+        <h3>System Status</h3>
+        <p id="status-text">Initializing...</p>
+        <p id="status-details">Waiting for system to load...</p>
+      </div>
+    </div>
+    
+    <!-- Preview Panel -->
+    <div class="preview-panel">
+      <h2>👁️ Edge Preview</h2>
+      
+      <div class="preview-stage">
+        <div class="edge-layer" id="edge-layer"></div>
+        <div class="test-content">
+          <h3>Edge Preview</h3>
+          <p>Changes should appear instantly</p>
+          <p>Current style: <span id="current-style">None</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Load the Border Edges System -->
+  <script src="js/border-edges.js"></script>
+  
+  <script>
+    // Wait for the system to load
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🎯 Test page: DOM ready, waiting for BorderEdgesSystem...');
+      
+      // Check if BorderEdgesSystem is available
+      const checkSystem = setInterval(() => {
+        if (window.borderEdges && window.borderEdges.initialized) {
+          clearInterval(checkSystem);
+          console.log('✅ Test page: BorderEdgesSystem ready!');
+          initializeTestPage();
+        }
+      }, 100);
+    });
+    
+    function initializeTestPage() {
+      const statusText = document.getElementById('status-text');
+      const statusDetails = document.getElementById('status-details');
+      const currentStyle = document.getElementById('current-style');
+      
+      // Update status
+      statusText.textContent = 'System Ready';
+      statusDetails.textContent = 'All controls are functional';
+      
+      // Update current style display
+      function updateCurrentStyle() {
+        currentStyle.textContent = window.borderEdges.settings.style;
+      }
+      
+      // Test edge button
+      document.getElementById('test-edge').addEventListener('click', () => {
+        console.log('🧪 Test page: Test edge button clicked');
+        window.borderEdges.test();
+        updateCurrentStyle();
+      });
+      
+      // Debug test button
+      document.getElementById('debug-test').addEventListener('click', () => {
+        console.log('🧪 Test page: Debug test button clicked');
+        console.log('BorderEdgesSystem instance:', window.borderEdges);
+        console.log('Current settings:', window.borderEdges.settings);
+        console.log('Initialized:', window.borderEdges.initialized);
+      });
+      
+      // Update current style when it changes
+      const originalApplyEdgeEffect = window.borderEdges.applyEdgeEffect;
+      window.borderEdges.applyEdgeEffect = function() {
+        originalApplyEdgeEffect.call(this);
+        updateCurrentStyle();
+      };
+      
+      // Initial update
+      updateCurrentStyle();
+      
+      console.log('✅ Test page: Initialization complete');
+    }
+  </script>
+</body>
+</html>

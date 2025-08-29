@@ -1,0 +1,238 @@
+/**
+ * BORDER EDGES CSS
+ * Clean, isolated styles for border edge effects
+ */
+
+/* Edge Layer Container */
+.edge-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Edge Controls Styling */
+.edge-controls {
+  margin: 15px 0;
+}
+
+.edge-controls label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: var(--ink, #333);
+}
+
+.edge-controls select,
+.edge-controls input[type="range"],
+.edge-controls input[type="color"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 4px;
+  background: var(--bg, #fff);
+  color: var(--ink, #333);
+  font-size: 14px;
+}
+
+.edge-controls select:focus,
+.edge-controls input[type="range"]:focus,
+.edge-controls input[type="color"]:focus {
+  outline: none;
+  border-color: var(--accent, #007bff);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.edge-controls input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: var(--border-color, #ddd);
+  border-radius: 3px;
+  outline: none;
+}
+
+.edge-controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--accent, #007bff);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.edge-controls input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--accent, #007bff);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+/* Edge Control Rows */
+.edge-control-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.edge-control-row > div {
+  flex: 1;
+}
+
+/* Edge Value Displays */
+.edge-value-display {
+  font-size: 12px;
+  color: var(--text-muted, #666);
+  margin-top: 2px;
+}
+
+/* Edge Buttons */
+.edge-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.edge-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edge-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edge-button.primary {
+  background: var(--accent, #007bff);
+  color: white;
+}
+
+.edge-button.secondary {
+  background: var(--border-color, #ddd);
+  color: var(--ink, #333);
+}
+
+.edge-button.success {
+  background: var(--success, #28a745);
+  color: white;
+}
+
+.edge-button.danger {
+  background: var(--danger, #dc3545);
+  color: white;
+}
+
+.edge-button.warning {
+  background: var(--warning, #fd7e14);
+  color: white;
+}
+
+.edge-button.info {
+  background: var(--info, #6f42c1);
+  color: white;
+}
+
+/* Edge Preview */
+.edge-preview {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border: 2px dashed var(--border-color, #ddd);
+  border-radius: 8px;
+  margin: 15px 0;
+  background: var(--bg, #fff);
+  overflow: hidden;
+}
+
+.edge-preview .edge-layer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .edge-control-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .edge-buttons {
+    flex-direction: column;
+  }
+  
+  .edge-button {
+    width: 100%;
+  }
+}
+
+/* Edge Effect Animations */
+.edge-effect-enter {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.3s ease;
+}
+
+.edge-effect-enter-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.edge-effect-exit {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.3s ease;
+}
+
+.edge-effect-exit-active {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Edge Style Specific Styles */
+.edge-style-torn {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.edge-style-scalloped {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
+}
+
+.edge-style-zigzag {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.edge-style-wave {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.edge-style-spikes {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+}
+
+.edge-style-dots {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.edge-style-geometric {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.edge-style-organic {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
+}
+
+.edge-style-vintage {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
