@@ -343,7 +343,10 @@ function toggleGroup(header) {
 window.toggleGroup = toggleGroup;
 
 // Initialize all groups based on data-collapsed attribute
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Load partials first
+  await loadPartials();
+  
   const groupHeaders = document.querySelectorAll('.group-header');
   groupHeaders.forEach(header => {
     const group = header.closest('.group');
@@ -381,7 +384,165 @@ setLayout();
 setEffect(); 
 setupParallax(); 
 applyBackground();
-loadPartials();
+
+// Initialize edge controls after partials are loaded
+setTimeout(() => {
+  initializeEdgeControls();
+}, 1000);
+
+// Edge system functionality
+function applyEdgeEffect() {
+  const edgeLayer = el('edge-layer');
+  if (!edgeLayer) return;
+  
+  edgeLayer.innerHTML = '';
+  
+  if (edgeSettings.style === 'none') {
+    return;
+  }
+  
+  const style = EDGE_STYLES[edgeSettings.style];
+  if (!style) return;
+  
+  // Get the variant path or use default if variant doesn't exist
+  const variantPath = style[edgeSettings.variant] || style.default;
+  if (!variantPath) return;
+  
+  // Create SVG for the edge effect
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 900 1350');
+  svg.setAttribute('preserveAspectRatio', 'none');
+  svg.style.position = 'absolute';
+  svg.style.top = '0';
+  svg.style.left = '0';
+  svg.style.width = '100%';
+  svg.style.height = '100%';
+  svg.style.pointerEvents = 'none';
+  
+  // Create edge effects for all four sides
+  console.log('🎨 Creating edge paths for all sides...');
+  createEdgePath(svg, variantPath, 'top', 0, 0, 900, 0);
+  createEdgePath(svg, variantPath, 'bottom', 0, 1350, 900, 1350);
+  createEdgePath(svg, variantPath, 'left', 0, 0, 0, 1350);
+  createEdgePath(svg, variantPath, 'right', 900, 0, 900, 1350);
+  console.log('✅ Edge paths created for all sides');
+  
+  edgeLayer.appendChild(svg);
+  
+  console.log('✨ Edge effect applied to all sides:', edgeSettings.style, edgeSettings.variant);
+}
+
+// Helper function to create edge paths for each side
+function createEdgePath(svg, variantPath, side, x1, y1, x2, y2) {
+  const edgePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  
+  // Scale and position the predefined path to fit the current side
+  const width = Math.abs(x2 - x1);
+  const height = Math.abs(y2 - y1);
+  
+  // Create a scaled and positioned version of the predefined path
+  let pathData = variantPath;
+  
+  // Scale the path to fit the current dimensions
+  if (side === 'top' || side === 'bottom') {
+    // Horizontal edges - scale width to match the side length
+    const scaleX = width / 100; // Original path is 100 units wide
+    pathData = variantPath.replace(/M(\d+),(\d+)/g, `M${x1},${y1}`)
+                          .replace(/L(\d+),(\d+)/g, (match, x, y) => {
+                            const scaledX = x1 + (parseInt(x) * scaleX);
+                            const scaledY = y1 + (parseInt(y) * (y === 0 ? 0 : height));
+                            return `L${scaledX},${scaledY}`;
+                          })
+                          .replace(/Q(\d+),(\d+) (\d+),(\d+)/g, (match, x1, y1, x2, y2) => {
+                            const scaledX1 = x1 + (parseInt(x1) * scaleX);
+                            const scaledY1 = y1 + (parseInt(y1) * (y1 === 0 ? 0 : height));
+                            const scaledX2 = x1 + (parseInt(x2) * scaleX);
+                            const scaledY2 = y1 + (parseInt(y2) * (y2 === 0 ? 0 : height));
+                            return `Q${scaledX1},${scaledY1} ${scaledX2},${scaledY2}`;
+                          });
+  } else {
+    // Vertical edges - scale height to match the side length
+    const scaleY = height / 100; // Original path is 100 units tall
+    pathData = variantPath.replace(/M(\d+),(\d+)/g, `M${x1},${y1}`)
+                          .replace(/L(\d+),(\d+)/g, (match, x, y) => {
+                            const scaledX = x1 + (parseInt(x) * (x === 0 ? 0 : width));
+                            const scaledY = y1 + (parseInt(y) * scaleY);
+                            return `L${scaledX},${scaledY}`;
+                          })
+                          .replace(/Q(\d+),(\d+) (\d+),(\d+)/g, (match, x1, y1, x2, y2) => {
+                            const scaledX1 = x1 + (parseInt(x1) * (x1 === 0 ? 0 : width));
+                            const scaledY1 = y1 + (parseInt(y1) * scaleY);
+                            const scaledX2 = x1 + (parseInt(x2) * (x2 === 0 ? 0 : width));
+                            const scaledY2 = y1 + (parseInt(y2) * scaleY);
+                            return `Q${scaledX1},${scaledY1} ${scaledX2},${scaledY2}`;
+                          });
+  }
+  
+  edgePath.setAttribute('d', pathData);
+  edgePath.setAttribute('fill', edgeSettings.color);
+  edgePath.setAttribute('fill-opacity', edgeSettings.opacity);
+  edgePath.setAttribute('stroke', edgeSettings.color);
+  edgePath.setAttribute('stroke-width', edgeSettings.thickness);
+  edgePath.setAttribute('stroke-linejoin', 'round');
+  
+  svg.appendChild(edgePath);
+}
+
+// Old edge path creation functions removed - now using predefined SVG paths
+
+// Initialize edge controls with live updates (no apply button needed)
+function initializeEdgeControls() {
+  // Edge style change
+  const edgeStyleSelect = el('edge-style');
+  if (edgeStyleSelect) {
+    edgeStyleSelect.addEventListener('change', (e) => {
+      edgeSettings.style = e.target.value;
+      applyEdgeEffect();
+    });
+  }
+  
+  // Edge variant change
+  const edgeVariantSelect = el('edge-variant');
+  if (edgeVariantSelect) {
+    edgeVariantSelect.addEventListener('change', (e) => {
+      edgeSettings.variant = e.target.value;
+      applyEdgeEffect();
+    });
+  }
+  
+  // Edge thickness
+  const edgeThicknessInput = el('edge-thickness');
+  if (edgeThicknessInput) {
+    edgeThicknessInput.addEventListener('input', (e) => {
+      edgeSettings.thickness = parseInt(e.target.value);
+      const valueDisplay = el('edge-thickness-value');
+      if (valueDisplay) valueDisplay.textContent = edgeSettings.thickness;
+      applyEdgeEffect();
+    });
+  }
+  
+  // Edge opacity
+  const edgeOpacityInput = el('edge-opacity');
+  if (edgeOpacityInput) {
+    edgeOpacityInput.addEventListener('input', (e) => {
+      edgeSettings.opacity = parseFloat(e.target.value);
+      const valueDisplay = el('edge-opacity-value');
+      if (valueDisplay) valueDisplay.textContent = edgeSettings.opacity;
+      applyEdgeEffect();
+    });
+  }
+  
+  // Edge color
+  const edgeColorInput = el('edge-color');
+  if (edgeColorInput) {
+    edgeColorInput.addEventListener('change', (e) => {
+      edgeSettings.color = e.target.value;
+      applyEdgeEffect();
+    });
+  }
+  
+  console.log('✅ Edge controls initialized with live updates');
+}
 
 // Export functions for use in other modules
 export {
@@ -410,5 +571,7 @@ export {
   setEffect,
   replay,
   setupParallax,
-  toggleGroup
+  toggleGroup,
+  applyEdgeEffect,
+  initializeEdgeControls
 };

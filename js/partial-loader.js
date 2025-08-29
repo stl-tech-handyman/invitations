@@ -4,13 +4,23 @@
 export async function loadPartials() {
   try {
     console.log('🔄 Loading sidebar partials...');
+    console.log('📍 Current location:', window.location.href);
+    console.log('📍 Partial paths:', 'partials/left-sidebar.html', 'partials/right-sidebar.html');
     
     // Load left sidebar
     const leftSidebarResponse = await fetch('partials/left-sidebar.html');
+    console.log('📥 Left sidebar response status:', leftSidebarResponse.status);
+    if (!leftSidebarResponse.ok) {
+      throw new Error(`Left sidebar fetch failed: ${leftSidebarResponse.status} ${leftSidebarResponse.statusText}`);
+    }
     const leftSidebarHTML = await leftSidebarResponse.text();
     
     // Load right sidebar
     const rightSidebarResponse = await fetch('partials/right-sidebar.html');
+    console.log('📥 Right sidebar response status:', rightSidebarResponse.status);
+    if (!rightSidebarResponse.ok) {
+      throw new Error(`Right sidebar fetch failed: ${rightSidebarResponse.status} ${rightSidebarResponse.statusText}`);
+    }
     const rightSidebarHTML = await rightSidebarResponse.text();
     
     // Insert left sidebar

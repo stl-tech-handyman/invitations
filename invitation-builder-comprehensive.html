@@ -145,6 +145,173 @@
       transition: all 0.3s ease;
     }
     
+    /* Drag handle styling */
+    .drag-handle {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    
+    .sprite:hover .drag-handle {
+      opacity: 1;
+    }
+    
+    .sprite:active .drag-handle {
+      opacity: 0.8;
+    }
+    
+    /* Interactive object styling */
+    .interactive-object {
+      cursor: move;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    
+    .interactive-object:hover {
+      transform: scale(1.02);
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.15));
+    }
+    
+    .interactive-object.dragging {
+      cursor: grabbing;
+      z-index: 1000;
+      filter: brightness(1.1) drop-shadow(0 4px 12px rgba(0,0,0,0.25));
+    }
+    
+    /* Text element interactivity */
+    .title-out, .names-out, .pill-out, .subtitle-out, .date-out, .time-out, .location-out, .rsvp-out {
+      cursor: move;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    
+    .title-out:hover, .names-out:hover, .pill-out:hover, .subtitle-out:hover, .date-out:hover, .time-out:hover, .location-out:hover, .rsvp-out:hover {
+      transform: scale(1.02);
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.15));
+    }
+    
+    /* Theme sprite styling */
+    .theme-sprite {
+      opacity: 0.8;
+      z-index: 1;
+    }
+    
+    .theme-sprite:hover {
+      opacity: 1;
+      z-index: 10;
+    }
+    
+    /* Context menu styling */
+    .context-menu {
+      position: fixed;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 10000;
+      min-width: 200px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+    
+    .context-menu-item {
+      padding: 8px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+      transition: background 0.2s ease;
+    }
+    
+    .context-menu-item:hover {
+      background: #f0f0f0;
+    }
+    
+    .context-menu-item:last-child {
+      border-bottom: none;
+    }
+    
+    /* Dragging state */
+    .sprite.dragging {
+      filter: brightness(1.3) drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+      transform: scale(1.15);
+      transition: none;
+    }
+    
+    /* Particle Effects */
+    .particle {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .particle.confetti {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+    
+    .particle.snow {
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 2px rgba(255,255,255,0.8);
+    }
+    
+    .particle.sparkle {
+      width: 3px;
+      height: 3px;
+      background: #ffd700;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #ffd700;
+      animation: sparkle 1.5s ease-in-out infinite;
+    }
+    
+    .particle.firework {
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      animation: firework 2s ease-out forwards;
+    }
+    
+    .particle.leaves {
+      width: 12px;
+      height: 8px;
+      background: linear-gradient(45deg, #8B4513, #A0522D);
+      border-radius: 50% 0 50% 0;
+      animation: leafFall 4s linear infinite;
+    }
+    
+    .particle.bubbles {
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(173,216,230,0.6) 100%);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 50%;
+      animation: bubbleFloat 3s ease-in-out infinite;
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    
+    @keyframes firework {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+    
+    @keyframes leafFall {
+      0% { transform: rotate(0deg) translateX(0); }
+      25% { transform: rotate(90deg) translateX(20px); }
+      50% { transform: rotate(180deg) translateX(-20px); }
+      75% { transform: rotate(270deg) translateX(20px); }
+      100% { transform: rotate(360deg) translateX(0); }
+    }
+    
+    @keyframes bubbleFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-10px) scale(1.1); }
+    }
+    
     /* Readability Notification */
     .readability-notification {
       position: fixed;
@@ -226,7 +393,7 @@
       background: #fffbf0;
     }
     
-        .readability-notification .issue-header {
+    .readability-notification .issue-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -685,7 +852,17 @@
           <div class="group-content">
             <label>Edge Style</label>
             <select id="edge-style">
-              <!-- Options populated automatically by SelectInitializer -->
+              <option value="none">None</option>
+              <option value="border">Simple Border</option>
+              <option value="torn">Torn Paper</option>
+              <option value="scalloped">Scalloped</option>
+              <option value="zigzag">Zigzag</option>
+              <option value="wave">Wavy</option>
+              <option value="spikes">Spikes</option>
+              <option value="dots">Dotted</option>
+              <option value="geometric">Geometric</option>
+              <option value="organic">Organic</option>
+              <option value="vintage">Vintage</option>
             </select>
             
             <div class="row" style="margin-top:12px">
@@ -705,15 +882,18 @@
                 <input type="color" id="edge-color" value="#000000">
               </div>
               <div>
-                <label>Style</label>
+                <label>Variant</label>
                 <select id="edge-variant">
-                  <!-- Options populated automatically by SelectInitializer -->
+                  <option value="default">Default</option>
+                  <option value="rough">Rough</option>
+                  <option value="smooth">Smooth</option>
+                  <option value="sharp">Sharp</option>
+                  <option value="soft">Soft</option>
                 </select>
               </div>
             </div>
             
             <div class="row" style="margin-top:12px">
-              <button id="apply-edge" class="btn">Apply Edge</button>
               <button id="reset-edge" class="btn btn-secondary">Reset</button>
             </div>
           </div>
@@ -760,7 +940,6 @@
             </div>
             
             <div class="row" style="margin-top:12px">
-              <button id="apply-overlay" class="btn">Apply Overlay</button>
               <button id="reset-overlay" class="btn btn-secondary">Reset</button>
             </div>
           </div>
@@ -918,6 +1097,134 @@
           cursor: pointer;
           transition: all 0.2s ease;
         ">🎨 Browse & Manage Sprites</button>
+      </div>
+
+      <!-- Particle Effects -->
+      <div class="group">
+        <div class="group-header" onclick="toggleGroup(this)">
+          <h3>✨ Particle Effects</h3>
+          <span class="collapse-icon">▼</span>
+        </div>
+        <div class="group-content">
+          <div class="row" style="margin-bottom: 12px;">
+            <div>
+              <label>Effect Type</label>
+              <select id="particle-effect-type">
+                <option value="none">None</option>
+                <option value="confetti">🎉 Confetti</option>
+                <option value="snow">❄️ Snow</option>
+                <option value="sparkles">✨ Sparkles</option>
+                <option value="fireworks">🎆 Fireworks</option>
+                <option value="leaves">🍂 Falling Leaves</option>
+                <option value="bubbles">🫧 Bubbles</option>
+              </select>
+            </div>
+            <div>
+              <label>Intensity</label>
+              <select id="particle-intensity">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="extreme">Extreme</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="row" style="margin-bottom: 12px;">
+            <div>
+              <label>Speed</label>
+              <select id="particle-speed">
+                <option value="slow">Slow</option>
+                <option value="normal">Normal</option>
+                <option value="fast">Fast</option>
+                <option value="ultra">Ultra Fast</option>
+              </select>
+            </div>
+            <div>
+              <label>Direction</label>
+              <select id="particle-direction">
+                <option value="down">⬇️ Down</option>
+                <option value="up">⬆️ Up</option>
+                <option value="left">⬅️ Left</option>
+                <option value="right">➡️ Right</option>
+                <option value="random">🎲 Random</option>
+                <option value="outward">💥 Outward</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="row" style="margin-bottom: 12px;">
+            <div>
+              <label>Colors</label>
+              <select id="particle-colors">
+                <option value="rainbow">🌈 Rainbow</option>
+                <option value="warm">🔥 Warm</option>
+                <option value="cool">❄️ Cool</option>
+                <option value="pastel">🎨 Pastel</option>
+                <option value="neon">💫 Neon</option>
+                <option value="monochrome">⚫ Monochrome</option>
+              </select>
+            </div>
+            <div>
+              <label>Size</label>
+              <select id="particle-size">
+                <option value="tiny">Tiny</option>
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+                <option value="mixed">Mixed</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="row" style="margin-bottom: 12px;">
+            <button id="start-particles" class="btn" style="background: #28a745; color: white;">🚀 Start Effects</button>
+            <button id="stop-particles" class="btn" style="background: #dc3545; color: white;">⏹️ Stop Effects</button>
+          </div>
+          
+          <div class="row">
+            <button id="burst-particles" class="btn" style="background: #ffc107; color: #212529;">💥 Burst Effect</button>
+            <button id="clear-particles" class="btn" style="background: #6c757d; color: white;">🧹 Clear All</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Object Management System -->
+      <div class="group">
+        <div class="group-header" onclick="toggleGroup(this)">
+          <h3>🎯 Object Management</h3>
+          <span class="collapse-icon">▼</span>
+        </div>
+        <div class="group-content">
+          <div style="font-size: 11px; color: #666; margin-bottom: 12px;">
+            Manage all interactive objects (text, sprites, etc.) with individual settings
+          </div>
+          
+          <div class="row" style="margin-bottom: 12px;">
+            <button id="export-objects" class="btn" style="background: #17a2b8; color: white;">📤 Export Objects</button>
+            <button id="import-objects" class="btn" style="background: #6f42c1; color: white;">📥 Import Objects</button>
+          </div>
+          
+          <div class="row" style="margin-bottom: 12px;">
+            <button id="reset-all-positions" class="btn" style="background: #ffc107; color: #212529;">🔄 Reset All Positions</button>
+            <button id="reset-all-rotations" class="btn" style="background: #fd7e14; color: white;">🔄 Reset All Rotations</button>
+          </div>
+          
+          <div class="row">
+            <button id="bring-all-to-front" class="btn" style="background: #28a745; color: white;">⬆️ Bring All to Front</button>
+            <button id="send-all-to-back" class="btn" style="background: #6c757d; color: white;">⬇️ Send All to Back</button>
+          </div>
+          
+          <div style="margin-top: 12px; padding: 8px; background: #f8f9fa; border-radius: 4px; font-size: 11px; color: #666;">
+            💡 <strong>Tip:</strong> 
+            <ul style="margin: 4px 0; padding-left: 16px;">
+              <li>Drag any object to move it</li>
+              <li>Use mouse wheel to rotate sprites</li>
+              <li>Right-click for context menu with more options</li>
+              <li>All changes are automatically saved</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <!-- Readability Checker -->
@@ -1237,6 +1544,13 @@
     // Edge style definitions with SVG paths
     const EDGE_STYLES = {
       none: null,
+      border: {
+        default: 'M0,0 L100,0 L100,100 L0,100 Z',
+        rough: 'M0,0 L100,0 L100,100 L0,100 Z',
+        smooth: 'M0,0 L100,0 L100,100 L0,100 Z',
+        sharp: 'M0,0 L100,0 L100,100 L0,100 Z',
+        soft: 'M0,0 L100,0 L100,100 L0,100 Z'
+      },
       torn: {
         default: 'M0,0 Q25,5 50,0 T100,0 L100,100 Q75,95 50,100 T0,100 Z',
         rough: 'M0,0 Q20,8 40,2 Q60,-3 80,1 Q90,4 100,0 L100,100 Q80,92 60,98 Q40,103 20,97 Q10,95 0,100 Z',
@@ -1304,18 +1618,34 @@
     
     // Apply edge effect to the invitation
     function applyEdgeEffect() {
+      console.log('🎨 Applying edge effect:', edgeSettings);
+      
       const edgeLayer = el('edge-layer');
+      if (!edgeLayer) {
+        console.error('❌ Edge layer not found!');
+        return;
+      }
+      
       edgeLayer.innerHTML = '';
       
       if (edgeSettings.style === 'none') {
+        console.log('✅ No edge style selected, clearing edge layer');
         return;
       }
       
       const style = EDGE_STYLES[edgeSettings.style];
-      if (!style) return;
+      if (!style) {
+        console.error('❌ Edge style not found:', edgeSettings.style);
+        return;
+      }
       
       const variant = style[edgeSettings.variant] || style.default;
-      if (!variant) return;
+      if (!variant) {
+        console.error('❌ Edge variant not found:', edgeSettings.variant);
+        return;
+      }
+      
+      console.log('✅ Using edge style:', edgeSettings.style, 'variant:', edgeSettings.variant);
       
       // Create SVG for the edge effect
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -1327,6 +1657,7 @@
       svg.style.width = '100%';
       svg.style.height = '100%';
       svg.style.pointerEvents = 'none';
+
       
       // Create edge effects for all four sides
       console.log('🎨 Creating edge paths for all sides...');
@@ -1343,17 +1674,21 @@
 
     // Helper function to create edge paths for each side
     function createEdgePath(svg, variant, side, x1, y1, x2, y2) {
+      console.log(`🎨 Creating edge path for ${side} side at (${x1},${y1}) to (${x2},${y2})`);
+      
       const edgePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       
       let pathData = '';
       
       if (side === 'top' || side === 'bottom') {
         // Horizontal edges (top/bottom)
-        pathData = this.createHorizontalEdgePath(variant, x1, y1, x2, y2);
+        pathData = createHorizontalEdgePath(variant, x1, y1, x2, y2);
       } else {
         // Vertical edges (left/right)
-        pathData = this.createVerticalEdgePath(variant, x1, y1, x2, y2);
+        pathData = createVerticalEdgePath(variant, x1, y1, x2, y2);
       }
+      
+      console.log(`📐 Generated path data for ${side}:`, pathData);
       
       edgePath.setAttribute('d', pathData);
       edgePath.setAttribute('fill', edgeSettings.color);
@@ -1362,152 +1697,64 @@
       edgePath.setAttribute('stroke-width', edgeSettings.thickness);
       edgePath.setAttribute('stroke-linejoin', 'round');
       
+
+      
       svg.appendChild(edgePath);
+      console.log(`✅ Added ${side} edge path to SVG`);
     }
 
     // Create horizontal edge path (top/bottom)
     function createHorizontalEdgePath(variant, x1, y1, x2, y2) {
-      const width = Math.abs(x2 - x1);
-      const segments = Math.ceil(width / 100); // Divide into segments
-      
-      if (edgeSettings.style === 'torn' || edgeSettings.style === 'scalloped' || edgeSettings.style === 'wave') {
-        // Create repeating pattern for torn/scalloped/wave edges
-        let path = `M${x1},${y1}`;
-        for (let i = 0; i < segments; i++) {
-          const segmentWidth = width / segments;
-          const startX = x1 + (i * segmentWidth);
-          const endX = x1 + ((i + 1) * segmentWidth);
-          
-          if (edgeSettings.style === 'torn') {
-            const midY = y1 + (Math.random() * 20 - 10);
-            path += ` Q${startX + segmentWidth/2},${midY} ${endX},${y1}`;
-          } else if (edgeSettings.style === 'scalloped') {
-            const midY = y1 + (y1 === 0 ? 15 : -15);
-            path += ` Q${startX + segmentWidth/2},${midY} ${endX},${y1}`;
-          } else if (edgeSettings.style === 'wave') {
-            const midY = y1 + (y1 === 0 ? 10 : -10);
-            path += ` Q${startX + segmentWidth/3},${midY} ${startX + segmentWidth*2/3},${y1}`;
-            path += ` Q${startX + segmentWidth*2/3},${midY} ${endX},${y1}`;
-          }
-        }
-        return path;
-      } else if (edgeSettings.style === 'zigzag' || edgeSettings.style === 'spikes') {
-        // Create zigzag/spikes pattern
-        let path = `M${x1},${y1}`;
-        for (let i = 0; i < segments; i++) {
-          const segmentWidth = width / segments;
-          const startX = x1 + (i * segmentWidth);
-          const endX = x1 + ((i + 1) * segmentWidth);
-          const midX = startX + segmentWidth / 2;
-          const peakY = y1 + (y1 === 0 ? 20 : -20);
-          
-          path += ` L${midX},${peakY} L${endX},${y1}`;
-        }
-        return path;
-      } else if (edgeSettings.style === 'dots') {
-        // Create dotted edge pattern
-        let path = `M${x1},${y1}`;
-        for (let i = 0; i < segments; i++) {
-          const segmentWidth = width / segments;
-          const startX = x1 + (i * segmentWidth);
-          const endX = x1 + ((i + 1) * segmentWidth);
-          const midX = startX + segmentWidth / 2;
-          const midY = y1 + (y1 === 0 ? 5 : -5);
-          
-          path += ` M${midX},${midY} m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0`;
-        }
-        return path;
-      } else if (edgeSettings.style === 'geometric') {
-        // Create geometric edge pattern
-        let path = `M${x1},${y1}`;
-        for (let i = 0; i < segments; i++) {
-          const segmentWidth = width / segments;
-          const startX = x1 + (i * segmentWidth);
-          const endX = x1 + ((i + 1) * segmentWidth);
-          const midX = startX + segmentWidth / 2;
-          const peakY = y1 + (y1 === 0 ? 15 : -15);
-          
-          path += ` L${midX},${peakY} L${endX},${y1}`;
-        }
-        return path;
-      } else if (edgeSettings.style === 'border') {
-        // Create a simple border around all edges
-        return `M${x1},${y1} L${x2},${y2}`;
-      } else {
-        // Default straight edge
-        return `M${x1},${y1} L${x2},${y2}`;
+      // Use the predefined variant path and scale it to fit the edge
+      if (variant && variant !== '') {
+        // Scale the variant path from 0-100 to the actual edge dimensions
+        let scaledPath = variant;
+        
+        // Replace the coordinates in the variant path
+        scaledPath = scaledPath.replace(/M0,0/g, `M${x1},${y1}`);
+        scaledPath = scaledPath.replace(/L100,0/g, `L${x2},${y1}`);
+        scaledPath = scaledPath.replace(/L100,100/g, `L${x2},${y1}`);
+        scaledPath = scaledPath.replace(/L0,100/g, `L${x1},${y1}`);
+        
+        // Scale any other coordinates in the path
+        scaledPath = scaledPath.replace(/(\d+),(\d+)/g, (match, x, y) => {
+          const scaledX = x1 + (parseInt(x) / 100) * (x2 - x1);
+          const scaledY = y1 + (parseInt(y) / 100) * (y2 - y1);
+          return `${scaledX},${scaledY}`;
+        });
+        
+        return scaledPath;
       }
+      
+      // Fallback to simple line if no variant
+      return `M${x1},${y1} L${x2},${y2}`;
     }
 
     // Create vertical edge path (left/right)
     function createVerticalEdgePath(variant, x1, y1, x2, y2) {
-      const height = Math.abs(y2 - y1);
-      const segments = Math.ceil(height / 100); // Divide into segments
-      
-      if (edgeSettings.style === 'torn' || edgeSettings.style === 'scalloped' || edgeSettings.style === 'wave') {
-        // Create repeating pattern for torn/scalloped/wave edges
-        let path = `M${x1},${y1}`;
-        for (let i = 0; i < segments; i++) {
-          const segmentHeight = height / segments;
-          const startY = y1 + (i * segmentHeight);
-          const endY = y1 + ((i + 1) * segmentHeight);
-          
-          if (edgeSettings.style === 'torn') {
-            const midX = x1 + (Math.random() * 20 - 10);
-            path += ` Q${midX},${startY + segmentHeight/2} ${x1},${endY}`;
-          } else if (edgeSettings.style === 'scalloped') {
-            const midX = x1 + (x1 === 0 ? 15 : -15);
-            path += ` Q${midX},${startY + segmentHeight/2} ${x1},${endY}`;
-          } else if (edgeSettings.style === 'wave') {
-            const midX = x1 + (x1 === 0 ? 10 : -10);
-            path += ` Q${midX},${startY + segmentHeight/3} ${x1},${startY + segmentHeight*2/3}`;
-            path += ` Q${midX},${startY + segmentHeight*2/3} ${x1},${endY}`;
-          }
-        }
-        return path;
-      } else if (edgeSettings.style === 'zigzag' || edgeSettings.style === 'spikes') {
-        // Create zigzag/spikes pattern
-        let path = `M${x1},${y1}`;
-        for (let i = 0; i < segments; i++) {
-          const segmentHeight = height / segments;
-          const startY = y1 + (i * segmentHeight);
-          const endY = y1 + ((i + 1) * segmentHeight);
-          const midY = startY + segmentHeight / 2;
-          const peakX = x1 + (x1 === 0 ? 20 : -20);
-          
-          path += ` L${peakX},${midY} L${x1},${endY}`;
-        }
-        return path;
-      } else if (edgeSettings.style === 'dots') {
-        // Create dotted edge pattern
-        let path = `M${x1},${y1}`;
-        for (let i = 0; i < segments; i++) {
-          const segmentHeight = height / segments;
-          const startY = y1 + (i * segmentHeight);
-          const endY = y1 + ((i + 1) * segmentHeight);
-          const midY = startY + segmentHeight / 2;
-          const midX = x1 + (x1 === 0 ? 5 : -5);
-          
-          path += ` M${midX},${midY} m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0`;
-        }
-        return path;
-      } else if (edgeSettings.style === 'geometric') {
-        // Create geometric edge pattern
-        let path = `M${x1},${y1}`;
-        for (let i = 0; i < segments; i++) {
-          const segmentHeight = height / segments;
-          const startY = y1 + (i * segmentHeight);
-          const endY = y1 + ((i + 1) * segmentHeight);
-          const midY = startY + segmentHeight / 2;
-          const peakX = x1 + (x1 === 0 ? 15 : -15);
-          
-          path += ` L${peakX},${midY} L${x1},${endY}`;
-        }
-        return path;
-      } else {
-        // Default straight edge
-        return `M${x1},${y1} L${x2},${y2}`;
+      // Use the predefined variant path and scale it to fit the edge
+      if (variant && variant !== '') {
+        // Scale the variant path from 0-100 to the actual edge dimensions
+        let scaledPath = variant;
+        
+        // Replace the coordinates in the variant path
+        scaledPath = scaledPath.replace(/M0,0/g, `M${x1},${y1}`);
+        scaledPath = scaledPath.replace(/L100,0/g, `L${x1},${y2}`);
+        scaledPath = scaledPath.replace(/L100,100/g, `L${x1},${y2}`);
+        scaledPath = scaledPath.replace(/L0,100/g, `L${x1},${y2}`);
+        
+        // Scale any other coordinates in the path
+        scaledPath = scaledPath.replace(/(\d+),(\d+)/g, (match, x, y) => {
+          const scaledX = x1 + (parseInt(x) / 100) * (x2 - x1);
+          const scaledY = y1 + (parseInt(y) / 100) * (y2 - y1);
+          return `${scaledX},${scaledY}`;
+        });
+        
+        return scaledPath;
       }
+      
+      // Fallback to simple line if no variant
+      return `M${x1},${y1} L${x2},${y2}`;
     }
     
     // Update edge UI controls
@@ -1796,6 +2043,12 @@
       
       if (currentTheme) {
         console.log('🎭 Updating sprites for theme:', themeKey);
+        
+        // Check if we should preserve custom sprites
+        if (window.customSpritesAdded) {
+          console.log('🛡️ Preserving custom sprites during update');
+        }
+        
         // Always redraw sprites to get fresh positions and animations
         drawSprites(currentTheme);
         console.log('✅ Sprites updated');
@@ -1915,12 +2168,20 @@
         const x = rng()*900, y = rng()*600 + (i%2? 100: 250);
         const r = (rng()*40 - 20); const s = (0.6 + rng()*0.9) * scale; const color = theme.palette[i % theme.palette.length];
         const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-        g.setAttribute('class','sprite');
+        g.setAttribute('class','sprite theme-sprite');
+        g.setAttribute('data-sprite-id', `theme-${Date.now()}-${i}`);
+        g.setAttribute('data-sprite-type', 'theme');
+        g.setAttribute('data-sprite-index', i);
+        
         const dur = anim==='lively' ? (4 + rng()*3) : (anim==='gentle' ? (8 + rng()*5) : 0);
         const animStyle = dur ? `animation: floaty ${dur}s ease-in-out ${rng()*2}s infinite;` : '';
         g.setAttribute('transform',`translate(${x} ${y}) rotate(${r}) scale(${s})`);
-        g.setAttribute('style',`color:${color}; ${animStyle}`);
-        g.appendChild(use); svg.appendChild(g);
+        g.setAttribute('style',`color:${color}; ${animStyle}; opacity: 0.8; z-index: 1;`);
+        g.appendChild(use); 
+        svg.appendChild(g);
+        
+        // Make theme sprites draggable
+        makeSpriteDraggable(g, x, y);
       }
       
       console.log(`🎨 Drew ${density} theme sprites, preserved ${customSprites.length} custom sprites`);
@@ -2535,8 +2796,7 @@
         applyEdgeEffect();
       });
       
-      // Edge action buttons
-      el('apply-edge').addEventListener('click', applyEdgeEffect);
+      // Edge controls now work live (no apply button needed)
       el('reset-edge').addEventListener('click', resetEdgeSettings);
       
       // Initialize edge UI
@@ -2582,7 +2842,6 @@
       });
       
       // Overlay action buttons
-      el('apply-overlay').addEventListener('click', applyOverlay);
       el('reset-overlay').addEventListener('click', resetOverlaySettings);
       
       // Initialize overlay UI
@@ -4005,6 +4264,22 @@
                 cursor: pointer;
               ">Clear Custom</button>
             </div>
+            <div style="margin-top: 8px;">
+              <button id="check-sprite-status-btn" style="
+                width: 100%;
+                padding: 8px;
+                background: #6c757d;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-size: 12px;
+                cursor: pointer;
+              ">Check Sprite Status</button>
+            </div>
+            <div style="margin-top: 8px; padding: 8px; background: #f8f9fa; border-radius: 4px; font-size: 11px; color: #666; text-align: center;">
+              💡 <strong>Tip:</strong> Drag sprites to reposition them!<br>
+              Right-click for more options.
+            </div>
           </div>
         `;
 
@@ -4043,6 +4318,11 @@
         // Clear custom sprites button
         document.getElementById('clear-custom-sprites-btn')?.addEventListener('click', () => {
           this.clearCustomSprites();
+        });
+
+        // Check sprite status button
+        document.getElementById('check-sprite-status-btn')?.addEventListener('click', () => {
+          this.checkSpriteStatus();
         });
 
         // Click outside to close
@@ -4294,11 +4574,369 @@
         g.setAttribute('style', `color:${color}; ${animStyle}`);
         g.appendChild(use);
         
+        // Add a small drag handle indicator
+        const dragHandle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dragHandle.setAttribute('cx', '0');
+        dragHandle.setAttribute('cy', '0');
+        dragHandle.setAttribute('r', '3');
+        dragHandle.setAttribute('fill', 'rgba(255,255,255,0.8)');
+        dragHandle.setAttribute('stroke', 'rgba(0,0,0,0.5)');
+        dragHandle.setAttribute('stroke-width', '1');
+        dragHandle.setAttribute('class', 'drag-handle');
+        dragHandle.style.pointerEvents = 'none';
+        g.appendChild(dragHandle);
+        
+        // Make sprite draggable
+        this.makeSpriteDraggable(g, x, y);
+        
         svg.appendChild(g);
         console.log(`🎨 Added ${sprite.name} to display at position (${x}, ${y})`);
         
         // Mark that custom sprites have been added
         window.customSpritesAdded = true;
+        
+        // Add a mutation observer to detect if this sprite gets removed
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'childList') {
+              mutation.removedNodes.forEach((node) => {
+                if (node === g || (node.contains && node.contains(g))) {
+                  console.warn(`⚠️ Custom sprite ${sprite.name} was removed!`, {
+                    sprite: sprite.name,
+                    timestamp: new Date().toISOString(),
+                    mutation: mutation
+                  });
+                }
+              });
+            }
+          });
+        });
+        
+        observer.observe(svg, { childList: true, subtree: true });
+        
+        // Store observer reference for cleanup
+        g._observer = observer;
+        
+        // Set up a periodic check to ensure sprite persistence
+        const checkInterval = setInterval(() => {
+          if (!document.body.contains(g)) {
+            console.error(`❌ Custom sprite ${sprite.name} has disappeared! Attempting to restore...`);
+            clearInterval(checkInterval);
+            
+            // Try to restore the sprite
+            if (svg && document.body.contains(svg)) {
+              svg.appendChild(g.cloneNode(true));
+              console.log(`🔄 Restored ${sprite.name} sprite`);
+            }
+          }
+        }, 1000); // Check every second
+        
+        // Store interval reference for cleanup
+        g._checkInterval = checkInterval;
+      }
+
+      // Make a sprite draggable
+      makeSpriteDraggable(spriteElement, initialX, initialY) {
+        let isDragging = false;
+        let startX, startY;
+        let currentX = initialX;
+        let currentY = initialY;
+        
+        // Add cursor style to indicate draggability
+        spriteElement.style.cursor = 'grab';
+        spriteElement.style.userSelect = 'none';
+        
+        // Add hover effects
+        spriteElement.addEventListener('mouseenter', () => {
+          if (!isDragging) {
+            spriteElement.style.filter = 'brightness(1.2) drop-shadow(0 0 8px rgba(0,0,0,0.3))';
+            spriteElement.style.transform = spriteElement.getAttribute('transform') + ' scale(1.05)';
+          }
+        });
+        
+        spriteElement.addEventListener('mouseleave', () => {
+          if (!isDragging) {
+            spriteElement.style.filter = '';
+            spriteElement.style.transform = spriteElement.getAttribute('transform');
+          }
+        });
+        
+        // Mouse events for dragging
+        spriteElement.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          isDragging = true;
+          startX = e.clientX - currentX;
+          startY = e.clientY - currentY;
+          spriteElement.style.cursor = 'grabbing';
+          
+          // Add dragging class for visual feedback
+          spriteElement.classList.add('dragging');
+          
+          // Pause animation while dragging
+          spriteElement.style.animationPlayState = 'paused';
+          
+          console.log(`🎯 Started dragging sprite at (${currentX}, ${currentY})`);
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          
+          currentX = e.clientX - startX;
+          currentY = e.clientY - startY;
+          
+          // Constrain to invitation bounds
+          currentX = Math.max(0, Math.min(900, currentX));
+          currentY = Math.max(0, Math.min(1350, currentY));
+          
+          // Update transform
+          const transform = spriteElement.getAttribute('transform');
+          const newTransform = transform.replace(
+            /translate\([^)]+\)/,
+            `translate(${currentX} ${currentY})`
+          );
+          spriteElement.setAttribute('transform', newTransform);
+        });
+        
+        document.addEventListener('mouseup', () => {
+          if (isDragging) {
+            isDragging = false;
+            spriteElement.style.cursor = 'grab';
+            
+            // Remove dragging class
+            spriteElement.classList.remove('dragging');
+            
+            // Resume animation
+            spriteElement.style.animationPlayState = 'running';
+            
+            console.log(`📍 Dropped sprite at (${currentX}, ${currentY})`);
+          }
+        });
+        
+        // Touch events for mobile devices
+        spriteElement.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          const touch = e.touches[0];
+          isDragging = true;
+          startX = touch.clientX - currentX;
+          startY = touch.clientY - currentY;
+          spriteElement.style.cursor = 'grabbing';
+          
+          // Add dragging class for visual feedback
+          spriteElement.classList.add('dragging');
+          
+          spriteElement.style.animationPlayState = 'paused';
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          e.preventDefault();
+          
+          const touch = e.touches[0];
+          currentX = touch.clientX - startX;
+          currentY = touch.clientY - startY;
+          
+          // Constrain to invitation bounds
+          currentX = Math.max(0, Math.min(900, currentX));
+          currentY = Math.max(0, Math.min(1350, currentY));
+          
+          // Update transform
+          const transform = spriteElement.getAttribute('transform');
+          const newTransform = transform.replace(
+            /translate\([^)]+\)/,
+            `translate(${currentX} ${currentY})`
+          );
+          spriteElement.setAttribute('transform', newTransform);
+        });
+        
+        document.addEventListener('touchend', () => {
+          if (isDragging) {
+            isDragging = false;
+            spriteElement.style.cursor = 'grab';
+            
+            // Remove dragging class
+            spriteElement.classList.remove('dragging');
+            
+            spriteElement.style.animationPlayState = 'running';
+          }
+        });
+        
+        // Store position data for later use
+        spriteElement._dragData = {
+          currentX,
+          currentY,
+          initialX,
+          initialY
+        };
+        
+        // Add rotation with mouse wheel
+        spriteElement.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          const delta = e.deltaY > 0 ? -15 : 15;
+          const currentRotation = spriteElement._dragData.rotation || 0;
+          spriteElement._dragData.rotation = currentRotation + delta;
+          
+          // Update transform with rotation
+          const transform = spriteElement.getAttribute('transform');
+          const newTransform = transform.replace(
+            /translate\([^)]+\)/,
+            `translate(${currentX} ${currentY})`
+          ).replace(
+            /rotate\([^)]*\)/,
+            `rotate(${spriteElement._dragData.rotation})`
+          );
+          
+          if (!newTransform.includes('rotate')) {
+            spriteElement.setAttribute('transform', newTransform + ` rotate(${spriteElement._dragData.rotation})`);
+          } else {
+            spriteElement.setAttribute('transform', newTransform);
+          }
+        });
+        
+        // Add right-click context menu for additional options
+        spriteElement.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          this.showSpriteContextMenu(e, spriteElement);
+        });
+      }
+      
+      // Show context menu for sprite options
+      showSpriteContextMenu(event, spriteElement) {
+        // Remove existing context menu
+        const existingMenu = document.getElementById('sprite-context-menu');
+        if (existingMenu) existingMenu.remove();
+        
+        const menu = document.createElement('div');
+        menu.id = 'sprite-context-menu';
+        menu.style.cssText = `
+          position: fixed;
+          top: ${event.clientY}px;
+          left: ${event.clientX}px;
+          background: white;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+          z-index: 10000;
+          font-family: Arial, sans-serif;
+          font-size: 12px;
+        `;
+        
+        const options = [
+          { text: 'Reset Position', action: () => this.resetSpritePosition(spriteElement) },
+          { text: 'Bring to Front', action: () => this.bringSpriteToFront(spriteElement) },
+          { text: 'Send to Back', action: () => this.sendSpriteToBack(spriteElement) },
+          { text: 'Duplicate', action: () => this.duplicateSprite(spriteElement) },
+          { text: 'Delete', action: () => this.deleteSprite(spriteElement) }
+        ];
+        
+        options.forEach(option => {
+          const item = document.createElement('div');
+          item.style.cssText = `
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+          `;
+          item.textContent = option.text;
+          item.addEventListener('click', () => {
+            option.action();
+            menu.remove();
+          });
+          item.addEventListener('mouseenter', () => {
+            item.style.background = '#f0f0f0';
+          });
+          item.addEventListener('mouseleave', () => {
+            item.style.background = 'white';
+          });
+          menu.appendChild(item);
+        });
+        
+        document.body.appendChild(menu);
+        
+        // Close menu when clicking elsewhere
+        setTimeout(() => {
+          document.addEventListener('click', () => menu.remove(), { once: true });
+        }, 100);
+      }
+      
+      // Reset sprite to initial position
+      resetSpritePosition(spriteElement) {
+        const dragData = spriteElement._dragData;
+        if (dragData) {
+          const transform = spriteElement.getAttribute('transform');
+          const newTransform = transform.replace(
+            /translate\([^)]+\)/,
+            `translate(${dragData.initialX} ${dragData.initialY})`
+          );
+          spriteElement.setAttribute('transform', newTransform);
+          
+          dragData.currentX = dragData.initialX;
+          dragData.currentY = dragData.initialY;
+          
+          console.log(`🔄 Reset ${spriteElement.getAttribute('data-sprite-id')} to initial position`);
+        }
+      }
+      
+      // Bring sprite to front
+      bringSpriteToFront(spriteElement) {
+        const svg = document.getElementById('sprites');
+        if (svg && spriteElement.parentNode) {
+          svg.appendChild(spriteElement);
+          console.log(`⬆️ Brought ${spriteElement.getAttribute('data-sprite-id')} to front`);
+        }
+      }
+      
+      // Send sprite to back
+      sendSpriteToBack(spriteElement) {
+        const svg = document.getElementById('sprites');
+        if (svg && spriteElement.parentNode) {
+          svg.insertBefore(spriteElement, svg.firstChild);
+          console.log(`⬇️ Sent ${spriteElement.getAttribute('data-sprite-id')} to back`);
+        }
+      }
+      
+      // Duplicate sprite
+      duplicateSprite(spriteElement) {
+        const clone = spriteElement.cloneNode(true);
+        const spriteId = spriteElement.getAttribute('data-sprite-id');
+        const newId = `${spriteId}-copy-${Date.now()}`;
+        
+        clone.setAttribute('data-sprite-id', newId);
+        
+        // Offset the duplicate slightly
+        const transform = clone.getAttribute('transform');
+        const offsetX = Math.random() * 50 - 25;
+        const offsetY = Math.random() * 50 - 25;
+        const newTransform = transform.replace(
+          /translate\(([^,]+),\s*([^)]+)\)/,
+          (match, x, y) => `translate(${parseFloat(x) + offsetX} ${parseFloat(y) + offsetY})`
+        );
+        clone.setAttribute('transform', newTransform);
+        
+        // Make the duplicate draggable
+        const match = newTransform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+        if (match) {
+          this.makeSpriteDraggable(clone, parseFloat(match[1]), parseFloat(match[2]));
+        }
+        
+        const svg = document.getElementById('sprites');
+        svg.appendChild(clone);
+        
+        console.log(`📋 Duplicated ${spriteId} as ${newId}`);
+      }
+      
+      // Delete sprite
+      deleteSprite(spriteElement) {
+        if (confirm(`Are you sure you want to delete this sprite?`)) {
+          // Clean up observers and intervals
+          if (spriteElement._observer) {
+            spriteElement._observer.disconnect();
+          }
+          if (spriteElement._checkInterval) {
+            clearInterval(spriteElement._checkInterval);
+          }
+          
+          spriteElement.remove();
+          console.log(`🗑️ Deleted sprite ${spriteElement.getAttribute('data-sprite-id')}`);
+        }
       }
 
       getRandomColor() {
@@ -4328,10 +4966,41 @@
         
         // Remove only custom sprites (those with data-sprite-id)
         const customSprites = svg.querySelectorAll('[data-sprite-id]');
-        customSprites.forEach(sprite => sprite.remove());
+        customSprites.forEach(sprite => {
+          // Clean up observers and intervals
+          if (sprite._observer) {
+            sprite._observer.disconnect();
+          }
+          if (sprite._checkInterval) {
+            clearInterval(sprite._checkInterval);
+          }
+          sprite.remove();
+        });
         
         window.customSpritesAdded = false;
         console.log('🗑️ Custom sprites cleared');
+      }
+
+      // Method to check current sprite status
+      checkSpriteStatus() {
+        const svg = document.getElementById('sprites');
+        if (!svg) return;
+        
+        const customSprites = svg.querySelectorAll('[data-sprite-id]');
+        const themeSprites = svg.querySelectorAll('.sprite:not([data-sprite-id])');
+        
+        console.log('📊 Current sprite status:', {
+          customSprites: customSprites.length,
+          themeSprites: themeSprites.length,
+          totalSprites: svg.children.length,
+          customSpritesAdded: window.customSpritesAdded
+        });
+        
+        return {
+          customSprites: customSprites.length,
+          themeSprites: themeSprites.length,
+          totalSprites: svg.children.length
+        };
       }
 
       filterSprites() {
@@ -4410,16 +5079,1125 @@
       }
     }
 
-    // Initialize Sprite Browser when DOM is ready
-    document.addEventListener('DOMContentLoaded', () => {
-      try {
-        window.spriteBrowser = new SimpleSpriteBrowser();
-        console.log('✅ Simple Sprite Browser initialized');
-      } catch (error) {
-        console.error('❌ Failed to initialize Sprite Browser:', error);
+    /* === COMPREHENSIVE OBJECT MANAGEMENT SYSTEM === */
+    
+    // Global object registry to track all interactive elements
+    window.objectRegistry = {
+      objects: new Map(),
+      nextId: 1,
+      
+      // Register a new object
+      register(object, type, data = {}) {
+        const id = `obj-${this.nextId++}`;
+        object.setAttribute('data-object-id', id);
+        object.setAttribute('data-object-type', type);
+        object.setAttribute('data-object-data', JSON.stringify(data));
+        
+        this.objects.set(id, {
+          element: object,
+          type: type,
+          data: data,
+          id: id
+        });
+        
+        console.log(`📝 Registered ${type} object: ${id}`);
+        return id;
+      },
+      
+      // Get object by ID
+      get(id) {
+        return this.objects.get(id);
+      },
+      
+      // Get all objects of a specific type
+      getByType(type) {
+        return Array.from(this.objects.values()).filter(obj => obj.type === type);
+      },
+      
+      // Update object data
+      update(id, data) {
+        const obj = this.objects.get(id);
+        if (obj) {
+          obj.data = { ...obj.data, ...data };
+          obj.element.setAttribute('data-object-data', JSON.stringify(obj.data));
+        }
+      },
+      
+      // Remove object from registry
+      unregister(id) {
+        this.objects.delete(id);
+      },
+      
+      // Export all objects for saving
+      export() {
+        const exportData = {};
+        this.objects.forEach((obj, id) => {
+          exportData[id] = {
+            type: obj.type,
+            data: obj.data,
+            element: {
+              tagName: obj.element.tagName,
+              className: obj.element.className,
+              attributes: Array.from(obj.element.attributes).map(attr => ({
+                name: attr.name,
+                value: attr.value
+              }))
+            }
+          };
+        });
+        return exportData;
+      },
+      
+      // Import objects from saved data
+      import(data) {
+        // Clear existing objects
+        this.objects.clear();
+        
+        // Recreate objects from saved data
+        Object.entries(data).forEach(([id, objData]) => {
+          // This would need to be implemented based on the specific object types
+          console.log(`📥 Importing ${objData.type} object: ${id}`);
+        });
       }
-    });
-  </script>
+    };
+
+    // Make text elements interactive and draggable
+    function makeTextInteractive() {
+      const textElements = [
+        'pill-out', 'title-out', 'subtitle-out', 'names-out', 
+        'date-out', 'time-out', 'location-out', 'rsvp-out'
+      ];
+      
+      textElements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          // Make text draggable
+          makeElementDraggable(element, 'text');
+          
+          // Add right-click context menu
+          element.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            showTextContextMenu(e, element);
+          });
+          
+          // Add hover effects
+          element.style.cursor = 'move';
+          element.style.transition = 'all 0.2s ease';
+          
+          element.addEventListener('mouseenter', () => {
+            element.style.transform = 'scale(1.02)';
+            element.style.filter = 'drop-shadow(0 2px 8px rgba(0,0,0,0.15))';
+          });
+          
+          element.addEventListener('mouseleave', () => {
+            element.style.transform = 'scale(1)';
+            element.style.filter = 'none';
+          });
+        }
+      });
+      
+      console.log('✅ Text elements made interactive');
+    }
+
+    // Make any element draggable
+    function makeElementDraggable(element, type) {
+      let isDragging = false;
+      let startX, startY, startTransform;
+      let currentX = 0, currentY = 0;
+      let currentRotation = 0;
+      
+      // Parse current transform to get position and rotation
+      const transform = element.style.transform || element.getAttribute('transform') || '';
+      const translateMatch = transform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+      const rotateMatch = transform.match(/rotate\(([^)]+)\)/);
+      
+      if (translateMatch) {
+        currentX = parseFloat(translateMatch[1]);
+        currentY = parseFloat(translateMatch[2]);
+      }
+      if (rotateMatch) {
+        currentRotation = parseFloat(rotateMatch[1]);
+      }
+      
+      // Mouse events
+      element.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return; // Only left click
+        
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startTransform = element.style.transform || element.getAttribute('transform') || '';
+        
+        element.style.cursor = 'grabbing';
+        element.style.zIndex = '1000';
+        
+        e.preventDefault();
+      });
+      
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+        
+        const newX = currentX + deltaX;
+        const newY = currentY + deltaY;
+        
+        // Apply transform
+        const newTransform = `translate(${newX}px, ${newY}px) rotate(${currentRotation}deg)`;
+        element.style.transform = newTransform;
+      });
+      
+      document.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          element.style.cursor = 'move';
+          element.style.zIndex = 'auto';
+          
+          // Update current position
+          const transform = element.style.transform || '';
+          const translateMatch = transform.match(/translate\(([^,]+)px,\s*([^)]+)px\)/);
+          if (translateMatch) {
+            currentX = parseFloat(translateMatch[1]);
+            currentY = parseFloat(translateMatch[2]);
+          }
+          
+          // Register object if not already registered
+          if (!element.getAttribute('data-object-id')) {
+            window.objectRegistry.register(element, type, {
+              x: currentX,
+              y: currentY,
+              rotation: currentRotation,
+              type: type
+            });
+          } else {
+            // Update existing object
+            const id = element.getAttribute('data-object-id');
+            window.objectRegistry.update(id, {
+              x: currentX,
+              y: currentY,
+              rotation: currentRotation
+            });
+          }
+        }
+      });
+      
+      // Touch events for mobile
+      element.addEventListener('touchstart', (e) => {
+        if (e.touches.length !== 1) return;
+        
+        const touch = e.touches[0];
+        isDragging = true;
+        startX = touch.clientX;
+        startY = touch.clientY;
+        startTransform = element.style.transform || element.getAttribute('transform') || '';
+        
+        element.style.zIndex = '1000';
+        e.preventDefault();
+      });
+      
+      document.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - startX;
+        const deltaY = touch.clientY - startY;
+        
+        const newX = currentX + deltaX;
+        const newY = currentY + deltaY;
+        
+        const newTransform = `translate(${newX}px, ${newY}px) rotate(${currentRotation}deg)`;
+        element.style.transform = newTransform;
+        
+        e.preventDefault();
+      });
+      
+      document.addEventListener('touchend', () => {
+        if (isDragging) {
+          isDragging = false;
+          element.style.zIndex = 'auto';
+          
+          const transform = element.style.transform || '';
+          const translateMatch = transform.match(/translate\(([^,]+)px,\s*([^)]+)px\)/);
+          if (translateMatch) {
+            currentX = parseFloat(translateMatch[1]);
+            currentY = parseFloat(translateMatch[2]);
+          }
+          
+          if (!element.getAttribute('data-object-id')) {
+            window.objectRegistry.register(element, type, {
+              x: currentX,
+              y: currentY,
+              rotation: currentRotation,
+              type: type
+            });
+          } else {
+            const id = element.getAttribute('data-object-id');
+            window.objectRegistry.update(id, {
+              x: currentX,
+              y: currentY,
+              rotation: currentRotation
+            });
+          }
+        }
+      });
+      
+      console.log(`✅ Made ${type} element draggable`);
+    }
+
+    // Show context menu for text elements
+    function showTextContextMenu(event, element) {
+      const menu = document.createElement('div');
+      menu.style.cssText = `
+        position: fixed;
+        top: ${event.clientY}px;
+        left: ${event.clientX}px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        min-width: 200px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+      `;
+      
+      const options = [
+        {
+          text: '🔄 Reset Position',
+          action: () => resetElementPosition(element)
+        },
+        {
+          text: '🔄 Reset Rotation',
+          action: () => resetElementRotation(element)
+        },
+        {
+          text: '⬆️ Bring to Front',
+          action: () => bringElementToFront(element)
+        },
+        {
+          text: '⬇️ Send to Back',
+          action: () => sendElementToBack(element)
+        },
+        {
+          text: '📝 Edit Text',
+          action: () => editElementText(element)
+        },
+        {
+          text: '🎨 Change Color',
+          action: () => changeElementColor(element)
+        },
+        {
+          text: '📏 Change Size',
+          action: () => changeElementSize(element)
+        },
+        {
+          text: '📋 Duplicate',
+          action: () => duplicateElement(element)
+        },
+        {
+          text: '🗑️ Delete',
+          action: () => deleteElement(element)
+        }
+      ];
+      
+      options.forEach(option => {
+        const item = document.createElement('div');
+        item.style.cssText = `
+          padding: 8px 12px;
+          cursor: pointer;
+          border-bottom: 1px solid #eee;
+        `;
+        item.textContent = option.text;
+        item.addEventListener('click', () => {
+          option.action();
+          menu.remove();
+        });
+        item.addEventListener('mouseenter', () => {
+          item.style.background = '#f0f0f0';
+        });
+        item.addEventListener('mouseleave', => {
+          item.style.background = 'white';
+        });
+        menu.appendChild(item);
+      });
+      
+      document.body.appendChild(menu);
+      
+      // Close menu when clicking elsewhere
+      setTimeout(() => {
+        document.addEventListener('click', () => menu.remove(), { once: true });
+      }, 100);
+    }
+
+    // Element manipulation functions
+    function resetElementPosition(element) {
+      element.style.transform = element.style.transform.replace(/translate\([^)]+\)/, 'translate(0px, 0px)');
+      const id = element.getAttribute('data-object-id');
+      if (id) {
+        window.objectRegistry.update(id, { x: 0, y: 0 });
+      }
+    }
+
+    function resetElementRotation(element) {
+      const transform = element.style.transform || '';
+      const newTransform = transform.replace(/rotate\([^)]+\)/, 'rotate(0deg)');
+      element.style.transform = newTransform;
+      
+      const id = element.getAttribute('data-object-id');
+      if (id) {
+        window.objectRegistry.update(id, { rotation: 0 });
+      }
+    }
+
+    function bringElementToFront(element) {
+      element.style.zIndex = '1000';
+    }
+
+    function sendElementToBack(element) {
+      element.style.zIndex = '1';
+    }
+
+    function editElementText(element) {
+      const currentText = element.textContent;
+      const newText = prompt('Edit text:', currentText);
+      if (newText !== null && newText !== currentText) {
+        element.textContent = newText;
+        const id = element.getAttribute('data-object-id');
+        if (id) {
+          window.objectRegistry.update(id, { text: newText });
+        }
+      }
+    }
+
+    function changeElementColor(element) {
+      const currentColor = element.style.color || getComputedStyle(element).color;
+      const newColor = prompt('Enter color (hex, rgb, or name):', currentColor);
+      if (newColor && newColor !== currentColor) {
+        element.style.color = newColor;
+        const id = element.getAttribute('data-object-id');
+        if (id) {
+          window.objectRegistry.update(id, { color: newColor });
+        }
+      }
+    }
+
+    function changeElementSize(element) {
+      const currentSize = element.style.fontSize || getComputedStyle(element).fontSize;
+      const newSize = prompt('Enter font size (e.g., 16px, 2em):', currentSize);
+      if (newSize && newSize !== currentSize) {
+        element.style.fontSize = newSize;
+        const id = element.getAttribute('data-object-id');
+        if (id) {
+          window.objectRegistry.update(id, { fontSize: newSize });
+        }
+      }
+    }
+
+    function duplicateElement(element) {
+      const clone = element.cloneNode(true);
+      const newId = `obj-${Date.now()}`;
+      clone.setAttribute('data-object-id', newId);
+      
+      // Offset the duplicate slightly
+      const transform = clone.style.transform || '';
+      const offsetX = Math.random() * 50 - 25;
+      const offsetY = Math.random() * 50 - 25;
+      const newTransform = transform.replace(
+        /translate\(([^,]+)px,\s*([^)]+)px\)/,
+        (match, x, y) => `translate(${parseFloat(x) + offsetX}px, ${parseFloat(y) + offsetY}px)`
+      );
+      clone.style.transform = newTransform;
+      
+      // Make the duplicate interactive
+      const type = element.getAttribute('data-object-type') || 'text';
+      makeElementDraggable(clone, type);
+      
+      // Add context menu
+      clone.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        showTextContextMenu(e, clone);
+      });
+      
+      // Insert after the original
+      element.parentNode.insertBefore(clone, element.nextSibling);
+      
+      // Register the duplicate
+      window.objectRegistry.register(clone, type, {
+        x: offsetX,
+        y: offsetY,
+        rotation: 0,
+        type: type,
+        text: element.textContent
+      });
+    }
+
+    function deleteElement(element) {
+      if (confirm('Are you sure you want to delete this element?')) {
+        const id = element.getAttribute('data-object-id');
+        if (id) {
+          window.objectRegistry.unregister(id);
+        }
+        element.remove();
+      }
+    }
+
+    // Export/Import system for all objects
+    function exportAllObjects() {
+      const data = {
+        objects: window.objectRegistry.export(),
+        timestamp: new Date().toISOString(),
+        version: '1.0'
+      };
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `invitation-objects-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      
+      URL.revokeObjectURL(url);
+      console.log('📤 Exported all objects');
+    }
+
+    function importAllObjects(data) {
+      try {
+        if (typeof data === 'string') {
+          data = JSON.parse(data);
+        }
+        
+        if (data.objects) {
+          window.objectRegistry.import(data.objects);
+          console.log('📥 Imported objects successfully');
+        }
+      } catch (error) {
+        console.error('❌ Failed to import objects:', error);
+      }
+    }
+
+    // Initialize object management button listeners
+    function initializeObjectManagementButtons() {
+      // Export objects button
+      const exportBtn = document.getElementById('export-objects');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+          try {
+            exportAllObjects();
+            alert('Objects exported successfully!');
+          } catch (error) {
+            alert('Failed to export objects: ' + error.message);
+          }
+        });
+      }
+      
+      // Import objects button
+      const importBtn = document.getElementById('import-objects');
+      if (importBtn) {
+        importBtn.addEventListener('click', () => {
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = '.json';
+          input.style.display = 'none';
+          document.body.appendChild(input);
+          
+          input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                try {
+                  importAllObjects(e.target.result);
+                  alert('Objects imported successfully!');
+                } catch (error) {
+                  alert('Failed to import objects: ' + error.message);
+                }
+              };
+              reader.readAsText(file);
+            }
+            document.body.removeChild(input);
+          };
+          
+          input.click();
+        });
+      }
+      
+      // Reset all positions button
+      const resetPosBtn = document.getElementById('reset-all-positions');
+      if (resetPosBtn) {
+        resetPosBtn.addEventListener('click', () => {
+          if (confirm('Reset all object positions to default?')) {
+            window.objectRegistry.objects.forEach((obj) => {
+              if (obj.element.style.transform) {
+                obj.element.style.transform = obj.element.style.transform.replace(
+                  /translate\([^)]+\)/,
+                  'translate(0px, 0px)'
+                );
+                window.objectRegistry.update(obj.id, { x: 0, y: 0 });
+              }
+            });
+            console.log('🔄 Reset all object positions');
+          }
+        });
+      }
+      
+      // Reset all rotations button
+      const resetRotBtn = document.getElementById('reset-all-rotations');
+      if (resetRotBtn) {
+        resetRotBtn.addEventListener('click', () => {
+          if (confirm('Reset all object rotations to default?')) {
+            window.objectRegistry.objects.forEach((obj) => {
+              if (obj.element.style.transform) {
+                obj.element.style.transform = obj.element.style.transform.replace(
+                  /rotate\([^)]+\)/,
+                  'rotate(0deg)'
+                );
+                window.objectRegistry.update(obj.id, { rotation: 0 });
+              }
+            });
+            console.log('🔄 Reset all object rotations');
+          }
+        });
+      }
+      
+      // Bring all to front button
+      const bringFrontBtn = document.getElementById('bring-all-to-front');
+      if (bringFrontBtn) {
+        bringFrontBtn.addEventListener('click', () => {
+          window.objectRegistry.objects.forEach((obj) => {
+            obj.element.style.zIndex = '1000';
+          });
+          console.log('⬆️ Brought all objects to front');
+        });
+      }
+      
+      // Send all to back button
+      const sendBackBtn = document.getElementById('send-all-to-back');
+      if (sendBackBtn) {
+        sendBackBtn.addEventListener('click', () => {
+          window.objectRegistry.objects.forEach((obj) => {
+            obj.element.style.zIndex = '1';
+          });
+          console.log('⬇️ Sent all objects to back');
+        });
+      }
+      
+      console.log('✅ Object management buttons initialized');
+    }
+
+            // Initialize Sprite Browser when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+          try {
+            window.spriteBrowser = new SimpleSpriteBrowser();
+            console.log('✅ Simple Sprite Browser initialized');
+            
+            // Initialize text interactivity system
+            setTimeout(() => {
+              makeTextInteractive();
+              console.log('✅ Text interactivity system initialized');
+            }, 1500);
+            
+            // Add global debugging functions
+            window.checkSpriteStatus = () => {
+              if (window.spriteBrowser) {
+                return window.spriteBrowser.checkSpriteStatus();
+              } else {
+                console.error('❌ Sprite Browser not initialized');
+                return null;
+              }
+            };
+            
+            window.debugSprites = () => {
+              const svg = document.getElementById('sprites');
+              if (!svg) {
+                console.error('❌ Sprites SVG not found');
+                return;
+              }
+              
+              console.log('🔍 Debugging sprites:', {
+                totalChildren: svg.children.length,
+                customSprites: svg.querySelectorAll('[data-sprite-id]').length,
+                themeSprites: svg.querySelectorAll('.sprite:not([data-sprite-id])').length,
+                customSpritesAdded: window.customSpritesAdded,
+                svgHTML: svg.innerHTML.substring(0, 200) + '...'
+              });
+            };
+            
+            // Add global object management functions
+            window.exportObjects = exportAllObjects;
+            window.importObjects = importAllObjects;
+            
+            // Initialize object management button listeners
+            setTimeout(() => {
+              initializeObjectManagementButtons();
+            }, 2000);
+            
+            console.log('🔧 Global debugging functions added: checkSpriteStatus(), debugSprites()');
+            console.log('🔧 Global object management functions added: exportObjects(), importObjects()');
+          } catch (error) {
+            console.error('❌ Failed to initialize Sprite Browser:', error);
+          }
+        });
+        
+        // Initialize Particle System
+        try {
+          window.particleSystem = new ParticleSystem();
+          console.log('✅ Particle System initialized');
+        } catch (error) {
+          console.error('❌ Failed to initialize Particle System:', error);
+        }
+      }
+    </script>
+    
+    <!-- Particle Effects System -->
+    <script>
+      class ParticleSystem {
+        constructor() {
+          this.particles = [];
+          this.isActive = false;
+          this.animationId = null;
+          this.container = null;
+          this.settings = {
+            effectType: 'confetti',
+            intensity: 'medium',
+            speed: 'normal',
+            direction: 'down',
+            colors: 'rainbow',
+            size: 'medium'
+          };
+          
+          this.colorPalettes = {
+            rainbow: ['#ff0000', '#ff8000', '#ffff00', '#80ff00', '#00ff00', '#00ff80', '#00ffff', '#0080ff', '#0000ff', '#8000ff', '#ff00ff', '#ff0080'],
+            warm: ['#ff0000', '#ff4000', '#ff8000', '#ffc000', '#ffff00', '#ffcc00', '#ff9900', '#ff6600', '#ff3300'],
+            cool: ['#0000ff', '#0040ff', '#0080ff', '#00c0ff', '#00ffff', '#00ccff', '#0099ff', '#0066ff', '#0033ff'],
+            pastel: ['#ffb3ba', '#baffc9', '#bae1ff', '#ffb3f0', '#f0ffb3', '#ffd9b3', '#b3d9ff', '#d9b3ff', '#b3ffd9'],
+            neon: ['#ff00ff', '#00ffff', '#ffff00', '#ff0080', '#80ff00', '#00ff80', '#8000ff', '#ff8000', '#0080ff'],
+            monochrome: ['#ffffff', '#e6e6e6', '#cccccc', '#b3b3b3', '#999999', '#808080', '#666666', '#4d4d4d', '#333333']
+          };
+          
+          this.speedMultipliers = {
+            slow: 0.5,
+            normal: 1.0,
+            fast: 2.0,
+            ultra: 4.0
+          };
+          
+          this.intensityMultipliers = {
+            low: 0.3,
+            medium: 1.0,
+            high: 2.0,
+            extreme: 4.0
+          };
+          
+          this.sizeMultipliers = {
+            tiny: 0.5,
+            small: 0.8,
+            medium: 1.0,
+            large: 1.5,
+            mixed: 1.0
+          };
+          
+          this.init();
+        }
+        
+        init() {
+          // Create particle container
+          this.container = document.createElement('div');
+          this.container.id = 'particle-container';
+          this.container.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            overflow: hidden;
+          `;
+          
+          // Add to stage
+          const stage = document.getElementById('stage');
+          if (stage) {
+            stage.appendChild(this.container);
+          }
+          
+          this.setupEventListeners();
+          console.log('✨ Particle System initialized');
+        }
+        
+        setupEventListeners() {
+          // Start particles
+          document.getElementById('start-particles')?.addEventListener('click', () => {
+            this.start();
+          });
+          
+          // Stop particles
+          document.getElementById('stop-particles')?.addEventListener('click', () => {
+            this.stop();
+          });
+          
+          // Burst effect
+          document.getElementById('burst-particles')?.addEventListener('click', () => {
+            this.burst();
+          });
+          
+          // Clear particles
+          document.getElementById('clear-particles')?.addEventListener('click', () => {
+            this.clear();
+          });
+          
+          // Settings changes
+          ['particle-effect-type', 'particle-intensity', 'particle-speed', 'particle-direction', 'particle-colors', 'particle-size'].forEach(id => {
+            document.getElementById(id)?.addEventListener('change', (e) => {
+              this.settings[id.replace('particle-', '')] = e.target.value;
+              if (this.isActive) {
+                this.restart();
+              }
+            });
+          });
+        }
+        
+        start() {
+          if (this.isActive) return;
+          
+          this.isActive = true;
+          this.animate();
+          console.log('🚀 Particle effects started:', this.settings.effectType);
+        }
+        
+        stop() {
+          this.isActive = false;
+          if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+            this.animationId = null;
+          }
+          console.log('⏹️ Particle effects stopped');
+        }
+        
+        restart() {
+          this.stop();
+          setTimeout(() => this.start(), 100);
+        }
+        
+        burst() {
+          const burstCount = 50 * this.intensityMultipliers[this.settings.intensity];
+          for (let i = 0; i < burstCount; i++) {
+            this.createParticle(true);
+          }
+          console.log('💥 Burst effect triggered!');
+        }
+        
+        clear() {
+          this.particles.forEach(particle => {
+            if (particle.element && particle.element.parentNode) {
+              particle.element.remove();
+            }
+          });
+          this.particles = [];
+          console.log('🧹 All particles cleared');
+        }
+        
+        createParticle(isBurst = false) {
+          const particle = document.createElement('div');
+          particle.className = `particle ${this.settings.effectType}`;
+          
+          // Position
+          let x, y;
+          if (isBurst) {
+            // Burst from center
+            x = 450 + (Math.random() - 0.5) * 200;
+            y = 675 + (Math.random() - 0.5) * 200;
+          } else {
+            // Random position based on direction
+            switch (this.settings.direction) {
+              case 'down':
+                x = Math.random() * 900;
+                y = -20;
+                break;
+              case 'up':
+                x = Math.random() * 900;
+                y = 1370;
+                break;
+              case 'left':
+                x = 920;
+                y = Math.random() * 1350;
+                break;
+              case 'right':
+                x = -20;
+                y = Math.random() * 1350;
+                break;
+              case 'random':
+                x = Math.random() * 900;
+                y = Math.random() * 1350;
+                break;
+              case 'outward':
+                x = 450 + (Math.random() - 0.5) * 100;
+                y = 675 + (Math.random() - 0.5) * 100;
+                break;
+              default:
+                x = Math.random() * 900;
+                y = -20;
+            }
+          }
+          
+          // Size
+          let size = this.sizeMultipliers[this.settings.size];
+          if (this.settings.size === 'mixed') {
+            size = 0.5 + Math.random() * 1.5;
+          }
+          
+          // Color
+          const colors = this.colorPalettes[this.settings.colors];
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          
+          // Special effects for different particle types
+          let specialStyles = '';
+          switch (this.settings.effectType) {
+            case 'confetti':
+              // Random confetti shapes
+              const shapes = ['square', 'triangle', 'circle'];
+              const shape = shapes[Math.floor(Math.random() * shapes.length)];
+              if (shape === 'triangle') {
+                specialStyles = 'clip-path: polygon(50% 0%, 0% 100%, 100% 100%);';
+              } else if (shape === 'circle') {
+                specialStyles = 'border-radius: 50%;';
+              }
+              break;
+            case 'snow':
+              // Snowflakes with different patterns
+              const snowPatterns = ['❄', '❅', '❆', '•'];
+              const snowPattern = snowPatterns[Math.floor(Math.random() * snowPatterns.length)];
+              particle.textContent = snowPattern;
+              particle.style.fontSize = `${8 * size}px`;
+              particle.style.color = color;
+              particle.style.background = 'transparent';
+              break;
+            case 'sparkles':
+              // Sparkle with glow effect
+              specialStyles = `
+                box-shadow: 0 0 ${6 * size}px ${color}, 0 0 ${12 * size}px ${color};
+                background: radial-gradient(circle, ${color} 0%, transparent 70%);
+              `;
+              break;
+            case 'fireworks':
+              // Firework particles with trail effect
+              specialStyles = `
+                background: radial-gradient(circle, ${color} 0%, transparent 100%);
+                box-shadow: 0 0 ${4 * size}px ${color};
+              `;
+              break;
+            case 'leaves':
+              // Autumn leaves with realistic colors
+              const leafColors = ['#8B4513', '#A0522D', '#CD853F', '#D2691E', '#B8860B'];
+              const leafColor = leafColors[Math.floor(Math.random() * leafColors.length)];
+              specialStyles = `
+                background: linear-gradient(45deg, ${leafColor}, ${this.adjustColor(leafColor, 20)});
+                border-radius: 50% 0 50% 0;
+              `;
+              break;
+            case 'bubbles':
+              // Bubbles with transparency and shine
+              specialStyles = `
+                background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9) 0%, rgba(173,216,230,0.6) 50%, transparent 100%);
+                border: 1px solid rgba(255,255,255,0.9);
+                box-shadow: inset 0 0 10px rgba(255,255,255,0.5);
+              `;
+              break;
+          }
+          
+          // Apply styles
+          particle.style.cssText = `
+            position: absolute;
+            left: ${x}px;
+            top: ${y}px;
+            background: ${color};
+            transform: scale(${size});
+            ${specialStyles}
+          `;
+          
+          // Add to container
+          this.container.appendChild(particle);
+          
+          // Create particle data
+          const particleData = {
+            element: particle,
+            x: x,
+            y: y,
+            vx: this.getVelocityX(isBurst),
+            vy: this.getVelocityY(isBurst),
+            life: this.getParticleLife(),
+            maxLife: this.getParticleLife(),
+            rotation: Math.random() * 360,
+            rotationSpeed: (Math.random() - 0.5) * 10,
+            size: size,
+            color: color,
+            type: this.settings.effectType
+          };
+          
+          this.particles.push(particleData);
+        }
+        
+        getVelocityX(isBurst) {
+          const baseSpeed = this.speedMultipliers[this.settings.speed];
+          if (isBurst) {
+            return (Math.random() - 0.5) * 8 * baseSpeed;
+          }
+          
+          switch (this.settings.direction) {
+            case 'left': return -2 * baseSpeed;
+            case 'right': return 2 * baseSpeed;
+            case 'random': return (Math.random() - 0.5) * 4 * baseSpeed;
+            case 'outward': return (Math.random() - 0.5) * 6 * baseSpeed;
+            default: return (Math.random() - 0.5) * 2 * baseSpeed;
+          }
+        }
+        
+        getVelocityY(isBurst) {
+          const baseSpeed = this.speedMultipliers[this.settings.speed];
+          if (isBurst) {
+            return (Math.random() - 0.5) * 8 * baseSpeed;
+          }
+            
+          switch (this.settings.direction) {
+            case 'down': return 2 * baseSpeed;
+            case 'up': return -2 * baseSpeed;
+            case 'right': return (Math.random() - 0.5) * 4 * baseSpeed;
+            case 'outward': return (Math.random() - 0.5) * 6 * baseSpeed;
+            default: return 2 * baseSpeed;
+          }
+        }
+        
+        getParticleLife() {
+          const baseLife = 3000; // 3 seconds
+          const speedMultiplier = this.speedMultipliers[this.settings.speed];
+          return baseLife / speedMultiplier;
+        }
+        
+        animate() {
+          if (!this.isActive) return;
+          
+          const now = Date.now();
+          const intensity = this.intensityMultipliers[this.settings.intensity];
+          
+          // Create new particles
+          if (Math.random() < 0.1 * intensity) {
+            this.createParticle();
+          }
+          
+          // Update existing particles
+          this.particles = this.particles.filter(particle => {
+            if (!particle.element || !particle.element.parentNode) {
+              return false;
+            }
+            
+            // Update position
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            
+            // Update rotation
+            particle.rotation += particle.rotationSpeed;
+            
+            // Update life
+            particle.life -= 16; // Assuming 60fps
+            
+            // Apply physics based on particle type
+            switch (particle.type) {
+              case 'snow':
+                particle.vy += 0.1; // Gravity for snow
+                particle.vx += (Math.random() - 0.5) * 0.2; // Wind effect
+                break;
+              case 'leaves':
+                particle.vy += 0.05; // Gentle fall for leaves
+                particle.vx += Math.sin(particle.life / 100) * 0.1; // Swaying motion
+                break;
+              case 'bubbles':
+                particle.vy -= 0.02; // Bubbles float up
+                particle.vx += (Math.random() - 0.5) * 0.1; // Gentle horizontal drift
+                break;
+              case 'fireworks':
+                particle.vy += 0.15; // Gravity for fireworks
+                particle.vx *= 0.99; // Air resistance
+                break;
+              case 'confetti':
+                particle.vy += 0.08; // Gravity for confetti
+                particle.rotation += particle.rotationSpeed; // Rotation
+                break;
+              case 'sparkles':
+                // Sparkles don't need physics - they just twinkle
+                break;
+            }
+            
+            // Update element
+            particle.element.style.left = `${particle.x}px`;
+            particle.element.style.top = `${particle.y}px`;
+            particle.element.style.transform = `scale(${particle.size}) rotate(${particle.rotation}deg)`;
+            
+            // Fade out based on life
+            const opacity = particle.life / particle.maxLife;
+            particle.element.style.opacity = opacity;
+            
+            // Remove dead particles
+            if (particle.life <= 0) {
+              particle.element.remove();
+              return false;
+            }
+            
+            return true;
+          });
+          
+          // Remove particles that are off-screen
+          this.particles = this.particles.filter(particle => {
+            if (particle.x < -50 || particle.x > 950 || particle.y < -50 || particle.y > 1400) {
+              particle.element.remove();
+              return false;
+            }
+            return true;
+          });
+          
+          this.animationId = requestAnimationFrame(() => this.animate());
+        }
+        
+        // Helper method to adjust color brightness
+        adjustColor(color, amount) {
+          const hex = color.replace('#', '');
+          const r = Math.max(0, Math.min(255, parseInt(hex.substr(0, 2), 16) + amount));
+          const g = Math.max(0, Math.min(255, parseInt(hex.substr(2, 2), 16) + amount));
+          const b = Math.max(0, Math.min(255, parseInt(hex.substr(4, 2), 16) + amount));
+          return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+        }
+        
+        // Get particle count based on intensity
+        getParticleCount() {
+          const baseCount = 20;
+          return Math.floor(baseCount * this.intensityMultipliers[this.settings.intensity]);
+        }
+        
+        // Create multiple particles for burst effects
+        createBurstParticles(count, centerX, centerY) {
+          for (let i = 0; i < count; i++) {
+            const angle = (i / count) * Math.PI * 2;
+            const distance = 50 + Math.random() * 100;
+            const x = centerX + Math.cos(angle) * distance;
+            const y = centerY + Math.sin(angle) * distance;
+            
+            const particle = this.createParticleAt(x, y, true);
+            if (particle) {
+              // Add explosion velocity
+              const velocity = 3 + Math.random() * 5;
+              particle.vx = Math.cos(angle) * velocity;
+              particle.vy = Math.sin(angle) * velocity;
+            }
+          }
+        }
+        
+        // Create particle at specific position
+        createParticleAt(x, y, isBurst = false) {
+          // This is a simplified version - the main createParticle method handles the full logic
+          return this.createParticle(isBurst);
+        }
+      }
+    </script>
   
   <!-- Select Initialization System -->
   <script type="module">
