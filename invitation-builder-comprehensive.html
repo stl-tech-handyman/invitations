@@ -2838,9 +2838,9 @@
     }
   </script>
 
-  <!-- Edge System -->
+  <!-- Edge System - REMOVED: Replaced with js/border-edges.js -->
   <script>
-    console.log('🎯 Loading Edge System...');
+    console.log('🎯 Old Edge System removed - using new BorderEdgesSystem from js/border-edges.js');
 
     /* === EDGE SYSTEM === */
     let edgeSettings = {
@@ -3168,19 +3168,8 @@
       document.getElementById('edge-opacity-value').textContent = edgeSettings.opacity;
     }
 
-    // Reset edge settings
-    function resetEdgeSettings() {
-      edgeSettings = {
-        style: 'none',
-        thickness: 3,
-        opacity: 0.8,
-        color: '#000000',
-        variant: 'default'
-      };
-      updateEdgeUI();
-      applyEdgeEffect();
-      console.log('🔄 Edge settings reset');
-    }
+    // Reset edge settings - REMOVED: Using new BorderEdgesSystem
+    console.log('🔄 Old edge system removed - using new BorderEdgesSystem');
   </script>
 
   <!-- Overlay System -->
@@ -8985,6 +8974,10 @@
     }
   </script>
 
+  <!-- Border Edges System -->
+  <link rel="stylesheet" href="css/border-edges.css">
+  <script src="js/border-edges.js"></script>
+  
   <!-- Select Initialization System -->
   <script>
     // Initialize all select dropdowns automatically
