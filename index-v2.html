@@ -248,6 +248,7 @@
             <option value="solid" selected>Solid Color</option>
             <option value="gradient">Gradient</option>
             <option value="radial">Radial</option>
+            <option value="image">Background Image</option>
           </select>
         </div>
         <div style="margin-bottom: 12px;">
@@ -269,6 +270,37 @@
             border-radius: 6px;
             cursor: pointer;
           ">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Background Image</label>
+          <select id="bg-image" style="
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: var(--sidebar-font);
+          ">
+            <option value="" selected>Select an image...</option>
+            <option value="backgrounds/i-1.jpg">Image 1 (i-1.jpg)</option>
+            <option value="backgrounds/i-2.jpg">Image 2 (i-2.jpg)</option>
+            <option value="backgrounds/i-3.webp">Image 3 (i-3.webp)</option>
+            <option value="backgrounds/i-4.jpeg">Image 4 (i-4.jpeg)</option>
+            <option value="backgrounds/i-5.jpg">Image 5 (i-5.jpg)</option>
+            <option value="backgrounds/i-6.png">Image 6 (i-6.png)</option>
+            <option value="backgrounds/i-7.png">Image 7 (i-7.png)</option>
+            <option value="backgrounds/i-8.png">Image 8 (i-8.png)</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Image Opacity</label>
+          <input type="range" id="bg-opacity" min="0" max="100" value="100" style="
+            width: 100%;
+            height: 20px;
+          ">
+          <div style="text-align: center; font-size: 11px; color: #666;">
+            <span id="opacity-value">100%</span>
+          </div>
         </div>
       </div>
       
@@ -345,7 +377,7 @@
             ✅ Text input system<br>
                          ✅ Color system<br>
              ✅ Font system<br>
-             ✅ Background system<br>
+             ✅ Background system (with images!)<br>
              ✅ Validation system<br>
              🔄 Next: Adding sprite system
           </div>
@@ -614,6 +646,8 @@
       const bgType = document.getElementById('bg-type').value;
       const bgColor = document.getElementById('bg-color').value;
       const bgColor2 = document.getElementById('bg-color2').value;
+      const bgImage = document.getElementById('bg-image').value;
+      const bgOpacity = document.getElementById('bg-opacity').value;
       
       const stage = document.getElementById('stage');
       if (!stage) return;
@@ -630,17 +664,67 @@
         case 'radial':
           backgroundStyle = `radial-gradient(circle at center, ${bgColor}, ${bgColor2})`;
           break;
+        case 'image':
+          if (bgImage) {
+            backgroundStyle = `url('${bgImage}')`;
+            // Set background properties for proper image display
+            stage.style.backgroundSize = 'cover';
+            stage.style.backgroundPosition = 'center';
+            stage.style.backgroundRepeat = 'no-repeat';
+          } else {
+            backgroundStyle = bgColor; // Fallback to solid color
+          }
+          break;
         default:
           backgroundStyle = bgColor;
       }
       
+      // Apply the background
       stage.style.background = backgroundStyle;
-      console.log('🖼️ Background updated:', { type: bgType, color1: bgColor, color2: bgColor2 });
+      
+      // Handle image opacity if it's an image background
+      if (bgType === 'image' && bgImage) {
+        // Create a pseudo-element for opacity control
+        let opacityOverlay = stage.querySelector('.bg-opacity-overlay');
+        if (!opacityOverlay) {
+          opacityOverlay = document.createElement('div');
+          opacityOverlay.className = 'bg-opacity-overlay';
+          opacityOverlay.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: ${bgColor};
+            opacity: ${1 - (bgOpacity / 100)};
+            pointer-events: none;
+            z-index: 1;
+          `;
+          stage.appendChild(opacityOverlay);
+        } else {
+          opacityOverlay.style.background = bgColor;
+          opacityOverlay.style.opacity = 1 - (bgOpacity / 100);
+        }
+      } else {
+        // Remove opacity overlay if not using image
+        const opacityOverlay = stage.querySelector('.bg-opacity-overlay');
+        if (opacityOverlay) {
+          opacityOverlay.remove();
+        }
+      }
+      
+      console.log('🖼️ Background updated:', { 
+        type: bgType, 
+        color1: bgColor, 
+        color2: bgColor2, 
+        image: bgImage, 
+        opacity: bgOpacity 
+      });
     }
     
     // Setup background listeners
     function setupBackgroundListeners() {
-      const bgInputs = ['bg-type', 'bg-color', 'bg-color2'];
+      const bgInputs = ['bg-type', 'bg-color', 'bg-color2', 'bg-image', 'bg-opacity'];
       
       bgInputs.forEach(id => {
         const input = document.getElementById(id);
@@ -650,6 +734,15 @@
           console.log(`🖼️ Added background listener for ${id}`);
         }
       });
+      
+      // Special handling for opacity slider to show value
+      const opacitySlider = document.getElementById('bg-opacity');
+      const opacityValue = document.getElementById('opacity-value');
+      if (opacitySlider && opacityValue) {
+        opacitySlider.addEventListener('input', () => {
+          opacityValue.textContent = `${opacitySlider.value}%`;
+        });
+      }
     }
     
     // Test background system
@@ -659,17 +752,20 @@
       const bgTypeSelect = document.getElementById('bg-type');
       const bgColorInput = document.getElementById('bg-color');
       const bgColor2Input = document.getElementById('bg-color2');
+      const bgImageSelect = document.getElementById('bg-image');
+      const bgOpacitySlider = document.getElementById('bg-opacity');
       
-      if (bgTypeSelect && bgColorInput && bgColor2Input) {
+      if (bgTypeSelect && bgColorInput && bgColor2Input && bgImageSelect && bgOpacitySlider) {
         updateStatus('✅ Background system working');
         console.log('✅ Background system fully functional');
         
-        // Test background change
-        bgTypeSelect.value = 'gradient';
-        bgColorInput.value = '#ff6b6b';
-        bgColor2Input.value = '#4ecdc4';
+        // Test image background
+        bgTypeSelect.value = 'image';
+        bgImageSelect.value = 'backgrounds/i-1.jpg';
+        bgColorInput.value = '#ffffff';
+        bgOpacitySlider.value = 80;
         updateBackground();
-        console.log('✅ Live background update working');
+        console.log('✅ Live background image update working');
       } else {
         updateStatus('❌ Background system broken');
         console.error('❌ Background system has issues');
@@ -709,10 +805,13 @@
       const bgTypeSelect = document.getElementById('bg-type');
       const bgColorInput = document.getElementById('bg-color');
       const bgColor2Input = document.getElementById('bg-color2');
-      if (bgTypeSelect && bgColorInput && bgColor2Input) {
-        bgTypeSelect.value = 'radial';
+      const bgImageSelect = document.getElementById('bg-image');
+      const bgOpacitySlider = document.getElementById('bg-opacity');
+      if (bgTypeSelect && bgColorInput && bgColor2Input && bgImageSelect && bgOpacitySlider) {
+        bgTypeSelect.value = 'image';
+        bgImageSelect.value = 'backgrounds/i-3.webp';
         bgColorInput.value = '#667eea';
-        bgColor2Input.value = '#764ba2';
+        bgOpacitySlider.value = 70;
         updateBackground();
       }
       
@@ -783,7 +882,8 @@
       const expectedSelects = [
         'title-font',
         'body-font', 
-        'bg-type'
+        'bg-type',
+        'bg-image'
       ];
       
       const missingSelects = [];
