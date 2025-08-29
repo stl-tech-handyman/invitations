@@ -62,4 +62,34 @@
       </div>
     </div>
   </div>
+  
+  <!-- Theme & Color System -->
+  <div class="group" data-section="theme">
+    <div class="group-header" onclick="toggleGroup(this)">
+      <h3>🎨 Theme & Colors</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="group-content">
+      <label>Theme Category</label>
+      <select id="category">
+        <option value="pool">Pool Party</option>
+        <option value="birthday">Birthday</option>
+        <option value="baby">Baby Shower</option>
+        <option value="graduation">Graduation</option>
+        <option value="holiday">Holiday</option>
+        <option value="custom">Custom Elements</option>
+      </select>
+      
+      <div class="row">
+        <div>
+          <label>Primary Accent</label>
+          <input type="color" id="accent" value="#2ec5ff" />
+        </div>
+        <div>
+          <label>Secondary Accent</label>
+          <input type="color" id="accent2" value="#ff6b6b" />
+        </div>
+      </div>
+    </div>
+  </div>
 </aside>
