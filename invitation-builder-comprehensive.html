@@ -18,6 +18,11 @@
       --card:#ffffff;             /* card color */
       --shadow: 0 10px 30px rgba(0,0,0,.08);
       --radius:22px;
+      
+      /* Sidebar fonts - never change */
+      --sidebar-font: system-ui, -apple-system, sans-serif;
+      
+      /* Invitation fonts - can be changed by user (scoped to invitation only) */
       --title-font:"Playfair Display", serif;
       --names-font:"Playfair Display", serif;
       --body-font:Quicksand, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
@@ -26,7 +31,7 @@
     html,body{height:100%}
     body{
       margin:0; background:var(--bg); color:var(--ink);
-      font-family:var(--body-font);
+      font-family:var(--sidebar-font);
     }
     .app{display:grid; grid-template-columns: 380px 1fr; gap:22px; padding:22px; height:100%;}
     .panel{
@@ -34,14 +39,15 @@
       border-radius:var(--radius);
       padding:18px 18px 24px; box-shadow:var(--shadow); overflow:auto;
     }
-    .panel h2{font-size:20px; margin:6px 0 14px}
+    .panel h2{font-size:20px; margin:6px 0 14px; font-family:var(--sidebar-font)}
     .group{margin:12px 0 16px}
-    label{display:block; font-size:12px; text-transform:uppercase; letter-spacing:.08em; opacity:.8; margin-bottom:6px}
-    input, select, textarea{width:100%; padding:10px 12px; border:1px solid #e6e6ee; border-radius:12px; outline:none; background:#fafafe; transition:.2s border-color; font:14px/1.2 var(--body-font)}
+    .group-header h3{font-family:var(--sidebar-font)}
+    label{display:block; font-size:12px; text-transform:uppercase; letter-spacing:.08em; opacity:.8; margin-bottom:6px; font-family:var(--sidebar-font)}
+    input, select, textarea{width:100%; padding:10px 12px; border:1px solid #e6e6ee; border-radius:12px; outline:none; background:#fafafe; transition:.2s border-color; font:14px/1.2 var(--sidebar-font)}
     input:focus,select:focus,textarea:focus{border-color:var(--accent)}
     .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
     .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
-    button{appearance:none; border:0; border-radius:14px; padding:10px 14px; font-weight:700; cursor:pointer; box-shadow:var(--shadow); background:var(--accent); color:white; transition:transform .05s ease}
+    button{appearance:none; border:0; border-radius:14px; padding:10px 14px; font-weight:700; cursor:pointer; box-shadow:var(--shadow); background:var(--accent); color:white; transition:transform .05s ease; font-family:var(--sidebar-font)}
     button.secondary{background:var(--accent-2)}
     button.ghost{background:transparent; color:var(--ink); box-shadow:none; border:1px dashed #d7d7e0}
     button:active{transform:translateY(1px)}
@@ -90,6 +96,21 @@
     /* Floating SVG objects */
     .sprites{pointer-events:none}
     .sprite{position:absolute; opacity:.95; filter:drop-shadow(0 4px 12px rgba(0,0,0,.12)); transform-origin:center}
+    
+    /* Draggable sprite states */
+    .sprite.dragging {
+      opacity: 0.8;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,.3));
+      z-index: 1000;
+    }
+    
+    .sprite:hover {
+      cursor: grab;
+    }
+    
+    .sprite:active {
+      cursor: grabbing;
+    }
 
     /* Content */
     .inner{display:flex; flex-direction:column; padding:60px}
@@ -111,6 +132,13 @@
 
     .footer{display:flex; justify-content:center; margin-top:12px; text-shadow:var(--global-text-shadow)}
     .rsvp{background:rgba(255,255,255,.92); padding:12px 16px; border-radius:14px; font:700 14px var(--body-font); border:1px solid rgba(0,0,0,.06)}
+    
+    /* Ensure invitation content uses scoped font variables */
+    .stage {
+      --title-font: var(--title-font, "Playfair Display", serif);
+      --names-font: var(--names-font, "Playfair Display", serif);
+      --body-font: var(--body-font, "Quicksand", system-ui, -apple-system, sans-serif);
+    }
 
     /* Accent coloring */
     .title h1, .names h3{color:var(--accent); text-shadow:var(--global-text-shadow)}
@@ -908,7 +936,14 @@
           <div class="group-content">
             <label>Overlay Style</label>
             <select id="overlay-style">
-              <!-- Options populated automatically by SelectInitializer -->
+              <option value="none">❌ None</option>
+              <option value="frame-elegant" selected>🎭 Elegant Frame</option>
+              <option value="frame-vintage">🏛️ Vintage Frame</option>
+              <option value="frame-modern">⚡ Modern Frame</option>
+              <option value="frame-playful">🎈 Playful Frame</option>
+              <option value="frame-minimal">🔲 Minimal Frame</option>
+              <option value="frame-ornate">💎 Ornate Frame</option>
+              <option value="frame-nature">🌿 Nature Frame</option>
             </select>
             
             <div class="row" style="margin-top:12px">
@@ -919,7 +954,15 @@
               <div>
                 <label>Scale</label>
                 <select id="overlay-scale">
-                  <!-- Options populated automatically by SelectInitializer -->
+                  <option value="0.5">50%</option>
+                  <option value="0.7">70%</option>
+                  <option value="0.8">80%</option>
+                  <option value="0.9">90%</option>
+                  <option value="0.95" selected>95%</option>
+                  <option value="1.0">100%</option>
+                  <option value="1.1">110%</option>
+                  <option value="1.2">120%</option>
+                  <option value="1.5">150%</option>
                 </select>
               </div>
             </div>
@@ -928,13 +971,26 @@
               <div>
                 <label>Position</label>
                 <select id="overlay-position">
-                  <!-- Options populated automatically by SelectInitializer -->
+                  <option value="center" selected>🎯 Center</option>
+                  <option value="top">⬆️ Top</option>
+                  <option value="bottom">⬇️ Bottom</option>
+                  <option value="left">⬅️ Left</option>
+                  <option value="right">➡️ Right</option>
                 </select>
               </div>
               <div>
                 <label>Blend Mode</label>
                 <select id="overlay-blend">
-                  <!-- Options populated automatically by SelectInitializer -->
+                  <option value="normal" selected>🔤 Normal</option>
+                  <option value="multiply">✖️ Multiply</option>
+                  <option value="screen">💡 Screen</option>
+                  <option value="overlay">🎨 Overlay</option>
+                  <option value="soft-light">💫 Soft Light</option>
+                  <option value="hard-light">💥 Hard Light</option>
+                  <option value="color-dodge">✨ Color Dodge</option>
+                  <option value="color-burn">🔥 Color Burn</option>
+                  <option value="darken">🌑 Darken</option>
+                  <option value="lighten">💡 Lighten</option>
                 </select>
               </div>
             </div>
@@ -1134,6 +1190,18 @@
           cursor: pointer;
           transition: all 0.2s ease;
         ">🧪 Test Effects</button>
+        <button id="test-draggable" class="ghost" style="
+          background: #4CAF50; 
+          color: white; 
+          width: 100%;
+          padding: 12px;
+          border: none;
+          border-radius: 6px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          margin-top: 8px;
+        ">🎯 Test Draggable</button>
       </div>
 
       <!-- Particle Effects -->
@@ -1277,13 +1345,19 @@
             <div>
               <label>Check Sensitivity</label>
               <select id="contrast-sensitivity">
-                <!-- Options populated automatically by SelectInitializer -->
+                <option value="strict">🔴 Strict (WCAG AAA)</option>
+                <option value="normal" selected>🟡 Normal (WCAG AA)</option>
+                <option value="relaxed">🟢 Relaxed (WCAG A)</option>
+                <option value="custom">⚙️ Custom</option>
               </select>
             </div>
             <div>
               <label>Check Frequency</label>
               <select id="contrast-frequency">
-                <!-- Options populated automatically by SelectInitializer -->
+                <option value="on-change">🔄 On Every Change</option>
+                <option value="on-focus" selected>🎯 On Focus</option>
+                <option value="manual">✋ Manual Only</option>
+                <option value="auto">🤖 Auto (Every 5s)</option>
               </select>
             </div>
           </div>
@@ -1308,13 +1382,19 @@
             <div>
               <label>Warning Level</label>
               <select id="warning-level">
-                <!-- Options populated automatically by SelectInitializer -->
+                <option value="errors-only">❌ Errors Only</option>
+                <option value="warnings" selected>⚠️ Warnings & Errors</option>
+                <option value="all">💡 All Issues</option>
+                <option value="suggestions">💭 Suggestions</option>
               </select>
             </div>
             <div>
               <label>Auto-fix</label>
               <select id="auto-fix-level">
-                <!-- Options populated automatically by SelectInitializer -->
+                <option value="none">❌ None</option>
+                <option value="safe" selected>🛡️ Safe Fixes Only</option>
+                <option value="aggressive">⚡ Aggressive Fixes</option>
+                <option value="experimental">🧪 Experimental</option>
               </select>
             </div>
           </div>
@@ -1345,13 +1425,20 @@
               <div>
                 <label>Paper Size</label>
                 <select id="pdf-paper-size">
-                  <!-- Options populated automatically by SelectInitializer -->
+                  <option value="a4" selected>📄 A4 (210×297mm)</option>
+                  <option value="letter">📄 Letter (8.5×11in)</option>
+                  <option value="legal">📄 Legal (8.5×14in)</option>
+                  <option value="a3">📄 A3 (297×420mm)</option>
+                  <option value="a5">📄 A5 (148×210mm)</option>
+                  <option value="custom">⚙️ Custom</option>
                 </select>
               </div>
               <div>
                 <label>Orientation</label>
                 <select id="pdf-orientation">
-                  <!-- Options populated automatically by SelectInitializer -->
+                  <option value="portrait" selected>📱 Portrait</option>
+                  <option value="landscape">🖥️ Landscape</option>
+                  <option value="auto">🔄 Auto</option>
                 </select>
               </div>
             </div>
@@ -1360,13 +1447,20 @@
               <div>
                 <label>Quality</label>
                 <select id="pdf-quality">
-                  <!-- Options populated automatically by SelectInitializer -->
+                  <option value="low">📉 Low (72 DPI)</option>
+                  <option value="medium" selected>📊 Medium (150 DPI)</option>
+                  <option value="high">📈 High (300 DPI)</option>
+                  <option value="ultra">🚀 Ultra (600 DPI)</option>
                 </select>
               </div>
               <div>
                 <label>Margins</label>
                 <select id="pdf-margins">
-                  <!-- Options populated automatically by SelectInitializer -->
+                  <option value="none">❌ None</option>
+                  <option value="minimal" selected>📏 Minimal (5mm)</option>
+                  <option value="standard">📏 Standard (10mm)</option>
+                  <option value="wide">📏 Wide (20mm)</option>
+                  <option value="custom">⚙️ Custom</option>
                 </select>
               </div>
             </div>
@@ -1404,7 +1498,10 @@
               <div>
                 <label>Mode</label>
                 <select id="slideshow-mode">
-                  <!-- Options populated automatically by SelectInitializer -->
+                  <option value="sequential" selected>🔄 Sequential</option>
+                  <option value="random">🎲 Random</option>
+                  <option value="loop">🔄 Loop</option>
+                  <option value="bounce">⚡ Bounce</option>
                 </select>
               </div>
             </div>
@@ -2037,12 +2134,18 @@
       console.log('🔤 Updating fonts:', { titleFont, namesFont, bodyFont });
       
       el('gfonts').href = googleFontsHref();
-      document.documentElement.style.setProperty('--title-font', `'${titleFont}', serif`);
-      document.documentElement.style.setProperty('--names-font', `'${namesFont}', serif`);
-      document.documentElement.style.setProperty('--body-font', `'${bodyFont}', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`);
+      
+      // Only update fonts for the invitation stage, not the entire document
+      const stage = el('stage');
+      if (stage) {
+        stage.style.setProperty('--title-font', `'${titleFont}', serif`);
+        stage.style.setProperty('--names-font', `'${namesFont}', serif`);
+        stage.style.setProperty('--body-font', `'${bodyFont}', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`);
+      }
+      
       el('fonts-link').href = `https://fonts.google.com/specimen/${encodeURIComponent(titleFont)}`;
       
-      console.log('✅ Fonts updated successfully');
+      console.log('✅ Fonts updated successfully (scoped to invitation only)');
     }
 
     function setTheme(themeKey){
@@ -2251,14 +2354,22 @@
 
     function setLayout(){
       const stage = el('stage'); 
+      if (!stage) {
+        console.error('❌ Stage element not found!');
+        return;
+      }
       stage.classList.remove('style-centered','style-banner','style-split');
       const val = el('layout').value; 
       stage.classList.add('style-'+val);
-      console.log('🎨 Layout changed to:', val);
+      console.log('🎨 Layout changed to:', val, 'Stage classes:', stage.className);
     }
 
     function setEffect(){
       const stage = el('stage'); 
+      if (!stage) {
+        console.error('❌ Stage element not found!');
+        return;
+      }
       stage.classList.remove('anim-fade','anim-pop');
       const val = el('effect').value; 
       if(val==='fade') {
@@ -2270,6 +2381,7 @@
       } else {
         console.log('❌ Effect removed');
       }
+      console.log('🎭 Effect set to:', val, 'Stage classes:', stage.className);
       // trigger a reflow to replay
       void stage.offsetWidth;
     }
@@ -2388,7 +2500,62 @@
       console.log('🎭 Testing sprite updates...');
       updateSprites();
       
+      // Test overlay system
+      console.log('🎨 Testing overlay system...');
+      if (typeof applyOverlay === 'function') {
+        applyOverlay();
+      }
+      
+      // Test background system
+      console.log('🖼️ Testing background system...');
+      if (typeof applyBackground === 'function') {
+        applyBackground();
+      }
+      
+      // Test font system
+      console.log('🔤 Testing font system...');
+      if (typeof updateFonts === 'function') {
+        updateFonts();
+      }
+      
       console.log('✅ All effects tested!');
+    });
+    
+    // Test draggable button
+    el('test-draggable').addEventListener('click', () => {
+      console.log('🎯 Testing draggable system...');
+      
+      // Check if sprites exist
+      const sprites = document.querySelectorAll('.sprite');
+      console.log('🎭 Found sprites:', sprites.length);
+      
+      // Check if text elements are interactive
+      const textElements = document.querySelectorAll('.title h1, .title h2, .names h3, .pill, .rsvp');
+      console.log('📝 Found text elements:', textElements.length);
+      
+      // Check object registry
+      if (window.objectRegistry) {
+        console.log('📋 Object registry:', window.objectRegistry.objects.size, 'objects');
+        window.objectRegistry.objects.forEach((obj, id) => {
+          console.log('  -', id, ':', obj.type, obj.data);
+        });
+      } else {
+        console.log('❌ Object registry not found');
+      }
+      
+      // Try to make a sprite draggable manually
+      if (sprites.length > 0) {
+        const firstSprite = sprites[0];
+        console.log('🎯 Making first sprite draggable...');
+        if (typeof makeSpriteDraggable === 'function') {
+          makeSpriteDraggable(firstSprite, 0, 0);
+          console.log('✅ Sprite made draggable');
+        } else {
+          console.log('❌ makeSpriteDraggable function not found');
+        }
+      }
+      
+      console.log('✅ Draggable system tested!');
     });
     
     // Debug current values on page load
@@ -2943,6 +3110,62 @@
     
     // Initialize overlay controls after a delay
     setTimeout(initializeOverlayControls, 1600);
+    
+    // Comprehensive initialization function to ensure all systems load properly
+    function initializeAllSystems() {
+      console.log('🚀 Initializing all systems...');
+      
+      // Initialize fonts
+      if (typeof populateFonts === 'function') {
+        populateFonts();
+        console.log('✅ Fonts initialized');
+      }
+      
+      // Initialize overlay system
+      if (typeof updateOverlayUI === 'function') {
+        updateOverlayUI();
+        console.log('✅ Overlay system initialized');
+      }
+      
+      // Initialize edge system
+      if (typeof updateEdgeUI === 'function') {
+        updateEdgeUI();
+        console.log('✅ Edge system initialized');
+      }
+      
+      // Initialize background system
+      if (typeof applyBackground === 'function') {
+        applyBackground();
+        console.log('✅ Background system initialized');
+      }
+      
+      // Initialize sprites
+      if (typeof updateSprites === 'function') {
+        updateSprites();
+        console.log('✅ Sprite system initialized');
+      }
+      
+      // Initialize effects
+      if (typeof setLayout === 'function') {
+        setLayout();
+        console.log('✅ Layout system initialized');
+      }
+      
+      if (typeof setEffect === 'function') {
+        setEffect();
+        console.log('✅ Effect system initialized');
+      }
+      
+      if (typeof setupParallax === 'function') {
+        setupParallax();
+        console.log('✅ Parallax system initialized');
+      }
+      
+      console.log('🎉 All systems initialized successfully!');
+    }
+    
+    // Initialize all systems after a delay to ensure DOM is ready
+    setTimeout(initializeAllSystems, 2000);
     
     /* === EXPORT/IMPORT & SLIDESHOW SYSTEM === */
     let slideshowInterval = null;
@@ -4224,6 +4447,140 @@
   
   <!-- Sprite System -->
   <script>
+    // Standalone function to make sprites draggable
+    function makeSpriteDraggable(spriteElement, initialX, initialY) {
+      let isDragging = false;
+      let startX, startY;
+      let currentX = initialX;
+      let currentY = initialY;
+      
+      // Add cursor style to indicate draggability
+      spriteElement.style.cursor = 'grab';
+      spriteElement.style.userSelect = 'none';
+      
+      // Add hover effects
+      spriteElement.addEventListener('mouseenter', () => {
+        if (!isDragging) {
+          spriteElement.style.filter = 'brightness(1.2) drop-shadow(0 0 8px rgba(0,0,0,0.3))';
+          spriteElement.style.transform = spriteElement.getAttribute('transform') + ' scale(1.05)';
+        }
+      });
+      
+      spriteElement.addEventListener('mouseleave', () => {
+        if (!isDragging) {
+          spriteElement.style.filter = '';
+          spriteElement.style.transform = spriteElement.getAttribute('transform');
+        }
+      });
+      
+      // Mouse events for dragging
+      spriteElement.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        isDragging = true;
+        startX = e.clientX - currentX;
+        startY = e.clientY - currentY;
+        spriteElement.style.cursor = 'grabbing';
+        
+        // Add dragging class for visual feedback
+        spriteElement.classList.add('dragging');
+        
+        // Pause animation while dragging
+        spriteElement.style.animationPlayState = 'paused';
+        
+        console.log(`🎯 Started dragging sprite at (${currentX}, ${currentY})`);
+      });
+      
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        currentX = e.clientX - startX;
+        currentY = e.clientY - startY;
+        
+        // Update transform with new position
+        const transform = spriteElement.getAttribute('transform');
+        const newTransform = transform.replace(
+          /translate\([^)]+\)/,
+          `translate(${currentX} ${currentY})`
+        );
+        spriteElement.setAttribute('transform', newTransform);
+      });
+      
+      document.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        spriteElement.style.cursor = 'grab';
+        spriteElement.classList.remove('dragging');
+        spriteElement.style.animationPlayState = 'running';
+        
+        console.log(`🎯 Finished dragging sprite to (${currentX}, ${currentY})`);
+      });
+      
+      // Mouse wheel for rotation
+      spriteElement.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -15 : 15;
+        const currentRotation = spriteElement._dragData ? spriteElement._dragData.rotation || 0 : 0;
+        const newRotation = currentRotation + delta;
+        
+        // Store rotation data
+        if (!spriteElement._dragData) spriteElement._dragData = {};
+        spriteElement._dragData.rotation = newRotation;
+        
+        // Update transform with rotation
+        const transform = spriteElement.getAttribute('transform');
+        const newTransform = transform.replace(
+          /rotate\([^)]*\)/,
+          `rotate(${newRotation})`
+        );
+        
+        if (!newTransform.includes('rotate')) {
+          spriteElement.setAttribute('transform', newTransform + ` rotate(${newRotation})`);
+        } else {
+          spriteElement.setAttribute('transform', newTransform);
+        }
+      });
+      
+      // Touch events for mobile
+      spriteElement.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        isDragging = true;
+        startX = touch.clientX - currentX;
+        startY = touch.clientY - currentY;
+        spriteElement.style.cursor = 'grabbing';
+        spriteElement.classList.add('dragging');
+        spriteElement.style.animationPlayState = 'paused';
+      });
+      
+      spriteElement.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        currentX = touch.clientX - startX;
+        currentY = touch.clientY - startY;
+        
+        const transform = spriteElement.getAttribute('transform');
+        const newTransform = transform.replace(
+          /translate\([^)]+\)/,
+          `translate(${currentX} ${currentY})`
+        );
+        spriteElement.setAttribute('transform', newTransform);
+      });
+      
+      spriteElement.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        spriteElement.style.cursor = 'grab';
+        spriteElement.style.animationPlayState = 'running';
+      });
+      
+      // Store initial position for reference
+      spriteElement._dragData = { x: initialX, y: initialY, rotation: 0 };
+      
+      console.log(`🎯 Made sprite draggable at (${initialX}, ${currentY})`);
+    }
+    
     // Simple Sprite Browser Implementation
     class SimpleSpriteBrowser {
       constructor() {

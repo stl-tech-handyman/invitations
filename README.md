@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# 🎉 Invitation Generator 2.0
+# 🎉 Invitation Generator 0.9
 
 A comprehensive, feature-rich invitation card generator with real-time preview, multiple themes, textures, and export capabilities.
 
@@ -263,4 +262,3 @@ The testing framework covers:
 **🚀 Status**: Production-ready with full test coverage and debugging capabilities.
 =======
 # invitations
->>>>>>> origin/main
