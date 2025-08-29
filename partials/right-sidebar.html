@@ -309,6 +309,45 @@
     </div>
   </div>
   
+  <!-- Text Shadow System -->
+  <div class="group" data-section="shadow">
+    <div class="group-header" onclick="toggleGroup(this)">
+      <h3>🌑 Text Shadows</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="group-content">
+      <label>Global Shadow</label>
+      <div class="shadow-controls">
+        <div class="row">
+          <div>
+            <label>X Offset: <span id="shadow-x-value">2</span>px</label>
+            <input type="range" id="shadow-x" min="-10" max="10" value="2" step="1">
+          </div>
+          <div>
+            <label>Y Offset: <span id="shadow-y-value">2</span>px</label>
+            <input type="range" id="shadow-y" min="-10" max="10" value="2" step="1">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Blur: <span id="shadow-blur-value">4</span>px</label>
+            <input type="range" id="shadow-blur" min="0" max="20" value="4" step="1">
+          </div>
+          <div>
+            <label>Color</label>
+            <input type="color" id="shadow-color" value="#000000">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Opacity: <span id="shadow-opacity-value">0.3</span></label>
+            <input type="range" id="shadow-opacity" min="0" max="1" value="0.3" step="0.1">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- Actions -->
   <div class="group">
     <div class="actions">
