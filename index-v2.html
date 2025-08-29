@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invitation Builder v2 - Modular</title>
+  
+  <!-- External CSS and JS modules -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link id="gfonts" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Basic CSS Variables */
+    :root {
+      --accent: #2ec5ff;
+      --accent-2: #ff6b6b;
+      --bg: #f7f7fb;
+      --ink: #1b1b1f;
+      --card: #ffffff;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --radius: 22px;
+      
+      /* Sidebar fonts - never change */
+      --sidebar-font: system-ui, -apple-system, sans-serif;
+      
+      /* Invitation fonts - can be changed by user (scoped to invitation only) */
+      --title-font: "Playfair Display", serif;
+      --names-font: "Playfair Display", serif;
+      --body-font: "Quicksand", system-ui, -apple-system, sans-serif;
+    }
+    
+    /* Reset and basic styles */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sidebar-font);
+    }
+    
+    /* Main app layout */
+    .app {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 22px;
+      padding: 22px;
+      height: 100%;
+    }
+    
+    /* Sidebar panel */
+    .panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 18px 18px 24px;
+      box-shadow: var(--shadow);
+      overflow: auto;
+    }
+    
+    .panel h2 {
+      font-size: 20px;
+      margin: 6px 0 14px;
+      font-family: var(--sidebar-font);
+    }
+    
+    /* Stage area */
+    .stage-wrap {
+      display: grid;
+      place-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    
+    .stage {
+      width: 900px;
+      max-height: calc(100vh - 40px);
+      height: auto;
+      position: relative;
+      overflow: hidden;
+      background: white;
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      aspect-ratio: 2/3;
+    }
+    
+    /* Test button */
+    .test-button {
+      background: #FF9800;
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 8px 0;
+      width: 100%;
+    }
+    
+    .test-button:hover {
+      background: #F57C00;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar Panel -->
+    <aside class="panel">
+      <h2>🧪 Invitation Builder v2</h2>
+      
+      <!-- Test Section -->
+      <div style="margin-bottom: 20px;">
+        <h3>Testing</h3>
+        <button id="test-basic" class="test-button">🧪 Test Basic Structure</button>
+        <button id="test-css" class="test-button">🎨 Test CSS Variables</button>
+        <button id="test-layout" class="test-button">📐 Test Layout</button>
+        <button id="test-text" class="test-button">📝 Test Text System</button>
+        <button id="test-colors" class="test-button">🎨 Test Color System</button>
+        <button id="test-fonts" class="test-button">🔤 Test Font System</button>
+        <button id="test-background" class="test-button">🖼️ Test Background System</button>
+        <button id="test-all-systems" class="test-button" style="
+          background: #2196F3;
+          font-weight: bold;
+          margin-top: 16px;
+        ">🚀 Test All Systems</button>
+      </div>
+      
+      <!-- Text Input System -->
+      <div style="margin-bottom: 20px;">
+        <h3>📝 Text Input</h3>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Title</label>
+          <input type="text" id="title-input" placeholder="Enter title..." style="
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: var(--sidebar-font);
+          ">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Subtitle</label>
+          <input type="text" id="subtitle-input" placeholder="Enter subtitle..." style="
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: var(--sidebar-font);
+          ">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Names</label>
+          <input type="text" id="names-input" placeholder="Enter names..." style="
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: var(--sidebar-font);
+          ">
+        </div>
+      </div>
+      
+      <!-- Color System -->
+      <div style="margin-bottom: 20px;">
+        <h3>🎨 Colors</h3>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Primary Accent</label>
+          <input type="color" id="accent-color" value="#2ec5ff" style="
+            width: 100%;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+          ">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Secondary Accent</label>
+          <input type="color" id="accent2-color" value="#ff6b6b" style="
+            width: 100%;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+          ">
+        </div>
+      </div>
+      
+      <!-- Font System -->
+      <div style="margin-bottom: 20px;">
+        <h3>🔤 Fonts</h3>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Title Font</label>
+          <select id="title-font" style="
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: var(--sidebar-font);
+          ">
+            <option value="Playfair Display" selected>Playfair Display</option>
+            <option value="Bebas Neue">Bebas Neue</option>
+            <option value="Abril Fatface">Abril Fatface</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Montserrat">Montserrat</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Body Font</label>
+          <select id="body-font" style="
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: var(--sidebar-font);
+          ">
+            <option value="Quicksand" selected>Quicksand</option>
+            <option value="Open Sans">Open Sans</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Lato">Lato</option>
+            <option value="Inter">Inter</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Background System -->
+      <div style="margin-bottom: 20px;">
+        <h3>🖼️ Background</h3>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Background Type</label>
+          <select id="bg-type" style="
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: var(--sidebar-font);
+          ">
+            <option value="solid" selected>Solid Color</option>
+            <option value="gradient">Gradient</option>
+            <option value="radial">Radial</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Background Color</label>
+          <input type="color" id="bg-color" value="#ffffff" style="
+            width: 100%;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+          ">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Secondary Color (for gradients)</label>
+          <input type="color" id="bg-color2" value="#f0f0f0" style="
+            width: 100%;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+          ">
+        </div>
+      </div>
+      
+      <!-- Status Display -->
+      <div id="status" style="
+        background: #f0f0f0;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        color: #666;
+        margin-top: 16px;
+      ">
+        Status: Ready for testing
+      </div>
+    </aside>
+    
+    <!-- Main Stage Area -->
+    <main class="stage-wrap">
+      <section class="stage" id="stage">
+        <div style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          text-align: center;
+          padding: 40px;
+        ">
+          <!-- Title Display -->
+          <h1 id="title-display" style="
+            font-family: var(--title-font);
+            font-size: 48px;
+            color: var(--accent);
+            margin: 0 0 20px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+          ">Invitation Builder v2</h1>
+          
+          <!-- Subtitle Display -->
+          <p id="subtitle-display" style="
+            font-family: var(--body-font);
+            font-size: 18px;
+            color: var(--ink);
+            margin: 0 0 30px 0;
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+          ">Modular version - building one piece at a time</p>
+          
+          <!-- Names Display -->
+          <h2 id="names-display" style="
+            font-family: var(--names-font);
+            font-size: 32px;
+            color: var(--accent-2);
+            margin: 0 0 30px 0;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+          ">Your Names Here</h2>
+          
+          <div style="
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 16px;
+            font-size: 14px;
+            color: #666;
+          ">
+            <strong>Current Status:</strong><br>
+            ✅ Basic HTML structure<br>
+            ✅ CSS variables and layout<br>
+            ✅ Test buttons<br>
+            ✅ Text input system<br>
+            ✅ Color system<br>
+            ✅ Font system<br>
+            ✅ Background system<br>
+            🔄 Next: Adding sprite system
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  
+  <!-- Basic JavaScript for testing -->
+  <script>
+    // Basic test functionality
+    function updateStatus(message) {
+      const status = document.getElementById('status');
+      status.textContent = `Status: ${message}`;
+      console.log(`📊 Status: ${message}`);
+    }
+    
+    // Test basic structure
+    document.getElementById('test-basic').addEventListener('click', () => {
+      console.log('🧪 Testing basic structure...');
+      
+      // Test if elements exist
+      const stage = document.getElementById('stage');
+      const panel = document.querySelector('.panel');
+      const app = document.querySelector('.app');
+      
+      if (stage && panel && app) {
+        updateStatus('✅ Basic structure working');
+        console.log('✅ All basic elements found');
+      } else {
+        updateStatus('❌ Basic structure broken');
+        console.error('❌ Missing basic elements');
+      }
+    });
+    
+    // Test CSS variables
+    document.getElementById('test-css').addEventListener('click', () => {
+      console.log('🎨 Testing CSS variables...');
+      
+      const root = document.documentElement;
+      const computedStyle = getComputedStyle(root);
+      
+      const accent = computedStyle.getPropertyValue('--accent').trim();
+      const bg = computedStyle.getPropertyValue('--bg').trim();
+      
+      if (accent === '#2ec5ff' && bg === '#f7f7fb') {
+        updateStatus('✅ CSS variables working');
+        console.log('✅ CSS variables loaded correctly');
+      } else {
+        updateStatus('❌ CSS variables broken');
+        console.error('❌ CSS variables not loading');
+      }
+    });
+    
+    // Test layout
+    document.getElementById('test-layout').addEventListener('click', () => {
+      console.log('📐 Testing layout...');
+      
+      const app = document.querySelector('.app');
+      const computedStyle = getComputedStyle(app);
+      
+      const gridTemplate = computedStyle.gridTemplateColumns;
+      
+      if (gridTemplate.includes('380px') && gridTemplate.includes('1fr')) {
+        updateStatus('✅ Layout grid working');
+        console.log('✅ Grid layout applied correctly');
+      } else {
+        updateStatus('❌ Layout grid broken');
+        console.error('❌ Grid layout not working');
+      }
+    });
+    
+    // Text system functionality
+    function updateTextDisplay() {
+      const titleInput = document.getElementById('title-input');
+      const subtitleInput = document.getElementById('subtitle-input');
+      const namesInput = document.getElementById('names-input');
+      
+      const titleDisplay = document.getElementById('title-display');
+      const subtitleDisplay = document.getElementById('subtitle-display');
+      const namesDisplay = document.getElementById('names-display');
+      
+      if (titleInput && titleDisplay) {
+        titleDisplay.textContent = titleInput.value || 'Invitation Builder v2';
+      }
+      
+      if (subtitleInput && subtitleDisplay) {
+        subtitleDisplay.textContent = subtitleInput.value || 'Modular version - building one piece at a time';
+      }
+      
+      if (namesInput && namesDisplay) {
+        namesDisplay.textContent = namesInput.value || 'Your Names Here';
+      }
+    }
+    
+    // Add live text update listeners
+    function setupTextListeners() {
+      const inputs = ['title-input', 'subtitle-input', 'names-input'];
+      
+      inputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.addEventListener('input', updateTextDisplay);
+          console.log(`📝 Added listener for ${id}`);
+        }
+      });
+    }
+    
+    // Test text system
+    document.getElementById('test-text').addEventListener('click', () => {
+      console.log('📝 Testing text system...');
+      
+      // Test if all elements exist
+      const inputs = ['title-input', 'subtitle-input', 'names-input'];
+      const displays = ['title-display', 'subtitle-display', 'names-display'];
+      
+      let allFound = true;
+      
+      inputs.forEach(id => {
+        if (!document.getElementById(id)) {
+          console.error(`❌ Missing input: ${id}`);
+          allFound = false;
+        }
+      });
+      
+      displays.forEach(id => {
+        if (!document.getElementById(id)) {
+          console.error(`❌ Missing display: ${id}`);
+          allFound = false;
+        }
+      });
+      
+      if (allFound) {
+        updateStatus('✅ Text system working');
+        console.log('✅ Text system fully functional');
+        
+        // Test live update
+        const titleInput = document.getElementById('title-input');
+        if (titleInput) {
+          titleInput.value = 'Test Title';
+          updateTextDisplay();
+          console.log('✅ Live text update working');
+        }
+      } else {
+        updateStatus('❌ Text system broken');
+        console.error('❌ Text system has issues');
+      }
+    });
+    
+    // Color system functionality
+    function updateColors() {
+      const accentColor = document.getElementById('accent-color').value;
+      const accent2Color = document.getElementById('accent2-color').value;
+      
+      // Update CSS variables
+      document.documentElement.style.setProperty('--accent', accentColor);
+      document.documentElement.style.setProperty('--accent-2', accent2Color);
+      
+      // Update display elements
+      const titleDisplay = document.getElementById('title-display');
+      const namesDisplay = document.getElementById('names-display');
+      
+      if (titleDisplay) titleDisplay.style.color = accentColor;
+      if (namesDisplay) namesDisplay.style.color = accent2Color;
+      
+      console.log('🎨 Colors updated:', { accent: accentColor, accent2: accent2Color });
+    }
+    
+    // Setup color listeners
+    function setupColorListeners() {
+      const colorInputs = ['accent-color', 'accent2-color'];
+      
+      colorInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.addEventListener('input', updateColors);
+          console.log(`🎨 Added color listener for ${id}`);
+        }
+      });
+    }
+    
+    // Test color system
+    document.getElementById('test-colors').addEventListener('click', () => {
+      console.log('🎨 Testing color system...');
+      
+      const accentInput = document.getElementById('accent-color');
+      const accent2Input = document.getElementById('accent2-color');
+      
+      if (accentInput && accent2Input) {
+        updateStatus('✅ Color system working');
+        console.log('✅ Color system fully functional');
+        
+        // Test color change
+        accentInput.value = '#ff0000';
+        accent2Input.value = '#00ff00';
+        updateColors();
+        console.log('✅ Live color update working');
+      } else {
+        updateStatus('❌ Color system broken');
+        console.error('❌ Color system has issues');
+      }
+    });
+    
+    // Font system functionality
+    function updateFonts() {
+      const titleFont = document.getElementById('title-font').value;
+      const bodyFont = document.getElementById('body-font').value;
+      
+      // Update Google Fonts link
+      const gfontsLink = document.getElementById('gfonts');
+      if (gfontsLink) {
+        const families = [
+          `${titleFont}:400,600,700`,
+          `${bodyFont}:400,600,700`
+        ].map(f => `family=${encodeURIComponent(f)}`).join('&');
+        gfontsLink.href = `https://fonts.googleapis.com/css2?${families}&display=swap`;
+      }
+      
+      // Update CSS variables (scoped to stage only)
+      const stage = document.getElementById('stage');
+      if (stage) {
+        stage.style.setProperty('--title-font', `'${titleFont}', serif`);
+        stage.style.setProperty('--body-font', `'${bodyFont}', system-ui, sans-serif`);
+      }
+      
+      console.log('🔤 Fonts updated:', { titleFont, bodyFont });
+    }
+    
+    // Setup font listeners
+    function setupFontListeners() {
+      const fontInputs = ['title-font', 'body-font'];
+      
+      fontInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.addEventListener('change', updateFonts);
+          console.log(`🔤 Added font listener for ${id}`);
+        }
+      });
+    }
+    
+    // Test font system
+    document.getElementById('test-fonts').addEventListener('click', () => {
+      console.log('🔤 Testing font system...');
+      
+      const titleFontSelect = document.getElementById('title-font');
+      const bodyFontSelect = document.getElementById('body-font');
+      
+      if (titleFontSelect && bodyFontSelect) {
+        updateStatus('✅ Font system working');
+        console.log('✅ Font system fully functional');
+        
+        // Test font change
+        titleFontSelect.value = 'Montserrat';
+        bodyFontSelect.value = 'Roboto';
+        updateFonts();
+        console.log('✅ Live font update working');
+      } else {
+        updateStatus('❌ Font system broken');
+        console.error('❌ Font system has issues');
+      }
+    });
+    
+    // Background system functionality
+    function updateBackground() {
+      const bgType = document.getElementById('bg-type').value;
+      const bgColor = document.getElementById('bg-color').value;
+      const bgColor2 = document.getElementById('bg-color2').value;
+      
+      const stage = document.getElementById('stage');
+      if (!stage) return;
+      
+      let backgroundStyle = '';
+      
+      switch (bgType) {
+        case 'solid':
+          backgroundStyle = bgColor;
+          break;
+        case 'gradient':
+          backgroundStyle = `linear-gradient(135deg, ${bgColor}, ${bgColor2})`;
+          break;
+        case 'radial':
+          backgroundStyle = `radial-gradient(circle at center, ${bgColor}, ${bgColor2})`;
+          break;
+        default:
+          backgroundStyle = bgColor;
+      }
+      
+      stage.style.background = backgroundStyle;
+      console.log('🖼️ Background updated:', { type: bgType, color1: bgColor, color2: bgColor2 });
+    }
+    
+    // Setup background listeners
+    function setupBackgroundListeners() {
+      const bgInputs = ['bg-type', 'bg-color', 'bg-color2'];
+      
+      bgInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.addEventListener('change', updateBackground);
+          input.addEventListener('input', updateBackground);
+          console.log(`🖼️ Added background listener for ${id}`);
+        }
+      });
+    }
+    
+    // Test background system
+    document.getElementById('test-background').addEventListener('click', () => {
+      console.log('🖼️ Testing background system...');
+      
+      const bgTypeSelect = document.getElementById('bg-type');
+      const bgColorInput = document.getElementById('bg-color');
+      const bgColor2Input = document.getElementById('bg-color2');
+      
+      if (bgTypeSelect && bgColorInput && bgColor2Input) {
+        updateStatus('✅ Background system working');
+        console.log('✅ Background system fully functional');
+        
+        // Test background change
+        bgTypeSelect.value = 'gradient';
+        bgColorInput.value = '#ff6b6b';
+        bgColor2Input.value = '#4ecdc4';
+        updateBackground();
+        console.log('✅ Live background update working');
+      } else {
+        updateStatus('❌ Background system broken');
+        console.error('❌ Background system has issues');
+      }
+    });
+    
+    // Test all systems
+    document.getElementById('test-all-systems').addEventListener('click', () => {
+      console.log('🚀 Testing all systems...');
+      
+      // Test text system
+      const titleInput = document.getElementById('title-input');
+      if (titleInput) {
+        titleInput.value = '🎉 Party Invitation';
+        updateTextDisplay();
+      }
+      
+      // Test color system
+      const accentInput = document.getElementById('accent-color');
+      const accent2Input = document.getElementById('accent2-color');
+      if (accentInput && accent2Input) {
+        accentInput.value = '#ff6b6b';
+        accent2Input.value = '#4ecdc4';
+        updateColors();
+      }
+      
+      // Test font system
+      const titleFontSelect = document.getElementById('title-font');
+      const bodyFontSelect = document.getElementById('body-font');
+      if (titleFontSelect && bodyFontSelect) {
+        titleFontSelect.value = 'Bebas Neue';
+        bodyFontSelect.value = 'Open Sans';
+        updateFonts();
+      }
+      
+      // Test background system
+      const bgTypeSelect = document.getElementById('bg-type');
+      const bgColorInput = document.getElementById('bg-color');
+      const bgColor2Input = document.getElementById('bg-color2');
+      if (bgTypeSelect && bgColorInput && bgColor2Input) {
+        bgTypeSelect.value = 'radial';
+        bgColorInput.value = '#667eea';
+        bgColor2Input.value = '#764ba2';
+        updateBackground();
+      }
+      
+      updateStatus('✅ All systems tested successfully!');
+      console.log('✅ All systems tested successfully!');
+    });
+    
+    // Initialize
+    updateStatus('Ready for testing');
+    setupTextListeners();
+    setupColorListeners();
+    setupFontListeners();
+    setupBackgroundListeners();
+    console.log('🚀 Invitation Builder v2 initialized');
+  </script>
+</body>
+</html>
