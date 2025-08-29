@@ -2226,6 +2226,7 @@
               <button id="test-edge" class="btn" style="background: #28a745; color: white;">Test Edge</button>
               <button onclick="console.log('🎯 Direct HTML test button clicked'); testEdgeDirectly();" class="btn" style="background: #dc3545; color: white;">Debug Test</button>
               <button onclick="console.log('🎯 Dropdown test button clicked'); testDropdownDirectly();" class="btn" style="background: #6f42c1; color: white;">Test Dropdown</button>
+              <button onclick="console.log('🎯 Manual listener button clicked'); attachEdgeListenersManually();" class="btn" style="background: #fd7e14; color: white;">Manual Listeners</button>
             </div>
         </div>
       </div>
@@ -4920,6 +4921,7 @@
     // Initialize edge controls
     function initializeEdgeControls() {
       console.log('🔧 Initializing edge controls...');
+      console.log('🔧 Function called from:', new Error().stack);
       
       // Check if el function is available
       if (typeof el !== 'function') {
@@ -5054,6 +5056,8 @@
       updateEdgeUI();
 
             console.log('✅ Edge controls initialized');
+      window.edgeSystemInitialized = true;
+      console.log('🏁 Edge system initialization complete!');
     }
 
     // Fallback initialization using document.getElementById directly
@@ -5137,6 +5141,10 @@
     console.log('edge-thickness element:', document.getElementById('edge-thickness'));
     console.log('edge-opacity element:', document.getElementById('edge-opacity'));
     console.log('edge-color element:', document.getElementById('edge-color'));
+    
+    // Set a global flag to track initialization
+    window.edgeSystemInitialized = false;
+    console.log('🏁 Edge system ready, waiting for initialization...');
 
     // Make edge system globally accessible for testing
     window.edgeSystem = {
@@ -5152,6 +5160,15 @@
         edgeSettings.opacity = 0.8;
         applyEdgeEffect();
         console.log('✅ Test edge applied from console!');
+      },
+      status: () => {
+        console.log('📊 Edge System Status:');
+        console.log('Initialized:', window.edgeSystemInitialized);
+        console.log('Current settings:', edgeSettings);
+        console.log('Edge style element:', document.getElementById('edge-style'));
+        console.log('Edge style value:', document.getElementById('edge-style')?.value);
+        console.log('el function available:', typeof el === 'function');
+        console.log('Manual handler attached:', !!window.manualEdgeStyleHandler);
       }
     };
 
@@ -5207,6 +5224,55 @@
         console.log('Edge variant current value:', edgeVariantEl.value);
         console.log('Edge variant options:', Array.from(edgeVariantEl.options).map(opt => opt.value));
       }
+    };
+
+    // Manually attach event listeners to test if that works
+    window.attachEdgeListenersManually = function() {
+      console.log('🔧 Manually attaching edge event listeners...');
+      
+      const edgeStyleEl = document.getElementById('edge-style');
+      const edgeVariantEl = document.getElementById('edge-variant');
+      const edgeThicknessEl = document.getElementById('edge-thickness');
+      const edgeOpacityEl = document.getElementById('edge-opacity');
+      const edgeColorEl = document.getElementById('edge-color');
+      
+      if (!edgeStyleEl) {
+        console.error('❌ Edge style element not found for manual attachment');
+        return;
+      }
+      
+      console.log('✅ Found edge style element, attaching change listener...');
+      
+      // Remove any existing listeners first
+      edgeStyleEl.removeEventListener('change', window.manualEdgeStyleHandler);
+      
+      // Create and attach the handler
+      window.manualEdgeStyleHandler = function(e) {
+        console.log('🎯 MANUAL edge style change event fired!');
+        console.log('Event target:', e.target);
+        console.log('Event target value:', e.target.value);
+        console.log('Previous edge style:', edgeSettings.style);
+        
+        edgeSettings.style = e.target.value;
+        console.log('🎨 Edge style changed to:', edgeSettings.style);
+        console.log('Calling applyEdgeEffect...');
+        
+        try {
+          applyEdgeEffect();
+          console.log('✅ applyEdgeEffect completed successfully');
+        } catch (error) {
+          console.error('❌ Error in applyEdgeEffect:', error);
+        }
+      };
+      
+      edgeStyleEl.addEventListener('change', window.manualEdgeStyleHandler);
+      console.log('✅ Manual edge style change listener attached');
+      
+      // Test if it works by triggering a change
+      console.log('🧪 Testing manual listener by changing value to "torn"...');
+      edgeStyleEl.value = 'torn';
+      const testEvent = new Event('change', { bubbles: true });
+      edgeStyleEl.dispatchEvent(testEvent);
     };
 
     // Initialize edge controls after a delay
