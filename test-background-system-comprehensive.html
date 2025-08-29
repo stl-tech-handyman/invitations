@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Background System - Comprehensive Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .test-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 30px;
+    }
+    
+    .controls-panel {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+    
+    .controls-panel h2 {
+      margin-top: 0;
+      color: #333;
+      border-bottom: 2px solid #17a2b8;
+      padding-bottom: 10px;
+    }
+    
+    .control-group {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border-left: 4px solid #17a2b8;
+    }
+    
+    .control-group h3 {
+      margin: 0 0 10px 0;
+      color: #17a2b8;
+      font-size: 14px;
+    }
+    
+    .control-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 12px;
+    }
+    
+    .control-group select,
+    .control-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    
+    .control-group input[type="range"] {
+      margin-bottom: 5px;
+    }
+    
+    .value-display {
+      font-size: 11px;
+      color: #666;
+      font-family: monospace;
+    }
+    
+    .preview-panel {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .preview-panel h2 {
+      margin-top: 0;
+      color: #333;
+      text-align: center;
+    }
+    
+    .invitation-canvas {
+      width: 600px;
+      height: 400px;
+      margin: 0 auto;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      position: relative;
+      background: #ffffff;
+      overflow: hidden;
+    }
+    
+    .background-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .texture-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+    
+    .image-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+    }
+    
+    .status-panel {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border-left: 4px solid #17a2b8;
+    }
+    
+    .status-panel h3 {
+      margin: 0 0 10px 0;
+      color: #17a2b8;
+    }
+    
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+      font-size: 12px;
+      font-family: monospace;
+    }
+    
+    .status-success {
+      color: #28a745;
+    }
+    
+    .status-error {
+      color: #dc3545;
+    }
+    
+    .status-warning {
+      color: #ffc107;
+    }
+    
+    .test-buttons {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .test-button {
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .test-button.primary {
+      background: #17a2b8;
+      color: white;
+    }
+    
+    .test-button.primary:hover {
+      background: #138496;
+    }
+    
+    .test-button.secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .test-button.secondary:hover {
+      background: #545b62;
+    }
+    
+    .test-button.danger {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .test-button.danger:hover {
+      background: #c82333;
+    }
+    
+    .debug-info {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff3cd;
+      border-radius: 6px;
+      border-left: 4px solid #ffc107;
+    }
+    
+    .debug-info h3 {
+      margin: 0 0 10px 0;
+      color: #856404;
+    }
+    
+    .debug-info pre {
+      margin: 0;
+      font-size: 11px;
+      color: #856404;
+      background: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    
+    .background-preview {
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .background-preview h3 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+    
+    .background-preview p {
+      color: #666;
+      font-size: 14px;
+      margin: 5px 0;
+    }
+    
+    .color-preview {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 15px 0;
+    }
+    
+    .color-swatch {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Background System - Comprehensive Test</h1>
+  
+  <div class="test-container">
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+      <h2>🎛️ Background Controls</h2>
+      
+      <!-- Background Mode -->
+      <div class="control-group">
+        <h3>Background Mode</h3>
+        <label>Mode</label>
+        <select id="bg-mode">
+          <option value="color">Solid Color</option>
+          <option value="gradient">Gradient</option>
+          <option value="texture">Texture</option>
+          <option value="image">Stock Image</option>
+        </select>
+      </div>
+      
+      <!-- Color Mode -->
+      <div class="control-group" id="color-controls">
+        <h3>Color Settings</h3>
+        
+        <label>Primary Color</label>
+        <input type="color" id="primary-color" value="#667eea">
+        
+        <label>Secondary Color</label>
+        <input type="color" id="secondary-color" value="#764ba2">
+        
+        <label>Gradient Direction</label>
+        <select id="gradient-direction">
+          <option value="to right">Horizontal</option>
+          <option value="to bottom">Vertical</option>
+          <option value="45deg">Diagonal</option>
+          <option value="135deg">Reverse Diagonal</option>
+        </select>
+      </div>
+      
+      <!-- Texture Mode -->
+      <div class="control-group" id="texture-controls" style="display: none;">
+        <h3>Texture Settings</h3>
+        
+        <label>Texture Type</label>
+        <select id="texture-type">
+          <option value="none">None</option>
+          <option value="noise">Noise</option>
+          <option value="dots">Dots</option>
+          <option value="lines">Lines</option>
+          <option value="grid">Grid</option>
+          <option value="waves">Waves</option>
+        </select>
+        
+        <label>Texture Opacity</label>
+        <input type="range" id="texture-opacity" min="0" max="1" value="0.5" step="0.1">
+        <div class="value-display">Value: <span id="texture-opacity-value">0.5</span></div>
+        
+        <label>Texture Scale</label>
+        <input type="range" id="texture-scale" min="0.1" max="3" value="1.0" step="0.1">
+        <div class="value-display">Value: <span id="texture-scale-value">1.0</span></div>
+      </div>
+      
+      <!-- Image Mode -->
+      <div class="control-group" id="image-controls" style="display: none;">
+        <h3>Image Settings</h3>
+        
+        <label>Stock Image</label>
+        <select id="stock-image">
+          <option value="none">None</option>
+          <option value="nature-1">Nature Scene 1</option>
+          <option value="nature-2">Nature Scene 2</option>
+          <option value="abstract-1">Abstract 1</option>
+          <option value="abstract-2">Abstract 2</option>
+          <option value="geometric-1">Geometric 1</option>
+        </select>
+        
+        <label>Image Opacity</label>
+        <input type="range" id="image-opacity" min="0" max="1" value="0.8" step="0.1">
+        <div class="value-display">Value: <span id="image-opacity-value">0.8</span></div>
+        
+        <label>Image Blur</label>
+        <input type="range" id="image-blur" min="0" max="20" value="0" step="1">
+        <div class="value-display">Value: <span id="image-blur-value">0</span>px</div>
+        
+        <label>Image Brightness</label>
+        <input type="range" id="image-brightness" min="-100" max="100" value="0" step="10">
+        <div class="value-display">Value: <span id="image-brightness-value">0</span>%</div>
+        
+        <label>Image Vignette</label>
+        <input type="range" id="image-vignette" min="0" max="100" value="0" step="10">
+        <div class="value-display">Value: <span id="image-vignette-value">0</span>%</div>
+      </div>
+      
+      <!-- Test Buttons -->
+      <div class="test-buttons">
+        <button class="test-button primary" id="apply-background">Apply Background</button>
+        <button class="test-button secondary" id="reset-background">Reset</button>
+        <button class="test-button danger" id="clear-background">Clear</button>
+      </div>
+      
+      <!-- Status Panel -->
+      <div class="status-panel">
+        <h3>📊 System Status</h3>
+        <div class="status-item">
+          <span>Background System:</span>
+          <span id="system-status" class="status-warning">Initializing...</span>
+        </div>
+        <div class="status-item">
+          <span>Current Mode:</span>
+          <span id="current-mode">color</span>
+        </div>
+        <div class="status-item">
+          <span>Backgrounds Applied:</span>
+          <span id="backgrounds-count">0</span>
+        </div>
+      </div>
+      
+      <!-- Debug Info -->
+      <div class="debug-info">
+        <h3>🐛 Debug Information</h3>
+        <pre id="debug-output">Waiting for system...</pre>
+      </div>
+    </div>
+    
+    <!-- Preview Panel -->
+    <div class="preview-panel">
+      <h2>👁️ Invitation Preview</h2>
+      
+      <div class="invitation-canvas">
+        <!-- This is the actual invitation canvas -->
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #333; z-index: 10;">
+          <h3>Sample Invitation</h3>
+          <p>This is where your invitation content goes</p>
+          <p>Background effects will be applied behind this</p>
+        </div>
+        
+        <!-- Background Layer - Base colors/gradients -->
+        <div id="background-layer" class="background-layer"></div>
+        
+        <!-- Texture Layer - Patterns and textures -->
+        <div id="texture-layer" class="texture-layer"></div>
+        
+        <!-- Image Layer - Stock images -->
+        <div id="image-layer" class="image-layer"></div>
+      </div>
+      
+      <div class="background-preview">
+        <h3>Background Preview</h3>
+        <p><strong>Expected Behavior:</strong> Background effects should appear and STAY permanently behind the invitation</p>
+        <p><strong>Current Issue:</strong> Effects were disappearing - this test page fixes that</p>
+        
+        <div class="color-preview">
+          <div class="color-swatch" id="primary-swatch" style="background: #667eea;"></div>
+          <div class="color-swatch" id="secondary-swatch" style="background: #764ba2;"></div>
+        </div>
+        
+        <p><strong>Modes:</strong> Color, Gradient, Texture, Stock Image</p>
+        <p><strong>Features:</strong> Opacity, Scale, Blur, Brightness, Vignette</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Comprehensive Background Test System
+    class BackgroundTestSystem {
+      constructor() {
+        console.log('🧪 BackgroundTestSystem: Initializing...');
+        
+        this.backgroundsApplied = 0;
+        this.currentSettings = {
+          mode: 'color',
+          primaryColor: '#667eea',
+          secondaryColor: '#764ba2',
+          gradientDirection: 'to right',
+          textureType: 'none',
+          textureOpacity: 0.5,
+          textureScale: 1.0,
+          stockImage: 'none',
+          imageOpacity: 0.8,
+          imageBlur: 0,
+          imageBrightness: 0,
+          imageVignette: 0
+        };
+        
+        this.init();
+      }
+      
+      init() {
+        try {
+          this.attachEventListeners();
+          this.updateStatus('Ready', 'success');
+          this.updateDebugInfo('Background system initialized successfully');
+          this.updateColorSwatches();
+          console.log('✅ BackgroundTestSystem: Initialized successfully');
+        } catch (error) {
+          console.error('❌ BackgroundTestSystem: Initialization error:', error);
+          this.updateStatus('Error: ' + error.message, 'error');
+          this.updateDebugInfo('Initialization error: ' + error.message);
+        }
+      }
+      
+      attachEventListeners() {
+        // Background Mode
+        const bgMode = document.getElementById('bg-mode');
+        if (bgMode) {
+          bgMode.addEventListener('change', (e) => {
+            this.currentSettings.mode = e.target.value;
+            this.updateCurrentMode();
+            this.toggleControlGroups();
+            this.updateDebugInfo(`Background mode changed to: ${e.target.value}`);
+            this.applyBackground();
+          });
+        }
+        
+        // Color Controls
+        const primaryColor = document.getElementById('primary-color');
+        if (primaryColor) {
+          primaryColor.addEventListener('change', (e) => {
+            this.currentSettings.primaryColor = e.target.value;
+            this.updateColorSwatches();
+            this.updateDebugInfo(`Primary color changed to: ${e.target.value}`);
+            this.applyBackground();
+          });
+        }
+        
+        const secondaryColor = document.getElementById('secondary-color');
+        if (secondaryColor) {
+          secondaryColor.addEventListener('change', (e) => {
+            this.currentSettings.secondaryColor = e.target.value;
+            this.updateColorSwatches();
+            this.updateDebugInfo(`Secondary color changed to: ${e.target.value}`);
+            this.applyBackground();
+          });
+        }
+        
+        const gradientDirection = document.getElementById('gradient-direction');
+        if (gradientDirection) {
+          gradientDirection.addEventListener('change', (e) => {
+            this.currentSettings.gradientDirection = e.target.value;
+            this.updateDebugInfo(`Gradient direction changed to: ${e.target.value}`);
+            this.applyBackground();
+          });
+        }
+        
+        // Texture Controls
+        const textureType = document.getElementById('texture-type');
+        if (textureType) {
+          textureType.addEventListener('change', (e) => {
+            this.currentSettings.textureType = e.target.value;
+            this.updateDebugInfo(`Texture type changed to: ${e.target.value}`);
+            this.applyBackground();
+          });
+        }
+        
+        const textureOpacity = document.getElementById('texture-opacity');
+        if (textureOpacity) {
+          textureOpacity.addEventListener('input', (e) => {
+            this.currentSettings.textureOpacity = parseFloat(e.target.value);
+            document.getElementById('texture-opacity-value').textContent = e.target.value;
+            this.updateDebugInfo(`Texture opacity changed to: ${e.target.value}`);
+            this.applyBackground();
+          });
+        }
+        
+        const textureScale = document.getElementById('texture-scale');
+        if (textureScale) {
+          textureScale.addEventListener('input', (e) => {
+            this.currentSettings.textureScale = parseFloat(e.target.value);
+            document.getElementById('texture-scale-value').textContent = e.target.value;
+            this.updateDebugInfo(`Texture scale changed to: ${e.target.value}`);
+            this.applyBackground();
+          });
+        }
+        
+        // Image Controls
+        const stockImage = document.getElementById('stock-image');
+        if (stockImage) {
+          stockImage.addEventListener('change', (e) => {
+            this.currentSettings.stockImage = e.target.value;
+            this.updateDebugInfo(`Stock image changed to: ${e.target.value}`);
+            this.applyBackground();
+          });
+        }
+        
+        const imageOpacity = document.getElementById('image-opacity');
+        if (imageOpacity) {
+          imageOpacity.addEventListener('input', (e) => {
+            this.currentSettings.imageOpacity = parseFloat(e.target.value);
+            document.getElementById('image-opacity-value').textContent = e.target.value;
+            this.updateDebugInfo(`Image opacity changed to: ${e.target.value}`);
+            this.applyBackground();
+          });
+        }
+        
+        const imageBlur = document.getElementById('image-blur');
+        if (imageBlur) {
+          imageBlur.addEventListener('input', (e) => {
+            this.currentSettings.imageBlur = parseInt(e.target.value);
+            document.getElementById('image-blur-value').textContent = e.target.value;
+            this.updateDebugInfo(`Image blur changed to: ${e.target.value}px`);
+            this.applyBackground();
+          });
+        }
+        
+        const imageBrightness = document.getElementById('image-brightness');
+        if (imageBrightness) {
+          imageBrightness.addEventListener('input', (e) => {
+            this.currentSettings.imageBrightness = parseInt(e.target.value);
+            document.getElementById('image-brightness-value').textContent = e.target.value;
+            this.updateDebugInfo(`Image brightness changed to: ${e.target.value}%`);
+            this.applyBackground();
+          });
+        }
+        
+        const imageVignette = document.getElementById('image-vignette');
+        if (imageVignette) {
+          imageVignette.addEventListener('input', (e) => {
+            this.currentSettings.imageVignette = parseInt(e.target.value);
+            document.getElementById('image-vignette-value').textContent = e.target.value;
+            this.updateDebugInfo(`Image vignette changed to: ${e.target.value}%`);
+            this.applyBackground();
+          });
+        }
+        
+        // Test Buttons
+        const applyBackground = document.getElementById('apply-background');
+        if (applyBackground) {
+          applyBackground.addEventListener('click', () => {
+            this.applyBackground();
+          });
+        }
+        
+        const resetBackground = document.getElementById('reset-background');
+        if (resetBackground) {
+          resetBackground.addEventListener('click', () => {
+            this.resetBackgroundSettings();
+          });
+        }
+        
+        const clearBackground = document.getElementById('clear-background');
+        if (clearBackground) {
+          clearBackground.addEventListener('click', () => {
+            this.clearBackgroundEffects();
+          });
+        }
+        
+        console.log('✅ BackgroundTestSystem: Event listeners attached');
+      }
+      
+      toggleControlGroups() {
+        const colorControls = document.getElementById('color-controls');
+        const textureControls = document.getElementById('texture-controls');
+        const imageControls = document.getElementById('image-controls');
+        
+        // Hide all control groups
+        if (colorControls) colorControls.style.display = 'none';
+        if (textureControls) textureControls.style.display = 'none';
+        if (imageControls) imageControls.style.display = 'none';
+        
+        // Show relevant control group
+        switch (this.currentSettings.mode) {
+          case 'color':
+          case 'gradient':
+            if (colorControls) colorControls.style.display = 'block';
+            break;
+          case 'texture':
+            if (colorControls) colorControls.style.display = 'block';
+            if (textureControls) textureControls.style.display = 'block';
+            break;
+          case 'image':
+            if (colorControls) colorControls.style.display = 'block';
+            if (imageControls) imageControls.style.display = 'block';
+            break;
+        }
+      }
+      
+      applyBackground() {
+        try {
+          console.log('🎨 BackgroundTestSystem: Applying background:', this.currentSettings);
+          
+          this.applyBackgroundLayer();
+          this.applyTextureLayer();
+          this.applyImageLayer();
+          
+          this.backgroundsApplied++;
+          this.updateBackgroundsCount();
+          this.updateDebugInfo(`Background applied successfully: ${this.currentSettings.mode}`);
+          console.log('✅ BackgroundTestSystem: Background applied');
+          
+        } catch (error) {
+          console.error('❌ BackgroundTestSystem: Error applying background:', error);
+          this.updateDebugInfo(`Error applying background: ${error.message}`);
+        }
+      }
+      
+      applyBackgroundLayer() {
+        const backgroundLayer = document.getElementById('background-layer');
+        if (!backgroundLayer) return;
+        
+        backgroundLayer.innerHTML = '';
+        
+        if (this.currentSettings.mode === 'color') {
+          backgroundLayer.style.background = this.currentSettings.primaryColor;
+        } else if (this.currentSettings.mode === 'gradient') {
+          const gradient = `linear-gradient(${this.currentSettings.gradientDirection}, ${this.currentSettings.primaryColor}, ${this.currentSettings.secondaryColor})`;
+          backgroundLayer.style.background = gradient;
+        } else {
+          backgroundLayer.style.background = this.currentSettings.primaryColor;
+        }
+      }
+      
+      applyTextureLayer() {
+        const textureLayer = document.getElementById('texture-layer');
+        if (!textureLayer) return;
+        
+        textureLayer.innerHTML = '';
+        
+        if (this.currentSettings.textureType === 'none') return;
+        
+        const textureCanvas = document.createElement('canvas');
+        textureCanvas.width = 200;
+        textureCanvas.height = 200;
+        const ctx = textureCanvas.getContext('2d');
+        
+        // Create texture pattern
+        this.createTexture(ctx, this.currentSettings.textureType);
+        
+        const textureUrl = textureCanvas.toDataURL();
+        textureLayer.style.backgroundImage = `url(${textureUrl})`;
+        textureLayer.style.backgroundSize = `${this.currentSettings.textureScale * 100}%`;
+        textureLayer.style.opacity = this.currentSettings.textureOpacity;
+      }
+      
+      createTexture(ctx, type) {
+        ctx.fillStyle = this.currentSettings.secondaryColor;
+        ctx.fillRect(0, 0, 200, 200);
+        
+        switch (type) {
+          case 'noise':
+            this.createNoiseTexture(ctx);
+            break;
+          case 'dots':
+            this.createDotsTexture(ctx);
+            break;
+          case 'lines':
+            this.createLinesTexture(ctx);
+            break;
+          case 'grid':
+            this.createGridTexture(ctx);
+            break;
+          case 'waves':
+            this.createWavesTexture(ctx);
+            break;
+        }
+      }
+      
+      createNoiseTexture(ctx) {
+        const imageData = ctx.getImageData(0, 0, 200, 200);
+        const data = imageData.data;
+        
+        for (let i = 0; i < data.length; i += 4) {
+          const noise = Math.random() * 50;
+          data[i] = Math.max(0, Math.min(255, data[i] + noise));
+          data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
+          data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
+        }
+        
+        ctx.putImageData(imageData, 0, 0);
+      }
+      
+      createDotsTexture(ctx) {
+        ctx.fillStyle = this.currentSettings.primaryColor;
+        for (let i = 0; i < 20; i++) {
+          for (let j = 0; j < 20; j++) {
+            if (Math.random() > 0.7) {
+              ctx.beginPath();
+              ctx.arc(i * 10, j * 10, 2, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+      }
+      
+      createLinesTexture(ctx) {
+        ctx.strokeStyle = this.currentSettings.primaryColor;
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 200; i += 10) {
+          ctx.beginPath();
+          ctx.moveTo(i, 0);
+          ctx.lineTo(i, 200);
+          ctx.stroke();
+        }
+      }
+      
+      createGridTexture(ctx) {
+        ctx.strokeStyle = this.currentSettings.primaryColor;
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 200; i += 20) {
+          ctx.beginPath();
+          ctx.moveTo(i, 0);
+          ctx.lineTo(i, 200);
+          ctx.stroke();
+          
+          ctx.beginPath();
+          ctx.moveTo(0, i);
+          ctx.lineTo(200, i);
+          ctx.stroke();
+        }
+      }
+      
+      createWavesTexture(ctx) {
+        ctx.strokeStyle = this.currentSettings.primaryColor;
+        ctx.lineWidth = 2;
+        for (let i = 0; i < 200; i += 5) {
+          ctx.beginPath();
+          ctx.moveTo(0, i);
+          for (let x = 0; x < 200; x += 2) {
+            const y = i + Math.sin(x * 0.1) * 10;
+            ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+      }
+      
+      applyImageLayer() {
+        const imageLayer = document.getElementById('image-layer');
+        if (!imageLayer) return;
+        
+        imageLayer.innerHTML = '';
+        
+        if (this.currentSettings.stockImage === 'none') return;
+        
+        // Create a placeholder image (in real system, this would load actual images)
+        const placeholder = document.createElement('div');
+        placeholder.style.width = '100%';
+        placeholder.style.height = '100%';
+        placeholder.style.background = `linear-gradient(45deg, ${this.currentSettings.primaryColor}, ${this.currentSettings.secondaryColor})`;
+        placeholder.style.opacity = this.currentSettings.imageOpacity;
+        placeholder.style.filter = `blur(${this.currentSettings.imageBlur}px) brightness(${100 + this.currentSettings.imageBrightness}%)`;
+        
+        if (this.currentSettings.imageVignette > 0) {
+          placeholder.style.boxShadow = `inset 0 0 ${this.currentSettings.imageVignette}px rgba(0,0,0,0.5)`;
+        }
+        
+        imageLayer.appendChild(placeholder);
+      }
+      
+      resetBackgroundSettings() {
+        this.currentSettings = {
+          mode: 'color',
+          primaryColor: '#667eea',
+          secondaryColor: '#764ba2',
+          gradientDirection: 'to right',
+          textureType: 'none',
+          textureOpacity: 0.5,
+          textureScale: 1.0,
+          stockImage: 'none',
+          imageOpacity: 0.8,
+          imageBlur: 0,
+          imageBrightness: 0,
+          imageVignette: 0
+        };
+        
+        // Update UI
+        const bgMode = document.getElementById('bg-mode');
+        const primaryColor = document.getElementById('primary-color');
+        const secondaryColor = document.getElementById('secondary-color');
+        const gradientDirection = document.getElementById('gradient-direction');
+        const textureType = document.getElementById('texture-type');
+        const textureOpacity = document.getElementById('texture-opacity');
+        const textureScale = document.getElementById('texture-scale');
+        const stockImage = document.getElementById('stock-image');
+        const imageOpacity = document.getElementById('image-opacity');
+        const imageBlur = document.getElementById('image-blur');
+        const imageBrightness = document.getElementById('image-brightness');
+        const imageVignette = document.getElementById('image-vignette');
+        
+        if (bgMode) bgMode.value = 'color';
+        if (primaryColor) primaryColor.value = '#667eea';
+        if (secondaryColor) secondaryColor.value = '#764ba2';
+        if (gradientDirection) gradientDirection.value = 'to right';
+        if (textureType) textureType.value = 'none';
+        if (textureOpacity) textureOpacity.value = 0.5;
+        if (textureScale) textureScale.value = 1.0;
+        if (stockImage) stockImage.value = 'none';
+        if (imageOpacity) imageOpacity.value = 0.8;
+        if (imageBlur) imageBlur.value = 0;
+        if (imageBrightness) imageBrightness.value = 0;
+        if (imageVignette) imageVignette.value = 0;
+        
+        document.getElementById('texture-opacity-value').textContent = '0.5';
+        document.getElementById('texture-scale-value').textContent = '1.0';
+        document.getElementById('image-opacity-value').textContent = '0.8';
+        document.getElementById('image-blur-value').textContent = '0';
+        document.getElementById('image-brightness-value').textContent = '0';
+        document.getElementById('image-vignette-value').textContent = '0';
+        
+        this.updateCurrentMode();
+        this.updateColorSwatches();
+        this.toggleControlGroups();
+        this.clearBackgroundEffects();
+        this.updateDebugInfo('Background settings reset to defaults');
+      }
+      
+      clearBackgroundEffects() {
+        const backgroundLayer = document.getElementById('background-layer');
+        const textureLayer = document.getElementById('texture-layer');
+        const imageLayer = document.getElementById('image-layer');
+        
+        if (backgroundLayer) backgroundLayer.innerHTML = '';
+        if (textureLayer) textureLayer.innerHTML = '';
+        if (imageLayer) imageLayer.innerHTML = '';
+        
+        this.backgroundsApplied = 0;
+        this.updateBackgroundsCount();
+        this.updateDebugInfo('Background effects cleared');
+      }
+      
+      updateCurrentMode() {
+        const currentMode = document.getElementById('current-mode');
+        if (currentMode) {
+          currentMode.textContent = this.currentSettings.mode;
+        }
+      }
+      
+      updateColorSwatches() {
+        const primarySwatch = document.getElementById('primary-swatch');
+        const secondarySwatch = document.getElementById('secondary-swatch');
+        
+        if (primarySwatch) primarySwatch.style.background = this.currentSettings.primaryColor;
+        if (secondarySwatch) secondarySwatch.style.background = this.currentSettings.secondaryColor;
+      }
+      
+      updateBackgroundsCount() {
+        const backgroundsCount = document.getElementById('backgrounds-count');
+        if (backgroundsCount) {
+          backgroundsCount.textContent = this.backgroundsApplied;
+        }
+      }
+      
+      updateStatus(status, type) {
+        const systemStatus = document.getElementById('system-status');
+        if (systemStatus) {
+          systemStatus.textContent = status;
+          systemStatus.className = `status-${type}`;
+        }
+      }
+      
+      updateDebugInfo(message) {
+        const debugOutput = document.getElementById('debug-output');
+        if (debugOutput) {
+          const timestamp = new Date().toLocaleTimeString();
+          debugOutput.textContent = `[${timestamp}] ${message}\n${debugOutput.textContent}`;
+          
+          // Keep only last 10 lines
+          const lines = debugOutput.textContent.split('\n');
+          if (lines.length > 10) {
+            debugOutput.textContent = lines.slice(0, 10).join('\n');
+          }
+        }
+      }
+    }
+    
+    // Initialize the test system when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🧪 Test page: DOM ready, initializing BackgroundTestSystem...');
+      window.backgroundTestSystem = new BackgroundTestSystem();
+    });
+  </script>
+</body>
+</html>
