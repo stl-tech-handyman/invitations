@@ -4936,8 +4936,19 @@
       
       console.log('✅ el function is available');
       
-      // Check if all required elements exist
+      // Check if elements exist before proceeding
       const edgeStyleEl = el('edge-style');
+      if (!edgeStyleEl) {
+        console.error('❌ Edge style element not found during initialization!');
+        console.log('Available elements with "edge" in ID:', Array.from(document.querySelectorAll('[id*="edge"]')).map(el => el.id));
+        console.log('Document ready state:', document.readyState);
+        console.log('Body children count:', document.body.children.length);
+        return;
+      }
+      
+      console.log('✅ Edge style element found during initialization');
+      
+      // Check if all required elements exist
       const edgeThicknessEl = el('edge-thickness');
       const edgeOpacityEl = el('edge-opacity');
       const edgeColorEl = el('edge-color');
@@ -5145,6 +5156,27 @@
     // Set a global flag to track initialization
     window.edgeSystemInitialized = false;
     console.log('🏁 Edge system ready, waiting for initialization...');
+    
+    // Check if edge elements exist right now
+    console.log('🔍 Checking edge elements availability...');
+    const edgeElements = {
+      'edge-style': document.getElementById('edge-style'),
+      'edge-variant': document.getElementById('edge-variant'),
+      'edge-thickness': document.getElementById('edge-thickness'),
+      'edge-opacity': document.getElementById('edge-opacity'),
+      'edge-color': document.getElementById('edge-color'),
+      'edge-layer': document.getElementById('edge-layer')
+    };
+    
+    console.log('🔍 Edge elements status:', edgeElements);
+    
+    // Check if any edge elements are missing
+    const missingElements = Object.entries(edgeElements).filter(([id, element]) => !element);
+    if (missingElements.length > 0) {
+      console.error('❌ Missing edge elements:', missingElements.map(([id]) => id));
+    } else {
+      console.log('✅ All edge elements found');
+    }
 
     // Make edge system globally accessible for testing
     window.edgeSystem = {
@@ -5275,7 +5307,11 @@
       edgeStyleEl.dispatchEvent(testEvent);
     };
 
-    // Initialize edge controls after a delay
+    // Initialize edge controls immediately and also with delays
+    console.log('🚀 Initializing edge controls immediately...');
+    initializeEdgeControls();
+    
+    // Also try delayed initialization as backup
     console.log('⏰ Scheduling edge controls initialization in 1400ms...');
     setTimeout(() => {
       console.log('⏰ 1400ms timeout fired, calling initializeEdgeControls...');
