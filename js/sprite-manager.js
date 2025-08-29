@@ -38,6 +38,11 @@ class SpriteManager {
   }
 
   async loadFromElementsConfig() {
+    if (!window.ELEMENTS_CONFIG || !window.ELEMENTS_CONFIG.decorations) {
+      console.log('ℹ️ ELEMENTS_CONFIG not available, skipping...');
+      return;
+    }
+    
     const decorations = window.ELEMENTS_CONFIG.decorations;
     
     for (const [key, config] of Object.entries(decorations)) {
@@ -406,13 +411,4 @@ class SpriteManager {
 }
 
 // Export for use in other modules
-window.SpriteManager = SpriteManager;
-
-// Auto-initialize if DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    window.spriteManager = new SpriteManager();
-  });
-} else {
-  window.spriteManager = new SpriteManager();
-}
+export { SpriteManager };

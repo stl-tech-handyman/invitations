@@ -1328,27 +1328,34 @@
       svg.style.height = '100%';
       svg.style.pointerEvents = 'none';
       
-      // Create a simple edge effect using the variant pattern
+      // Create edge effects for all four sides
+      console.log('🎨 Creating edge paths for all sides...');
+      createEdgePath(svg, variant, 'top', 0, 0, 900, 0);
+      createEdgePath(svg, variant, 'bottom', 0, 1350, 900, 1350);
+      createEdgePath(svg, variant, 'left', 0, 0, 0, 1350);
+      createEdgePath(svg, variant, 'right', 900, 0, 900, 1350);
+      console.log('✅ Edge paths created for all sides');
+      
+      edgeLayer.appendChild(svg);
+      
+      console.log('✨ Edge effect applied to all sides:', edgeSettings.style, edgeSettings.variant);
+    }
+
+    // Helper function to create edge paths for each side
+    function createEdgePath(svg, variant, side, x1, y1, x2, y2) {
       const edgePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       
-      // Scale the variant path to fit the invitation dimensions
-      let scaledPath = variant;
-      if (edgeSettings.style === 'torn' || edgeSettings.style === 'scalloped' || edgeSettings.style === 'wave') {
-        // For top/bottom edges, scale horizontally
-        scaledPath = variant.replace(/M0,0 /, 'M0,0 ').replace(/ L100,100.*/, ' L900,0 Z');
-      } else if (edgeSettings.style === 'zigzag' || edgeSettings.style === 'spikes') {
-        // For zigzag/spikes, create a repeating pattern
-        scaledPath = 'M0,0 ' + Array.from({length: 9}, (_, i) => {
-          const x = i * 100;
-          const nextX = (i + 1) * 100;
-          return `L${x + 25},20 L${x + 50},0 L${x + 75},20 L${nextX},0`;
-        }).join(' ') + ' L900,0 Z';
+      let pathData = '';
+      
+      if (side === 'top' || side === 'bottom') {
+        // Horizontal edges (top/bottom)
+        pathData = this.createHorizontalEdgePath(variant, x1, y1, x2, y2);
       } else {
-        // For other styles, use a simple scaled version
-        scaledPath = variant.replace(/M0,0 /, 'M0,0 ').replace(/ L100,100.*/, ' L900,0 Z');
+        // Vertical edges (left/right)
+        pathData = this.createVerticalEdgePath(variant, x1, y1, x2, y2);
       }
       
-      edgePath.setAttribute('d', scaledPath);
+      edgePath.setAttribute('d', pathData);
       edgePath.setAttribute('fill', edgeSettings.color);
       edgePath.setAttribute('opacity', edgeSettings.opacity);
       edgePath.setAttribute('stroke', edgeSettings.color);
@@ -1356,9 +1363,151 @@
       edgePath.setAttribute('stroke-linejoin', 'round');
       
       svg.appendChild(edgePath);
-      edgeLayer.appendChild(svg);
+    }
+
+    // Create horizontal edge path (top/bottom)
+    function createHorizontalEdgePath(variant, x1, y1, x2, y2) {
+      const width = Math.abs(x2 - x1);
+      const segments = Math.ceil(width / 100); // Divide into segments
       
-      console.log('✨ Edge effect applied:', edgeSettings.style, edgeSettings.variant);
+      if (edgeSettings.style === 'torn' || edgeSettings.style === 'scalloped' || edgeSettings.style === 'wave') {
+        // Create repeating pattern for torn/scalloped/wave edges
+        let path = `M${x1},${y1}`;
+        for (let i = 0; i < segments; i++) {
+          const segmentWidth = width / segments;
+          const startX = x1 + (i * segmentWidth);
+          const endX = x1 + ((i + 1) * segmentWidth);
+          
+          if (edgeSettings.style === 'torn') {
+            const midY = y1 + (Math.random() * 20 - 10);
+            path += ` Q${startX + segmentWidth/2},${midY} ${endX},${y1}`;
+          } else if (edgeSettings.style === 'scalloped') {
+            const midY = y1 + (y1 === 0 ? 15 : -15);
+            path += ` Q${startX + segmentWidth/2},${midY} ${endX},${y1}`;
+          } else if (edgeSettings.style === 'wave') {
+            const midY = y1 + (y1 === 0 ? 10 : -10);
+            path += ` Q${startX + segmentWidth/3},${midY} ${startX + segmentWidth*2/3},${y1}`;
+            path += ` Q${startX + segmentWidth*2/3},${midY} ${endX},${y1}`;
+          }
+        }
+        return path;
+      } else if (edgeSettings.style === 'zigzag' || edgeSettings.style === 'spikes') {
+        // Create zigzag/spikes pattern
+        let path = `M${x1},${y1}`;
+        for (let i = 0; i < segments; i++) {
+          const segmentWidth = width / segments;
+          const startX = x1 + (i * segmentWidth);
+          const endX = x1 + ((i + 1) * segmentWidth);
+          const midX = startX + segmentWidth / 2;
+          const peakY = y1 + (y1 === 0 ? 20 : -20);
+          
+          path += ` L${midX},${peakY} L${endX},${y1}`;
+        }
+        return path;
+      } else if (edgeSettings.style === 'dots') {
+        // Create dotted edge pattern
+        let path = `M${x1},${y1}`;
+        for (let i = 0; i < segments; i++) {
+          const segmentWidth = width / segments;
+          const startX = x1 + (i * segmentWidth);
+          const endX = x1 + ((i + 1) * segmentWidth);
+          const midX = startX + segmentWidth / 2;
+          const midY = y1 + (y1 === 0 ? 5 : -5);
+          
+          path += ` M${midX},${midY} m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0`;
+        }
+        return path;
+      } else if (edgeSettings.style === 'geometric') {
+        // Create geometric edge pattern
+        let path = `M${x1},${y1}`;
+        for (let i = 0; i < segments; i++) {
+          const segmentWidth = width / segments;
+          const startX = x1 + (i * segmentWidth);
+          const endX = x1 + ((i + 1) * segmentWidth);
+          const midX = startX + segmentWidth / 2;
+          const peakY = y1 + (y1 === 0 ? 15 : -15);
+          
+          path += ` L${midX},${peakY} L${endX},${y1}`;
+        }
+        return path;
+      } else if (edgeSettings.style === 'border') {
+        // Create a simple border around all edges
+        return `M${x1},${y1} L${x2},${y2}`;
+      } else {
+        // Default straight edge
+        return `M${x1},${y1} L${x2},${y2}`;
+      }
+    }
+
+    // Create vertical edge path (left/right)
+    function createVerticalEdgePath(variant, x1, y1, x2, y2) {
+      const height = Math.abs(y2 - y1);
+      const segments = Math.ceil(height / 100); // Divide into segments
+      
+      if (edgeSettings.style === 'torn' || edgeSettings.style === 'scalloped' || edgeSettings.style === 'wave') {
+        // Create repeating pattern for torn/scalloped/wave edges
+        let path = `M${x1},${y1}`;
+        for (let i = 0; i < segments; i++) {
+          const segmentHeight = height / segments;
+          const startY = y1 + (i * segmentHeight);
+          const endY = y1 + ((i + 1) * segmentHeight);
+          
+          if (edgeSettings.style === 'torn') {
+            const midX = x1 + (Math.random() * 20 - 10);
+            path += ` Q${midX},${startY + segmentHeight/2} ${x1},${endY}`;
+          } else if (edgeSettings.style === 'scalloped') {
+            const midX = x1 + (x1 === 0 ? 15 : -15);
+            path += ` Q${midX},${startY + segmentHeight/2} ${x1},${endY}`;
+          } else if (edgeSettings.style === 'wave') {
+            const midX = x1 + (x1 === 0 ? 10 : -10);
+            path += ` Q${midX},${startY + segmentHeight/3} ${x1},${startY + segmentHeight*2/3}`;
+            path += ` Q${midX},${startY + segmentHeight*2/3} ${x1},${endY}`;
+          }
+        }
+        return path;
+      } else if (edgeSettings.style === 'zigzag' || edgeSettings.style === 'spikes') {
+        // Create zigzag/spikes pattern
+        let path = `M${x1},${y1}`;
+        for (let i = 0; i < segments; i++) {
+          const segmentHeight = height / segments;
+          const startY = y1 + (i * segmentHeight);
+          const endY = y1 + ((i + 1) * segmentHeight);
+          const midY = startY + segmentHeight / 2;
+          const peakX = x1 + (x1 === 0 ? 20 : -20);
+          
+          path += ` L${peakX},${midY} L${x1},${endY}`;
+        }
+        return path;
+      } else if (edgeSettings.style === 'dots') {
+        // Create dotted edge pattern
+        let path = `M${x1},${y1}`;
+        for (let i = 0; i < segments; i++) {
+          const segmentHeight = height / segments;
+          const startY = y1 + (i * segmentHeight);
+          const endY = y1 + ((i + 1) * segmentHeight);
+          const midY = startY + segmentHeight / 2;
+          const midX = x1 + (x1 === 0 ? 5 : -5);
+          
+          path += ` M${midX},${midY} m-2,0 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0`;
+        }
+        return path;
+      } else if (edgeSettings.style === 'geometric') {
+        // Create geometric edge pattern
+        let path = `M${x1},${y1}`;
+        for (let i = 0; i < segments; i++) {
+          const segmentHeight = height / segments;
+          const startY = y1 + (i * segmentHeight);
+          const endY = y1 + ((i + 1) * segmentHeight);
+          const midY = startY + segmentHeight / 2;
+          const peakX = x1 + (x1 === 0 ? 15 : -15);
+          
+          path += ` L${peakX},${midY} L${x1},${endY}`;
+        }
+        return path;
+      } else {
+        // Default straight edge
+        return `M${x1},${y1} L${x2},${y2}`;
+      }
     }
     
     // Update edge UI controls
@@ -1626,8 +1775,11 @@
  ${t.gradient}`;
         document.documentElement.style.setProperty('--accent', el('accent').value);
         document.documentElement.style.setProperty('--accent-2', el('accent2').value);
-        // Don't automatically redraw sprites - let them persist
-        // drawSprites(t);
+        
+        // Only draw sprites if this is a fresh theme change (not preserving custom additions)
+        if (!window.customSpritesAdded) {
+          drawSprites(t);
+        }
       }
     }
 
@@ -1732,7 +1884,28 @@
     }
 
     function drawSprites(theme){
-      const svg = el('sprites'); svg.innerHTML = '';
+      const svg = el('sprites');
+      
+      // Store custom sprites before clearing
+      const customSprites = [];
+      if (window.customSpritesAdded) {
+        const customSpriteElements = svg.querySelectorAll('[data-sprite-id]');
+        customSpriteElements.forEach(sprite => {
+          customSprites.push({
+            element: sprite.cloneNode(true),
+            dataSpriteId: sprite.getAttribute('data-sprite-id')
+          });
+        });
+      }
+      
+      // Clear only theme sprites, preserve custom ones
+      svg.innerHTML = '';
+      
+      // Restore custom sprites
+      customSprites.forEach(({ element }) => {
+        svg.appendChild(element);
+      });
+      
       const density = +el('density').value; const scale = +el('scale').value / 100;
       const anim = el('sprite-anim').value;
       for(let i=0;i<density;i++){
@@ -1749,6 +1922,8 @@
         g.setAttribute('style',`color:${color}; ${animStyle}`);
         g.appendChild(use); svg.appendChild(g);
       }
+      
+      console.log(`🎨 Drew ${density} theme sprites, preserved ${customSprites.length} custom sprites`);
     }
 
     function updateText(){
@@ -3683,6 +3858,565 @@
           }
         });
         console.log('✅ Sprite Browser button initialized');
+      }
+    });
+  </script>
+  
+  <!-- Configuration -->
+  <script type="module">
+    import { THEMES, CUSTOM_THEME } from './js/config.js';
+    window.THEMES = THEMES;
+    window.CUSTOM_THEME = CUSTOM_THEME;
+  </script>
+  
+  <!-- Elements Configuration -->
+  <script src="elements/elements-config.js"></script>
+  
+  <!-- Sprite System -->
+  <script>
+    // Simple Sprite Browser Implementation
+    class SimpleSpriteBrowser {
+      constructor() {
+        this.isVisible = false;
+        this.currentCategory = 'all';
+        this.searchQuery = '';
+        this.selectedSprite = null;
+        this.init();
+      }
+
+      init() {
+        console.log('🔍 Initializing Simple Sprite Browser...');
+        this.createBrowserInterface();
+        this.setupEventListeners();
+      }
+
+      createBrowserInterface() {
+        // Create the browser container
+        const browser = document.createElement('div');
+        browser.id = 'sprite-browser';
+        browser.className = 'sprite-browser';
+        browser.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          width: 400px;
+          max-height: 80vh;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+          z-index: 1005;
+          font-family: system-ui, -apple-system, sans-serif;
+          overflow: hidden;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+          display: none;
+        `;
+
+        browser.innerHTML = `
+          <div class="browser-header" style="
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          ">
+            <h3 style="margin: 0; font-size: 18px;">🎨 Sprite Browser</h3>
+            <button id="close-sprite-browser" style="
+              background: none;
+              border: none;
+              color: white;
+              font-size: 20px;
+              cursor: pointer;
+              padding: 0;
+              width: 24px;
+              height: 24px;
+            ">×</button>
+          </div>
+          
+          <div class="browser-content" style="padding: 20px;">
+            <div class="search-section" style="margin-bottom: 20px;">
+              <input type="text" id="sprite-search" placeholder="Search sprites..." style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e1e5e9;
+                border-radius: 8px;
+                font-size: 14px;
+                outline: none;
+              ">
+            </div>
+            
+            <div class="category-filter" style="margin-bottom: 20px;">
+              <select id="sprite-category-filter" style="
+                width: 100%;
+                padding: 10px;
+                border: 2px solid #e1e5e9;
+                border-radius: 6px;
+                font-size: 14px;
+                outline: none;
+              ">
+                <option value="all">All Categories</option>
+              </select>
+            </div>
+            
+            <div class="sprites-grid" id="sprites-grid" style="
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 12px;
+              max-height: 400px;
+              overflow-y: auto;
+            "></div>
+            
+            <div class="browser-actions" style="
+              margin-top: 20px;
+              padding-top: 20px;
+              border-top: 1px solid #e1e5e9;
+              display: flex;
+              gap: 10px;
+            ">
+              <button id="add-sprite-btn" style="
+                flex: 1;
+                padding: 12px;
+                background: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 14px;
+                cursor: pointer;
+              ">Add Selected</button>
+              <button id="randomize-sprites-btn" style="
+                flex: 1;
+                padding: 12px;
+                background: #2196F3;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 14px;
+                cursor: pointer;
+              ">Randomize</button>
+              <button id="clear-custom-sprites-btn" style="
+                flex: 1;
+                padding: 12px;
+                background: #dc3545;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 14px;
+                cursor: pointer;
+              ">Clear Custom</button>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(browser);
+        this.browser = browser;
+      }
+
+      setupEventListeners() {
+        // Close button
+        document.getElementById('close-sprite-browser')?.addEventListener('click', () => {
+          this.hide();
+        });
+
+        // Search input
+        document.getElementById('sprite-search')?.addEventListener('input', (e) => {
+          this.searchQuery = e.target.value;
+          this.filterSprites();
+        });
+
+        // Category filter
+        document.getElementById('sprite-category-filter')?.addEventListener('change', (e) => {
+          this.currentCategory = e.target.value;
+          this.filterSprites();
+        });
+
+        // Add sprite button
+        document.getElementById('add-sprite-btn')?.addEventListener('click', () => {
+          this.addSelectedSprites();
+        });
+
+        // Randomize button
+        document.getElementById('randomize-sprites-btn')?.addEventListener('click', () => {
+          this.randomizeSprites();
+        });
+
+        // Clear custom sprites button
+        document.getElementById('clear-custom-sprites-btn')?.addEventListener('click', () => {
+          this.clearCustomSprites();
+        });
+
+        // Click outside to close
+        document.addEventListener('click', (e) => {
+          if (this.isVisible && !this.browser.contains(e.target) && !e.target.closest('#open-sprite-browser')) {
+            this.hide();
+          }
+        });
+      }
+
+      show() {
+        if (!this.isVisible) {
+          this.browser.style.display = 'block';
+          setTimeout(() => {
+            this.browser.style.transform = 'translateX(0)';
+          }, 10);
+          this.isVisible = true;
+          this.populateSprites();
+          console.log('🔍 Sprite Browser opened');
+        }
+      }
+
+      hide() {
+        if (this.isVisible) {
+          this.browser.style.transform = 'translateX(100%)';
+          setTimeout(() => {
+            this.browser.style.display = 'none';
+          }, 300);
+          this.isVisible = false;
+          console.log('🔍 Sprite Browser closed');
+        }
+      }
+
+      populateSprites() {
+        // Populate categories
+        this.populateCategories();
+        
+        // Populate sprites grid
+        this.populateSpritesGrid();
+      }
+
+      populateCategories() {
+        const categoryFilter = document.getElementById('sprite-category-filter');
+        if (!categoryFilter) return;
+
+        // Get categories from existing sprites
+        const categories = this.getExistingSpriteCategories();
+        
+        // Clear existing options except "All Categories"
+        categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+        
+        // Add category options
+        categories.forEach(category => {
+          const option = document.createElement('option');
+          option.value = category;
+          option.textContent = this.capitalizeFirst(category);
+          categoryFilter.appendChild(option);
+        });
+      }
+
+      populateSpritesGrid() {
+        const grid = document.getElementById('sprites-grid');
+        if (!grid) return;
+
+        grid.innerHTML = '';
+
+        let sprites = [];
+        
+        if (this.currentCategory === 'all') {
+          // Get all existing sprites
+          sprites = this.getExistingSprites();
+        } else {
+          // Get sprites by category
+          sprites = this.getExistingSpritesByCategory(this.currentCategory);
+        }
+
+        // Filter by search query
+        if (this.searchQuery) {
+          sprites = sprites.filter(sprite => 
+            sprite.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            sprite.tags.some(tag => tag.toLowerCase().includes(this.searchQuery.toLowerCase()))
+          );
+        }
+
+        if (sprites.length === 0) {
+          grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666;">No sprites found</p>';
+          return;
+        }
+
+        // Create sprite previews
+        sprites.forEach(sprite => {
+          const spritePreview = this.createSpritePreview(sprite);
+          grid.appendChild(spritePreview);
+        });
+      }
+
+      createSpritePreview(sprite) {
+        const preview = document.createElement('div');
+        preview.className = 'sprite-preview';
+        preview.style.cssText = `
+          border: 2px solid #e1e5e9;
+          border-radius: 8px;
+          padding: 12px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          background: white;
+        `;
+
+        preview.innerHTML = `
+          <div class="sprite-icon" style="
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a90e2;
+          ">
+            ${this.getSpriteIcon(sprite)}
+          </div>
+          <div class="sprite-name" style="
+            font-size: 12px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+          ">${sprite.name}</div>
+          <div class="sprite-category" style="
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          ">${sprite.category}</div>
+        `;
+
+        // Add click handler
+        preview.addEventListener('click', (event) => {
+          this.selectSprite(sprite, event);
+        });
+
+        // Add hover effects
+        preview.addEventListener('mouseenter', () => {
+          preview.style.borderColor = '#4a90e2';
+          preview.style.transform = 'translateY(-2px)';
+          preview.style.boxShadow = '0 4px 12px rgba(74, 144, 226, 0.2)';
+        });
+
+        preview.addEventListener('mouseleave', () => {
+          preview.style.borderColor = '#e1e5e9';
+          preview.style.transform = 'translateY(0)';
+          preview.style.boxShadow = 'none';
+        });
+
+        return preview;
+      }
+
+      getSpriteIcon(sprite) {
+        // Try to create a preview using the existing SVG element
+        if (sprite.svgElement) {
+          try {
+            // Create a new SVG container for the preview
+            const previewSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            previewSvg.setAttribute('width', '32');
+            previewSvg.setAttribute('height', '32');
+            previewSvg.setAttribute('viewBox', '0 0 48 48');
+            previewSvg.setAttribute('fill', 'currentColor');
+            
+            // Clone the sprite content
+            const clonedContent = sprite.svgElement.cloneNode(true);
+            previewSvg.appendChild(clonedContent);
+            
+            console.log(`🎨 Created preview for ${sprite.name}:`, previewSvg.outerHTML);
+            return previewSvg.outerHTML;
+          } catch (error) {
+            console.warn('Failed to create SVG preview:', error);
+          }
+        }
+        
+        console.log(`⚠️ No SVG element for ${sprite.name}, using fallback icon`);
+        // Fallback icon
+        return '🎨';
+      }
+
+      selectSprite(sprite, event) {
+        // Highlight selected sprite
+        const previews = document.querySelectorAll('.sprite-preview');
+        previews.forEach(p => p.style.borderColor = '#e1e5e9');
+        
+        const selectedPreview = event.currentTarget;
+        selectedPreview.style.borderColor = '#4CAF50';
+        selectedPreview.style.background = '#f0f9ff';
+        
+        // Store selected sprite
+        this.selectedSprite = sprite;
+        
+        console.log('🎯 Selected sprite:', sprite.name);
+      }
+
+      addSelectedSprites() {
+        if (!this.selectedSprite) {
+          alert('Please select a sprite first');
+          return;
+        }
+
+        // Check if sprite is already displayed
+        const existingSprite = document.querySelector(`[data-sprite-id="${this.selectedSprite.id}"]`);
+        if (existingSprite) {
+          alert(`${this.selectedSprite.name} is already displayed on the invitation!`);
+          return;
+        }
+
+        // Add the selected sprite to the current theme
+        const theme = this.getCurrentTheme();
+        if (theme) {
+          // Add sprite to theme if not already present
+          if (!theme.sprites.includes(this.selectedSprite.id)) {
+            theme.sprites.push(this.selectedSprite.id);
+            console.log(`✅ Added ${this.selectedSprite.name} to current theme`);
+          }
+          
+          // Add the sprite directly to the display without clearing existing ones
+          this.addSpriteToDisplay(this.selectedSprite);
+        }
+      }
+
+      addSpriteToDisplay(sprite) {
+        const svg = document.getElementById('sprites');
+        if (!svg) return;
+
+        // Create a new sprite element
+        const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${sprite.id}`);
+        
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('class', 'sprite');
+        g.setAttribute('data-sprite-id', sprite.id);
+        
+        // Random position and properties
+        const x = Math.random() * 900;
+        const y = Math.random() * 600 + (Math.random() > 0.5 ? 100 : 250);
+        const r = (Math.random() * 40 - 20);
+        const s = (0.6 + Math.random() * 0.9);
+        const color = this.getRandomColor();
+        
+        const dur = Math.random() > 0.5 ? (4 + Math.random() * 3) : (8 + Math.random() * 5);
+        const animStyle = `animation: floaty ${dur}s ease-in-out ${Math.random() * 2}s infinite;`;
+        
+        g.setAttribute('transform', `translate(${x} ${y}) rotate(${r}) scale(${s})`);
+        g.setAttribute('style', `color:${color}; ${animStyle}`);
+        g.appendChild(use);
+        
+        svg.appendChild(g);
+        console.log(`🎨 Added ${sprite.name} to display at position (${x}, ${y})`);
+        
+        // Mark that custom sprites have been added
+        window.customSpritesAdded = true;
+      }
+
+      getRandomColor() {
+        const colors = ['#2ec5ff', '#ff6b6b', '#06d6a0', '#118ab2', '#ef476f', '#ffd166', '#4ecdc4', '#45b7d1'];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      randomizeSprites() {
+        const theme = this.getCurrentTheme();
+        if (theme) {
+          // Clear custom sprites flag and redraw with current theme
+          window.customSpritesAdded = false;
+          
+          // Clear existing sprites and redraw with current theme
+          if (typeof updateSprites === 'function') {
+            updateSprites();
+            console.log('🎲 Sprites randomized using existing system');
+          } else {
+            console.warn('⚠️ updateSprites function not available');
+          }
+        }
+      }
+
+      clearCustomSprites() {
+        const svg = document.getElementById('sprites');
+        if (!svg) return;
+        
+        // Remove only custom sprites (those with data-sprite-id)
+        const customSprites = svg.querySelectorAll('[data-sprite-id]');
+        customSprites.forEach(sprite => sprite.remove());
+        
+        window.customSpritesAdded = false;
+        console.log('🗑️ Custom sprites cleared');
+      }
+
+      filterSprites() {
+        this.populateSpritesGrid();
+      }
+
+      getCurrentTheme() {
+        const themeKey = document.getElementById('category')?.value;
+        if (themeKey === 'custom') {
+          return window.CUSTOM_THEME?.custom;
+        } else {
+          return window.THEMES?.[themeKey];
+        }
+      }
+
+      capitalizeFirst(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      }
+
+      // Helper methods to work with existing sprites
+      getExistingSpriteCategories() {
+        const categories = new Set();
+        
+        // Get all SVG definitions from the existing HTML
+        const svgDefs = document.querySelector('svg defs');
+        if (!svgDefs) return ['celebration', 'nature', 'geometric', 'decorative'];
+        
+        const spriteElements = svgDefs.querySelectorAll('g[id]');
+        spriteElements.forEach(element => {
+          const id = element.getAttribute('id');
+          const category = this.categorizeExistingSprite(id);
+          categories.add(category);
+        });
+        
+        return Array.from(categories);
+      }
+
+      getExistingSprites() {
+        const sprites = [];
+        
+        // Get all SVG definitions from the existing HTML
+        const svgDefs = document.querySelector('svg defs');
+        if (!svgDefs) return sprites;
+        
+        const spriteElements = svgDefs.querySelectorAll('g[id]');
+        spriteElements.forEach(element => {
+          const id = element.getAttribute('id');
+          const category = this.categorizeExistingSprite(id);
+          
+          sprites.push({
+            id: id,
+            name: this.capitalizeFirst(id),
+            category: category,
+            tags: [id, category],
+            svgElement: element
+          });
+        });
+        
+        return sprites;
+      }
+
+      getExistingSpritesByCategory(category) {
+        return this.getExistingSprites().filter(sprite => sprite.category === category);
+      }
+
+      categorizeExistingSprite(id) {
+        if (['balloon', 'confetti', 'cake', 'gifts', 'candles'].includes(id)) {
+          return 'celebration';
+        } else if (['star', 'cloud', 'duck', 'tree', 'snow'].includes(id)) {
+          return 'nature';
+        } else if (['floatie', 'sunglasses', 'flipflop', 'cap', 'ribbon'].includes(id)) {
+          return 'decorative';
+        } else {
+          return 'decorative';
+        }
+      }
+    }
+
+    // Initialize Sprite Browser when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        window.spriteBrowser = new SimpleSpriteBrowser();
+        console.log('✅ Simple Sprite Browser initialized');
+      } catch (error) {
+        console.error('❌ Failed to initialize Sprite Browser:', error);
       }
     });
   </script>

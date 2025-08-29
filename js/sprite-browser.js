@@ -187,11 +187,6 @@ class SpriteBrowser {
   }
 
   populateSprites() {
-    if (!window.spriteManager) {
-      console.error('❌ Sprite Manager not available');
-      return;
-    }
-
     // Populate categories
     this.populateCategories();
     
@@ -203,7 +198,8 @@ class SpriteBrowser {
     const categoryFilter = document.getElementById('sprite-category-filter');
     if (!categoryFilter) return;
 
-    const categories = window.spriteManager.getSpriteCategories();
+    // Get categories from existing sprites
+    const categories = this.getExistingSpriteCategories();
     
     // Clear existing options except "All Categories"
     categoryFilter.innerHTML = '<option value="all">All Categories</option>';
@@ -223,21 +219,14 @@ class SpriteBrowser {
 
     grid.innerHTML = '';
 
-    if (!window.spriteManager) {
-      grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666;">Sprite Manager not available</p>';
-      return;
-    }
-
     let sprites = [];
     
     if (this.currentCategory === 'all') {
-      // Get all sprites
-      window.spriteManager.spriteDefinitions.forEach(def => {
-        sprites.push(def);
-      });
+      // Get all existing sprites
+      sprites = this.getExistingSprites();
     } else {
       // Get sprites by category
-      sprites = window.spriteManager.getSpritesByCategory(this.currentCategory);
+      sprites = this.getExistingSpritesByCategory(this.currentCategory);
     }
 
     // Filter by search query
@@ -300,8 +289,8 @@ class SpriteBrowser {
     `;
 
     // Add click handler
-    preview.addEventListener('click', () => {
-      this.selectSprite(sprite);
+    preview.addEventListener('click', (event) => {
+      this.selectSprite(sprite, event);
     });
 
     // Add hover effects
@@ -321,22 +310,18 @@ class SpriteBrowser {
   }
 
   getSpriteIcon(sprite) {
-    // Try to create a preview using the SVG content
-    if (sprite.svgContent) {
+    // Try to create a preview using the existing SVG element
+    if (sprite.svgElement) {
       try {
-        const parser = new DOMParser();
-        const svgDoc = parser.parseFromString(sprite.svgContent, 'image/svg+xml');
-        const svgElement = svgDoc.documentElement;
-        
-        // Clone and scale down for preview
-        const clonedSvg = svgElement.cloneNode(true);
+        // Clone the SVG element and scale it down for preview
+        const clonedSvg = sprite.svgElement.cloneNode(true);
         clonedSvg.setAttribute('width', '32');
         clonedSvg.setAttribute('height', '32');
         clonedSvg.setAttribute('fill', 'currentColor');
         
         return clonedSvg.outerHTML;
       } catch (error) {
-        console.warn('Failed to parse SVG for preview:', error);
+        console.warn('Failed to create SVG preview:', error);
       }
     }
     
@@ -344,7 +329,7 @@ class SpriteBrowser {
     return '🎨';
   }
 
-  selectSprite(sprite) {
+  selectSprite(sprite, event) {
     // Highlight selected sprite
     const previews = document.querySelectorAll('.sprite-preview');
     previews.forEach(p => p.style.borderColor = '#e1e5e9');
@@ -365,11 +350,6 @@ class SpriteBrowser {
       return;
     }
 
-    if (!window.spriteManager) {
-      alert('Sprite Manager not available');
-      return;
-    }
-
     // Add the selected sprite to the current theme
     const theme = this.getCurrentTheme();
     if (theme) {
@@ -378,13 +358,12 @@ class SpriteBrowser {
         theme.sprites.push(this.selectedSprite.id);
         console.log(`✅ Added ${this.selectedSprite.name} to current theme`);
         
-        // Update sprites display
-        window.spriteManager.generateRandomSprites(
-          theme,
-          document.getElementById('density')?.value || 15,
-          document.getElementById('scale')?.value || 100,
-          document.getElementById('sprite-anim')?.value || 'gentle'
-        );
+        // Update sprites display using the existing system
+        if (typeof updateSprites === 'function') {
+          updateSprites();
+        } else {
+          console.warn('⚠️ updateSprites function not available');
+        }
       } else {
         console.log(`ℹ️ ${this.selectedSprite.name} is already in the current theme`);
       }
@@ -392,21 +371,15 @@ class SpriteBrowser {
   }
 
   randomizeSprites() {
-    if (!window.spriteManager) {
-      alert('Sprite Manager not available');
-      return;
-    }
-
     const theme = this.getCurrentTheme();
     if (theme) {
-      window.spriteManager.generateRandomSprites(
-        theme,
-        document.getElementById('density')?.value || 15,
-        document.getElementById('scale')?.value || 100,
-        document.getElementById('sprite-anim')?.value || 'gentle'
-      );
-      
-      console.log('🎲 Sprites randomized');
+      // Use the existing system to randomize sprites
+      if (typeof updateSprites === 'function') {
+        updateSprites();
+        console.log('🎲 Sprites randomized using existing system');
+      } else {
+        console.warn('⚠️ updateSprites function not available');
+      }
     }
   }
 
@@ -426,16 +399,65 @@ class SpriteBrowser {
   capitalizeFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
+
+  // Helper methods to work with existing sprites
+  getExistingSpriteCategories() {
+    const categories = new Set();
+    
+    // Get all SVG definitions from the existing HTML
+    const svgDefs = document.querySelector('svg defs');
+    if (!svgDefs) return ['celebration', 'nature', 'geometric', 'decorative'];
+    
+    const spriteElements = svgDefs.querySelectorAll('g[id]');
+    spriteElements.forEach(element => {
+      const id = element.getAttribute('id');
+      const category = this.categorizeExistingSprite(id);
+      categories.add(category);
+    });
+    
+    return Array.from(categories);
+  }
+
+  getExistingSprites() {
+    const sprites = [];
+    
+    // Get all SVG definitions from the existing HTML
+    const svgDefs = document.querySelector('svg defs');
+    if (!svgDefs) return sprites;
+    
+    const spriteElements = svgDefs.querySelectorAll('g[id]');
+    spriteElements.forEach(element => {
+      const id = element.getAttribute('id');
+      const category = this.categorizeExistingSprite(id);
+      
+      sprites.push({
+        id: id,
+        name: this.capitalizeFirst(id),
+        category: category,
+        tags: [id, category],
+        svgElement: element
+      });
+    });
+    
+    return sprites;
+  }
+
+  getExistingSpritesByCategory(category) {
+    return this.getExistingSprites().filter(sprite => sprite.category === category);
+  }
+
+  categorizeExistingSprite(id) {
+    if (['balloon', 'confetti', 'cake', 'gifts', 'candles'].includes(id)) {
+      return 'celebration';
+    } else if (['star', 'cloud', 'duck', 'tree', 'snow'].includes(id)) {
+      return 'nature';
+    } else if (['floatie', 'sunglasses', 'flipflop', 'cap', 'ribbon'].includes(id)) {
+      return 'decorative';
+    } else {
+      return 'decorative';
+    }
+  }
 }
 
 // Export for use in other modules
-window.SpriteBrowser = SpriteBrowser;
-
-// Auto-initialize if DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    window.spriteBrowser = new SpriteBrowser();
-  });
-} else {
-  window.spriteBrowser = new SpriteBrowser();
-}
+export { SpriteBrowser };

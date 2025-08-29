@@ -1,0 +1,68 @@
+{
+  "timestamp": "2025-08-29T12:38:49.125Z",
+  "name": "POOL PARTY!",
+  "settings": {
+    "text": {
+      "pill": "Join us for a",
+      "title": "POOL PARTY!",
+      "subtitle": "Celebrating",
+      "names": "Lincoln & Bentley’s 6th Birthday",
+      "date": "June 21",
+      "time": "12:00 — 2:30 PM",
+      "location": "The Pointe • 1 Ballwin Commons Circle",
+      "rsvp": "RSVP: Stephanie • (314) 330-0860 • sdo...@hotmail.com"
+    },
+    "colors": {
+      "accent": "#7e7c5d",
+      "accent2": "#59f607"
+    },
+    "fonts": {
+      "title": "Playfair Display",
+      "names": "Playfair Display",
+      "body": ""
+    },
+    "background": {
+      "mode": "img+tex",
+      "theme": "graduation",
+      "texture": "chevron",
+      "textureOpacity": "71",
+      "textureScale": "179",
+      "stockImage": "abstract3",
+      "imageOpacity": "70",
+      "imageBlur": "0",
+      "imageBrightness": "100",
+      "imageVignette": "20"
+    },
+    "sprites": {
+      "density": "34",
+      "scale": "117",
+      "animation": "off"
+    },
+    "layout": {
+      "style": "banner",
+      "effect": "fade",
+      "parallax": "off"
+    },
+    "shadows": {
+      "x": 2,
+      "y": 2,
+      "blur": 4,
+      "color": "#000000",
+      "opacity": 0.3
+    },
+    "edges": {
+      "style": "none",
+      "thickness": 3,
+      "opacity": 0.8,
+      "color": "#000000",
+      "variant": "default"
+    },
+    "overlay": {
+      "style": "frame-elegant",
+      "opacity": 0.8,
+      "scale": 0.95,
+      "position": "center",
+      "blend": "normal"
+    }
+  }
+}

@@ -20,6 +20,7 @@
  */
 export const EDGE_STYLES = {
   none: 'None',
+  border: 'Simple Border',
   torn: 'Torn Paper',
   scalloped: 'Scalloped',
   zigzag: 'Zigzag',
