@@ -1,6 +1,8 @@
 // Partial Loader for Event Card Generator
 // Loads HTML partials for left and right sidebars
 
+import { updateFonts, updateText } from './main.js';
+
 export async function loadPartials() {
   try {
     console.log('🔄 Loading sidebar partials...');
@@ -39,6 +41,9 @@ export async function loadPartials() {
     
     // Initialize collapsible groups after loading
     initializeCollapsibleGroups();
+    
+    // Set up font change event listeners after partials are loaded
+    setupFontChangeEvents();
     
     console.log('✅ All partials loaded successfully');
     
@@ -85,4 +90,43 @@ function initializeCollapsibleGroups() {
     }
   });
   console.log('✅ Collapsible groups initialized');
+}
+
+// Set up font change event listeners after partials are loaded
+function setupFontChangeEvents() {
+  console.log('🔤 Setting up font change event listeners...');
+  
+  // Get font selectors
+  const fontTitle = document.getElementById('font-title');
+  const fontNames = document.getElementById('font-names');
+  const fontBody = document.getElementById('font-body');
+  
+  if (fontTitle) {
+    fontTitle.addEventListener('change', () => {
+      console.log('🔤 Title font changed to:', fontTitle.value);
+      updateFonts();
+      updateText();
+    });
+    console.log('✅ Title font event listener added');
+  }
+  
+  if (fontNames) {
+    fontNames.addEventListener('change', () => {
+      console.log('🔤 Names font changed to:', fontNames.value);
+      updateFonts();
+      updateText();
+    });
+    console.log('✅ Names font event listener added');
+  }
+  
+  if (fontBody) {
+    fontBody.addEventListener('change', () => {
+      console.log('🔤 Body font changed to:', fontBody.value);
+      updateFonts();
+      updateText();
+    });
+    console.log('✅ Body font event listener added');
+  }
+  
+  console.log('✅ Font change event listeners set up');
 }

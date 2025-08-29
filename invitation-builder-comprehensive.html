@@ -998,7 +998,11 @@
         <div class="group-content">
           <label>Background Mode</label>
           <select id="bg-mode">
-            <!-- Options populated automatically by SelectInitializer -->
+            <option value="gradient">🎨 Theme Gradient Only</option>
+            <option value="texture">🔲 Texture Only</option>
+            <option value="image">🖼️ Image Only</option>
+            <option value="grad+tex">🎨🔲 Gradient + Texture</option>
+            <option value="img+tex">🖼️🔲 Image + Texture</option>
           </select>
           
           <!-- Texture Settings -->
@@ -1006,7 +1010,16 @@
             <h4>Texture Settings</h4>
             <label>Texture Preset</label>
             <select id="texture">
-              <!-- Options populated automatically by SelectInitializer -->
+              <option value="stripes">📏 Stripes</option>
+              <option value="dots">🔘 Dots</option>
+              <option value="grid">🔲 Grid</option>
+              <option value="crosshatch">❌ Crosshatch</option>
+              <option value="chevron">🔶 Chevron</option>
+              <option value="checker">🏁 Checker</option>
+              <option value="sprinkles">✨ Sprinkles</option>
+              <option value="pluses">➕ Pluses</option>
+              <option value="waves">🌊 Waves</option>
+              <option value="noise">🎵 Noise</option>
             </select>
             <div class="row" style="margin-top:8px">
               <div><label>Texture Opacity</label><input id="tex-opacity" type="range" min="0" max="100" value="22"></div>
@@ -1019,7 +1032,9 @@
             <h4>Background Image</h4>
             <div class="row">
               <select id="stock-image">
-                <!-- Options populated automatically by SelectInitializer -->
+                <option value="pool">🏊 Pool Scene</option>
+                <option value="confetti">🎉 Confetti</option>
+                <option value="clouds">☁️ Clouds</option>
               </select>
               <div id="drop-zone" class="drop-zone">
                 <div class="drop-zone-content">
@@ -1059,13 +1074,17 @@
         <div>
           <label>Layout Style</label>
           <select id="layout">
-            <!-- Options populated automatically by SelectInitializer -->
+            <option value="centered">🎯 Centered</option>
+            <option value="banner">🚩 Banner</option>
+            <option value="split">✂️ Split</option>
           </select>
         </div>
         <div>
           <label>Entrance Effect</label>
           <select id="effect">
-            <!-- Options populated automatically by SelectInitializer -->
+            <option value="none">❌ None</option>
+            <option value="fade">🌅 Fade Up</option>
+            <option value="pop">💥 Pop</option>
           </select>
         </div>
       </div>
@@ -1073,13 +1092,16 @@
         <div>
           <label>Sprite Animation</label>
           <select id="sprite-anim">
-            <!-- Options populated automatically by SelectInitializer -->
+            <option value="none">❌ None</option>
+            <option value="gentle">🌊 Gentle</option>
+            <option value="lively">🎉 Lively</option>
           </select>
         </div>
         <div>
           <label>Parallax</label>
           <select id="parallax">
-            <!-- Options populated automatically by SelectInitializer -->
+            <option value="off">❌ Off</option>
+            <option value="on">🌊 On</option>
           </select>
         </div>
       </div>
@@ -1097,6 +1119,21 @@
           cursor: pointer;
           transition: all 0.2s ease;
         ">🎨 Browse & Manage Sprites</button>
+      </div>
+      
+      <!-- Test Effects Button -->
+      <div class="group">
+        <button id="test-effects" class="ghost" style="
+          background: #FF9800; 
+          color: white; 
+          width: 100%;
+          padding: 12px;
+          border: none;
+          border-radius: 6px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        ">🧪 Test Effects</button>
       </div>
 
       <!-- Particle Effects -->
@@ -2213,13 +2250,26 @@
     function swapLayout(){ const names = el('names'); const t = el('title').value; el('title').value = names.value; names.value = t; updateText(); }
 
     function setLayout(){
-      const stage = el('stage'); stage.classList.remove('style-centered','style-banner','style-split');
-      const val = el('layout').value; stage.classList.add('style-'+val);
+      const stage = el('stage'); 
+      stage.classList.remove('style-centered','style-banner','style-split');
+      const val = el('layout').value; 
+      stage.classList.add('style-'+val);
+      console.log('🎨 Layout changed to:', val);
     }
 
     function setEffect(){
-      const stage = el('stage'); stage.classList.remove('anim-fade','anim-pop');
-      const val = el('effect').value; if(val==='fade') stage.classList.add('anim-fade'); if(val==='pop') stage.classList.add('anim-pop');
+      const stage = el('stage'); 
+      stage.classList.remove('anim-fade','anim-pop');
+      const val = el('effect').value; 
+      if(val==='fade') {
+        stage.classList.add('anim-fade');
+        console.log('🌅 Effect applied: Fade Up');
+      } else if(val==='pop') {
+        stage.classList.add('anim-pop');
+        console.log('💥 Effect applied: Pop');
+      } else {
+        console.log('❌ Effect removed');
+      }
       // trigger a reflow to replay
       void stage.offsetWidth;
     }
@@ -2246,14 +2296,20 @@
     function setupParallax(){
       const enabled = el('parallax').value==='on';
       const stage = el('stage');
+      console.log('🌊 Parallax:', enabled ? 'ON' : 'OFF');
+      
       stage.onmousemove = enabled ? (e=>{
         const r = stage.getBoundingClientRect();
-        const px = (e.clientX - r.left)/r.width - .5; const py = (e.clientY - r.top)/r.height - .5;
+        const px = (e.clientX - r.left)/r.width - .5; 
+        const py = (e.clientY - r.top)/r.height - .5;
         el('sprites').style.transform = `translate(${px*-12}px, ${py*-10}px)`;
         el('inner').style.transform = `translate(${px*8}px, ${py*6}px)`;
         el('bg').style.transform = `translate(${px*4}px, ${py*4}px)`;
       }) : null;
-      if(!enabled){ el('sprites').style.transform = el('inner').style.transform = el('bg').style.transform = 'none'; }
+      
+      if(!enabled){ 
+        el('sprites').style.transform = el('inner').style.transform = el('bg').style.transform = 'none'; 
+      }
     }
 
     // Wire inputs
@@ -2264,7 +2320,8 @@
         console.log('📝 Text updated for:', id);
       });
     });
-    ['density','scale','sprite-anim'].forEach(id=>{ el(id).addEventListener('input',()=>updateSprites()); });
+    ['density','scale'].forEach(id=>{ el(id).addEventListener('input',()=>updateSprites()); });
+    el('sprite-anim').addEventListener('change',()=>updateSprites());
     ['tex-opacity','tex-scale','texture','bg-mode','img-opacity','img-blur','img-bright','img-vignette'].forEach(id=>{ el(id).addEventListener('input',applyBackground); });
     el('stock-image').addEventListener('change',()=>{ setStockImage(); applyBackground(); });
     el('img-upload').addEventListener('change', (e)=>{
@@ -2310,6 +2367,40 @@
     el('effect').addEventListener('change', setEffect);
     el('parallax').addEventListener('change', setupParallax);
     el('category').addEventListener('change',()=>{ setTheme(el('category').value); });
+    
+    // Test effects button
+    el('test-effects').addEventListener('click', () => {
+      console.log('🧪 Testing all effects...');
+      
+      // Test layout changes
+      console.log('🎨 Testing layout changes...');
+      setLayout();
+      
+      // Test effect changes
+      console.log('🌅 Testing effect changes...');
+      setEffect();
+      
+      // Test parallax
+      console.log('🌊 Testing parallax...');
+      setupParallax();
+      
+      // Test sprite updates
+      console.log('🎭 Testing sprite updates...');
+      updateSprites();
+      
+      console.log('✅ All effects tested!');
+    });
+    
+    // Debug current values on page load
+    setTimeout(() => {
+      console.log('🔍 Current effect values:');
+      console.log('Layout:', el('layout').value);
+      console.log('Effect:', el('effect').value);
+      console.log('Parallax:', el('parallax').value);
+      console.log('Sprite Animation:', el('sprite-anim').value);
+      console.log('Background Mode:', el('bg-mode').value);
+      console.log('Texture:', el('texture').value);
+    }, 1000);
     el('randomize').addEventListener('click',()=>{ 
       console.log('🔀 Randomizing sprites...');
       
