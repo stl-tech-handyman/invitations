@@ -123,6 +123,11 @@
           font-weight: bold;
           margin-top: 16px;
         ">🚀 Test All Systems</button>
+        <button id="test-validation" class="test-button" style="
+          background: #9C27B0;
+          font-weight: bold;
+          margin-top: 8px;
+        ">🔍 Test Validation System</button>
       </div>
       
       <!-- Text Input System -->
@@ -338,10 +343,11 @@
             ✅ CSS variables and layout<br>
             ✅ Test buttons<br>
             ✅ Text input system<br>
-            ✅ Color system<br>
-            ✅ Font system<br>
-            ✅ Background system<br>
-            🔄 Next: Adding sprite system
+                         ✅ Color system<br>
+             ✅ Font system<br>
+             ✅ Background system<br>
+             ✅ Validation system<br>
+             🔄 Next: Adding sprite system
           </div>
         </div>
       </section>
@@ -714,12 +720,133 @@
       console.log('✅ All systems tested successfully!');
     });
     
+    // Test validation system
+    document.getElementById('test-validation').addEventListener('click', () => {
+      console.log('🔍 Testing validation system...');
+      updateStatus('🔍 Running validation tests...');
+      
+      const validationResult = validateAllSystems();
+      
+      if (validationResult) {
+        console.log('✅ Validation system working correctly');
+      } else {
+        console.error('❌ Validation system detected issues');
+      }
+    });
+    
+    // Validation system to check all select boxes
+    function validateAllSelects() {
+      console.log('🔍 Validating all select elements...');
+      
+      const allSelects = document.querySelectorAll('select');
+      let validationPassed = true;
+      let emptySelects = [];
+      
+      allSelects.forEach((select, index) => {
+        const id = select.id || `select-${index}`;
+        const options = select.querySelectorAll('option');
+        const hasValue = select.value && select.value.trim() !== '';
+        const hasOptions = options.length > 0;
+        
+        console.log(`🔍 Select "${id}":`, {
+          hasValue: hasValue,
+          hasOptions: hasOptions,
+          optionCount: options.length,
+          currentValue: select.value,
+          options: Array.from(options).map(opt => opt.value)
+        });
+        
+        if (!hasOptions) {
+          emptySelects.push(`${id} (no options)`);
+          validationPassed = false;
+        } else if (!hasValue) {
+          emptySelects.push(`${id} (no selected value)`);
+          validationPassed = false;
+        }
+      });
+      
+      if (validationPassed) {
+        console.log('✅ All select elements are properly populated');
+        updateStatus('✅ All selects validated successfully');
+      } else {
+        console.error('❌ Select validation failed:', emptySelects);
+        updateStatus(`❌ Select validation failed: ${emptySelects.join(', ')}`);
+      }
+      
+      return validationPassed;
+    }
+    
+    // Check for any missing select options that should exist
+    function checkForMissingSelects() {
+      console.log('🔍 Checking for missing select elements...');
+      
+      const expectedSelects = [
+        'title-font',
+        'body-font', 
+        'bg-type'
+      ];
+      
+      const missingSelects = [];
+      
+      expectedSelects.forEach(id => {
+        const select = document.getElementById(id);
+        if (!select) {
+          missingSelects.push(id);
+          console.error(`❌ Missing expected select: ${id}`);
+        }
+      });
+      
+      if (missingSelects.length > 0) {
+        console.error('❌ Missing select elements:', missingSelects);
+        updateStatus(`❌ Missing selects: ${missingSelects.join(', ')}`);
+        return false;
+      } else {
+        console.log('✅ All expected select elements found');
+        return true;
+      }
+    }
+    
+    // Comprehensive system validation
+    function validateAllSystems() {
+      console.log('🚀 Starting comprehensive system validation...');
+      
+      const results = {
+        selects: validateAllSelects(),
+        missing: checkForMissingSelects(),
+        inputs: true, // We'll add input validation later
+        overall: true
+      };
+      
+      // Check if any validation failed
+      if (!results.selects || !results.missing) {
+        results.overall = false;
+      }
+      
+      console.log('📊 Validation Results:', results);
+      
+      if (results.overall) {
+        updateStatus('✅ All systems validated successfully');
+        console.log('🎉 All systems are ready to go!');
+      } else {
+        updateStatus('❌ System validation failed - check console');
+        console.error('❌ System validation failed - some issues detected');
+      }
+      
+      return results.overall;
+    }
+    
     // Initialize
     updateStatus('Ready for testing');
     setupTextListeners();
     setupColorListeners();
     setupFontListeners();
     setupBackgroundListeners();
+    
+    // Run validation after a short delay to ensure DOM is ready
+    setTimeout(() => {
+      validateAllSystems();
+    }, 100);
+    
     console.log('🚀 Invitation Builder v2 initialized');
   </script>
 </body>
