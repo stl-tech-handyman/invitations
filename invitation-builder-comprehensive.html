@@ -2752,7 +2752,9 @@
 
   <!-- Core Utilities and Constants -->
   <script>
+    // Make el function globally accessible
     const el = id => document.getElementById(id);
+    window.el = el;
 
     /* === Themes === */
     const THEMES = {
@@ -2834,6 +2836,7 @@
 
   <!-- Edge System -->
   <script>
+    console.log('🎯 Loading Edge System...');
 
     /* === EDGE SYSTEM === */
     let edgeSettings = {
@@ -2923,7 +2926,10 @@
     function applyEdgeEffect() {
       console.log('🎨 Applying edge effect:', edgeSettings);
 
-      const edgeLayer = el('edge-layer');
+      // Check if el function is available, with fallback
+      const getElement = (typeof el === 'function') ? el : (id) => document.getElementById(id);
+      
+      const edgeLayer = getElement('edge-layer');
       if (!edgeLayer) {
         console.error('❌ Edge layer not found!');
         return;
@@ -4901,49 +4907,79 @@
 
     // Initialize edge controls
     function initializeEdgeControls() {
+      console.log('🔧 Initializing edge controls...');
+      
+      // Check if all required elements exist
+      const edgeStyleEl = el('edge-style');
+      const edgeThicknessEl = el('edge-thickness');
+      const edgeOpacityEl = el('edge-opacity');
+      const edgeColorEl = el('edge-color');
+      const edgeVariantEl = el('edge-variant');
+      const resetEdgeEl = el('reset-edge');
+      const testEdgeEl = el('test-edge');
+      
+      if (!edgeStyleEl || !edgeThicknessEl || !edgeOpacityEl || !edgeColorEl || !edgeVariantEl) {
+        console.error('❌ Some edge control elements not found:', {
+          edgeStyle: !!edgeStyleEl,
+          edgeThickness: !!edgeThicknessEl,
+          edgeOpacity: !!edgeOpacityEl,
+          edgeColor: !!edgeColorEl,
+          edgeVariant: !!edgeVariantEl
+        });
+        return;
+      }
+      
+      console.log('✅ All edge control elements found');
+      
       // Edge style change
-      el('edge-style').addEventListener('change', (e) => {
+      edgeStyleEl.addEventListener('change', (e) => {
         edgeSettings.style = e.target.value;
+        console.log('🎨 Edge style changed to:', edgeSettings.style);
         applyEdgeEffect();
       });
 
       // Edge thickness
-      el('edge-thickness').addEventListener('input', (e) => {
+      edgeThicknessEl.addEventListener('input', (e) => {
         edgeSettings.thickness = parseInt(e.target.value);
         document.getElementById('edge-thickness-value').textContent = edgeSettings.thickness;
+        console.log('🎨 Edge thickness changed to:', edgeSettings.thickness);
         applyEdgeEffect();
       });
 
       // Edge opacity
-      el('edge-opacity').addEventListener('input', (e) => {
+      edgeOpacityEl.addEventListener('input', (e) => {
         edgeSettings.opacity = parseFloat(e.target.value);
         document.getElementById('edge-opacity-value').textContent = edgeSettings.opacity;
+        console.log('🎨 Edge opacity changed to:', edgeSettings.opacity);
         applyEdgeEffect();
       });
 
       // Edge color
-      el('edge-color').addEventListener('change', (e) => {
+      edgeColorEl.addEventListener('change', (e) => {
         edgeSettings.color = e.target.value;
+        console.log('🎨 Edge color changed to:', edgeSettings.color);
         applyEdgeEffect();
       });
 
       // Edge variant
-      el('edge-variant').addEventListener('change', (e) => {
+      edgeVariantEl.addEventListener('change', (e) => {
         edgeSettings.variant = e.target.value;
+        console.log('🎨 Edge variant changed to:', edgeSettings.variant);
         applyEdgeEffect();
       });
 
       // Edge controls now work live (no apply button needed)
-      el('reset-edge').addEventListener('click', resetEdgeSettings);
+      if (resetEdgeEl) {
+        resetEdgeEl.addEventListener('click', resetEdgeSettings);
+      }
 
       // Test edge button
-      const testEdgeBtn = el('test-edge');
-      if (testEdgeBtn) {
-        testEdgeBtn.addEventListener('click', () => {
+      if (testEdgeEl) {
+        testEdgeEl.addEventListener('click', () => {
           console.log('🧪 Testing edge system...');
           console.log('Edge settings:', edgeSettings);
           console.log('Edge layer element:', el('edge-layer'));
-          console.log('Edge style element:', el('edge-style'));
+          console.log('Edge style element:', edgeStyleEl);
 
           // Force apply a test edge
           edgeSettings.style = 'torn';
@@ -4962,6 +4998,26 @@
 
       console.log('✅ Edge controls initialized');
     }
+
+    // Log that edge system is loaded
+          console.log('🎯 Edge System loaded and ready');
+
+    // Make edge system globally accessible for testing
+    window.edgeSystem = {
+      settings: edgeSettings,
+      apply: applyEdgeEffect,
+      reset: resetEdgeSettings,
+      test: () => {
+        console.log('🧪 Testing edge system from console...');
+        edgeSettings.style = 'torn';
+        edgeSettings.variant = 'default';
+        edgeSettings.color = '#ff0000';
+        edgeSettings.thickness = 5;
+        edgeSettings.opacity = 0.8;
+        applyEdgeEffect();
+        console.log('✅ Test edge applied from console!');
+      }
+    };
 
     // Initialize edge controls after a delay
     setTimeout(initializeEdgeControls, 1400);
