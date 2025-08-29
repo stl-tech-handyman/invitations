@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overlay System - Comprehensive Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .test-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 30px;
+    }
+    
+    .controls-panel {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+    
+    .controls-panel h2 {
+      margin-top: 0;
+      color: #333;
+      border-bottom: 2px solid #28a745;
+      padding-bottom: 10px;
+    }
+    
+    .control-group {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border-left: 4px solid #28a745;
+    }
+    
+    .control-group h3 {
+      margin: 0 0 10px 0;
+      color: #28a745;
+      font-size: 14px;
+    }
+    
+    .control-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 12px;
+    }
+    
+    .control-group select,
+    .control-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    
+    .control-group input[type="range"] {
+      margin-bottom: 5px;
+    }
+    
+    .value-display {
+      font-size: 11px;
+      color: #666;
+      font-family: monospace;
+    }
+    
+    .preview-panel {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .preview-panel h2 {
+      margin-top: 0;
+      color: #333;
+      text-align: center;
+    }
+    
+    .invitation-canvas {
+      width: 600px;
+      height: 400px;
+      margin: 0 auto;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      position: relative;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      overflow: hidden;
+    }
+    
+    .overlay-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .overlay-frame {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      height: 90%;
+      border: 3px solid rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .overlay-frame.elegant {
+      border-color: rgba(255, 215, 0, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+    }
+    
+    .overlay-frame.vintage {
+      border-color: rgba(139, 69, 19, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 0 25px rgba(139, 69, 19, 0.5);
+    }
+    
+    .overlay-frame.modern {
+      border-color: rgba(0, 123, 255, 0.9);
+      border-radius: 0;
+      box-shadow: 0 0 30px rgba(0, 123, 255, 0.4);
+    }
+    
+    .overlay-frame.playful {
+      border-color: rgba(255, 105, 180, 0.9);
+      border-radius: 25px;
+      box-shadow: 0 0 35px rgba(255, 105, 180, 0.4);
+    }
+    
+    .status-panel {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border-left: 4px solid #28a745;
+    }
+    
+    .status-panel h3 {
+      margin: 0 0 10px 0;
+      color: #28a745;
+    }
+    
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+      font-size: 12px;
+      font-family: monospace;
+    }
+    
+    .status-success {
+      color: #28a745;
+    }
+    
+    .status-error {
+      color: #dc3545;
+    }
+    
+    .status-warning {
+      color: #ffc107;
+    }
+    
+    .test-buttons {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .test-button {
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .test-button.primary {
+      background: #28a745;
+      color: white;
+    }
+    
+    .test-button.primary:hover {
+      background: #1e7e34;
+    }
+    
+    .test-button.secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .test-button.secondary:hover {
+      background: #545b62;
+    }
+    
+    .test-button.danger {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .test-button.danger:hover {
+      background: #c82333;
+    }
+    
+    .debug-info {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff3cd;
+      border-radius: 6px;
+      border-left: 4px solid #ffc107;
+    }
+    
+    .debug-info h3 {
+      margin: 0 0 10px 0;
+      color: #856404;
+    }
+    
+    .debug-info pre {
+      margin: 0;
+      font-size: 11px;
+      color: #856404;
+      background: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    
+    .overlay-preview {
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .overlay-preview h3 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+    
+    .overlay-preview p {
+      color: #666;
+      font-size: 14px;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🖼️ Overlay System - Comprehensive Test</h1>
+  
+  <div class="test-container">
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+      <h2>🎛️ Overlay Controls</h2>
+      
+      <!-- Overlay Style -->
+      <div class="control-group">
+        <h3>Frame Style</h3>
+        <label>Overlay Style</label>
+        <select id="overlay-style">
+          <option value="frame-elegant">Elegant</option>
+          <option value="frame-vintage">Vintage</option>
+          <option value="frame-modern">Modern</option>
+          <option value="frame-playful">Playful</option>
+          <option value="frame-nature">Nature</option>
+          <option value="frame-ornate">Ornate</option>
+          <option value="frame-minimal">Minimal</option>
+        </select>
+      </div>
+      
+      <!-- Overlay Properties -->
+      <div class="control-group">
+        <h3>Overlay Properties</h3>
+        
+        <label>Opacity</label>
+        <input type="range" id="overlay-opacity" min="0" max="1" value="0.8" step="0.1">
+        <div class="value-display">Value: <span id="overlay-opacity-value">0.8</span></div>
+        
+        <label>Scale</label>
+        <input type="range" id="overlay-scale" min="0.5" max="1.2" value="0.95" step="0.05">
+        <div class="value-display">Value: <span id="overlay-scale-value">0.95</span></div>
+        
+        <label>Position</label>
+        <select id="overlay-position">
+          <option value="center">Center</option>
+          <option value="top-left">Top Left</option>
+          <option value="top-right">Top Right</option>
+          <option value="bottom-left">Bottom Left</option>
+          <option value="bottom-right">Bottom Right</option>
+        </select>
+        
+        <label>Blend Mode</label>
+        <select id="overlay-blend">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply</option>
+          <option value="screen">Screen</option>
+          <option value="overlay">Overlay</option>
+          <option value="soft-light">Soft Light</option>
+        </select>
+      </div>
+      
+      <!-- Test Buttons -->
+      <div class="test-buttons">
+        <button class="test-button primary" id="apply-overlay">Apply Overlay</button>
+        <button class="test-button secondary" id="reset-overlay">Reset</button>
+        <button class="test-button danger" id="clear-overlay">Clear</button>
+      </div>
+      
+      <!-- Status Panel -->
+      <div class="status-panel">
+        <h3>📊 System Status</h3>
+        <div class="status-item">
+          <span>Overlay System:</span>
+          <span id="system-status" class="status-warning">Initializing...</span>
+        </div>
+        <div class="status-item">
+          <span>Current Style:</span>
+          <span id="current-style">frame-elegant</span>
+        </div>
+        <div class="status-item">
+          <span>Current Opacity:</span>
+          <span id="current-opacity">0.8</span>
+        </div>
+        <div class="status-item">
+          <span>Overlays Applied:</span>
+          <span id="overlays-count">0</span>
+        </div>
+      </div>
+      
+      <!-- Debug Info -->
+      <div class="debug-info">
+        <h3>🐛 Debug Information</h3>
+        <pre id="debug-output">Waiting for system...</pre>
+      </div>
+    </div>
+    
+    <!-- Preview Panel -->
+    <div class="preview-panel">
+      <h2>👁️ Invitation Preview</h2>
+      
+      <div class="invitation-canvas">
+        <!-- This is the actual invitation canvas -->
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; z-index: 1;">
+          <h3>Sample Invitation</h3>
+          <p>This is where your invitation content goes</p>
+          <p>Overlay frames will be applied around this</p>
+        </div>
+        
+        <!-- Overlay Layer - Effects will be applied here -->
+        <div id="overlay-layer" class="overlay-layer"></div>
+      </div>
+      
+      <div class="overlay-preview">
+        <h3>Overlay Preview</h3>
+        <p><strong>Expected Behavior:</strong> Overlay frames should appear and STAY permanently around the invitation</p>
+        <p><strong>Current Issue:</strong> Effects were disappearing - this test page fixes that</p>
+        <p><strong>Frame Types:</strong> Elegant (gold), Vintage (brown), Modern (blue), Playful (pink)</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Comprehensive Overlay Test System
+    class OverlayTestSystem {
+      constructor() {
+        console.log('🧪 OverlayTestSystem: Initializing...');
+        
+        this.overlaysApplied = 0;
+        this.currentSettings = {
+          style: 'frame-elegant',
+          opacity: 0.8,
+          scale: 0.95,
+          position: 'center',
+          blend: 'normal'
+        };
+        
+        this.init();
+      }
+      
+      init() {
+        try {
+          this.attachEventListeners();
+          this.updateStatus('Ready', 'success');
+          this.updateDebugInfo('Overlay system initialized successfully');
+          console.log('✅ OverlayTestSystem: Initialized successfully');
+        } catch (error) {
+          console.error('❌ OverlayTestSystem: Initialization error:', error);
+          this.updateStatus('Error: ' + error.message, 'error');
+          this.updateDebugInfo('Initialization error: ' + error.message);
+        }
+      }
+      
+      attachEventListeners() {
+        // Overlay Style
+        const overlayStyle = document.getElementById('overlay-style');
+        if (overlayStyle) {
+          overlayStyle.addEventListener('change', (e) => {
+            this.currentSettings.style = e.target.value;
+            this.updateCurrentStyle();
+            this.updateDebugInfo(`Overlay style changed to: ${e.target.value}`);
+            this.applyOverlay();
+          });
+        }
+        
+        // Overlay Opacity
+        const overlayOpacity = document.getElementById('overlay-opacity');
+        if (overlayOpacity) {
+          overlayOpacity.addEventListener('input', (e) => {
+            this.currentSettings.opacity = parseFloat(e.target.value);
+            document.getElementById('overlay-opacity-value').textContent = e.target.value;
+            this.updateCurrentOpacity();
+            this.updateDebugInfo(`Overlay opacity changed to: ${e.target.value}`);
+            this.applyOverlay();
+          });
+        }
+        
+        // Overlay Scale
+        const overlayScale = document.getElementById('overlay-scale');
+        if (overlayScale) {
+          overlayScale.addEventListener('input', (e) => {
+            this.currentSettings.scale = parseFloat(e.target.value);
+            document.getElementById('overlay-scale-value').textContent = e.target.value;
+            this.updateDebugInfo(`Overlay scale changed to: ${e.target.value}`);
+            this.applyOverlay();
+          });
+        }
+        
+        // Overlay Position
+        const overlayPosition = document.getElementById('overlay-position');
+        if (overlayPosition) {
+          overlayPosition.addEventListener('change', (e) => {
+            this.currentSettings.position = e.target.value;
+            this.updateDebugInfo(`Overlay position changed to: ${e.target.value}`);
+            this.applyOverlay();
+          });
+        }
+        
+        // Overlay Blend
+        const overlayBlend = document.getElementById('overlay-blend');
+        if (overlayBlend) {
+          overlayBlend.addEventListener('change', (e) => {
+            this.currentSettings.blend = e.target.value;
+            this.updateDebugInfo(`Overlay blend changed to: ${e.target.value}`);
+            this.applyOverlay();
+          });
+        }
+        
+        // Test Buttons
+        const applyOverlay = document.getElementById('apply-overlay');
+        if (applyOverlay) {
+          applyOverlay.addEventListener('click', () => {
+            this.applyOverlay();
+          });
+        }
+        
+        const resetOverlay = document.getElementById('reset-overlay');
+        if (resetOverlay) {
+          resetOverlay.addEventListener('click', () => {
+            this.resetOverlaySettings();
+          });
+        }
+        
+        const clearOverlay = document.getElementById('clear-overlay');
+        if (clearOverlay) {
+          clearOverlay.addEventListener('click', () => {
+            this.clearOverlayEffects();
+          });
+        }
+        
+        console.log('✅ OverlayTestSystem: Event listeners attached');
+      }
+      
+      applyOverlay() {
+        try {
+          console.log('🎨 OverlayTestSystem: Applying overlay:', this.currentSettings);
+          
+          const overlayLayer = document.getElementById('overlay-layer');
+          if (!overlayLayer) {
+            console.error('❌ Overlay layer not found');
+            return;
+          }
+          
+          // Clear existing overlays
+          overlayLayer.innerHTML = '';
+          
+          // Create overlay frame
+          const overlayFrame = document.createElement('div');
+          overlayFrame.className = `overlay-frame ${this.getFrameClass()}`;
+          
+          // Apply settings
+          overlayFrame.style.opacity = this.currentSettings.opacity;
+          overlayFrame.style.transform = `translate(-50%, -50%) scale(${this.currentSettings.scale})`;
+          overlayFrame.style.mixBlendMode = this.currentSettings.blend;
+          
+          // Apply position
+          this.applyPosition(overlayFrame);
+          
+          overlayLayer.appendChild(overlayFrame);
+          
+          this.overlaysApplied++;
+          this.updateOverlaysCount();
+          this.updateDebugInfo(`Overlay applied successfully: ${this.currentSettings.style}`);
+          console.log('✅ OverlayTestSystem: Overlay applied');
+          
+        } catch (error) {
+          console.error('❌ OverlayTestSystem: Error applying overlay:', error);
+          this.updateDebugInfo(`Error applying overlay: ${error.message}`);
+        }
+      }
+      
+      getFrameClass() {
+        const styleMap = {
+          'frame-elegant': 'elegant',
+          'frame-vintage': 'vintage',
+          'frame-modern': 'modern',
+          'frame-playful': 'playful',
+          'frame-nature': 'nature',
+          'frame-ornate': 'ornate',
+          'frame-minimal': 'minimal'
+        };
+        
+        return styleMap[this.currentSettings.style] || 'elegant';
+      }
+      
+      applyPosition(overlayFrame) {
+        const positions = {
+          'center': { top: '50%', left: '50%' },
+          'top-left': { top: '10%', left: '10%' },
+          'top-right': { top: '10%', right: '10%' },
+          'bottom-left': { bottom: '10%', left: '10%' },
+          'bottom-right': { bottom: '10%', right: '10%' }
+        };
+        
+        const position = positions[this.currentSettings.position] || positions.center;
+        
+        Object.assign(overlayFrame.style, position);
+        
+        // Adjust transform for non-center positions
+        if (this.currentSettings.position !== 'center') {
+          overlayFrame.style.transform = `scale(${this.currentSettings.scale})`;
+        }
+      }
+      
+      resetOverlaySettings() {
+        this.currentSettings = {
+          style: 'frame-elegant',
+          opacity: 0.8,
+          scale: 0.95,
+          position: 'center',
+          blend: 'normal'
+        };
+        
+        // Update UI
+        const overlayStyle = document.getElementById('overlay-style');
+        const overlayOpacity = document.getElementById('overlay-opacity');
+        const overlayScale = document.getElementById('overlay-scale');
+        const overlayPosition = document.getElementById('overlay-position');
+        const overlayBlend = document.getElementById('overlay-blend');
+        
+        if (overlayStyle) overlayStyle.value = 'frame-elegant';
+        if (overlayOpacity) overlayOpacity.value = 0.8;
+        if (overlayScale) overlayScale.value = 0.95;
+        if (overlayPosition) overlayPosition.value = 'center';
+        if (overlayBlend) overlayBlend.value = 'normal';
+        
+        document.getElementById('overlay-opacity-value').textContent = '0.8';
+        document.getElementById('overlay-scale-value').textContent = '0.95';
+        
+        this.updateCurrentStyle();
+        this.updateCurrentOpacity();
+        this.clearOverlayEffects();
+        this.updateDebugInfo('Overlay settings reset to defaults');
+      }
+      
+      clearOverlayEffects() {
+        const overlayLayer = document.getElementById('overlay-layer');
+        if (overlayLayer) {
+          overlayLayer.innerHTML = '';
+          this.overlaysApplied = 0;
+          this.updateOverlaysCount();
+          this.updateDebugInfo('Overlay effects cleared');
+        }
+      }
+      
+      updateCurrentStyle() {
+        const currentStyle = document.getElementById('current-style');
+        if (currentStyle) {
+          currentStyle.textContent = this.currentSettings.style;
+        }
+      }
+      
+      updateCurrentOpacity() {
+        const currentOpacity = document.getElementById('current-opacity');
+        if (currentOpacity) {
+          currentOpacity.textContent = this.currentSettings.opacity;
+        }
+      }
+      
+      updateOverlaysCount() {
+        const overlaysCount = document.getElementById('overlays-count');
+        if (overlaysCount) {
+          overlaysCount.textContent = this.overlaysApplied;
+        }
+      }
+      
+      updateStatus(status, type) {
+        const systemStatus = document.getElementById('system-status');
+        if (systemStatus) {
+          systemStatus.textContent = status;
+          systemStatus.className = `status-${type}`;
+        }
+      }
+      
+      updateDebugInfo(message) {
+        const debugOutput = document.getElementById('debug-output');
+        if (debugOutput) {
+          const timestamp = new Date().toLocaleTimeString();
+          debugOutput.textContent = `[${timestamp}] ${message}\n${debugOutput.textContent}`;
+          
+          // Keep only last 10 lines
+          const lines = debugOutput.textContent.split('\n');
+          if (lines.length > 10) {
+            debugOutput.textContent = lines.slice(0, 10).join('\n');
+          }
+        }
+      }
+    }
+    
+    // Initialize the test system when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🧪 Test page: DOM ready, initializing OverlayTestSystem...');
+      window.overlayTestSystem = new OverlayTestSystem();
+    });
+  </script>
+</body>
+</html>
