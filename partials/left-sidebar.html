@@ -1,0 +1,65 @@
+<!-- LEFT SIDEBAR: Text Editing Controls -->
+<aside class="left-panel" id="text-controls">
+  <h2>✏️ Text Editor</h2>
+  
+  <!-- Text content -->
+  <div class="group" data-section="text">
+    <label>Top Pill Text</label>
+    <input id="pill" value="Join us for a" />
+  </div>
+  
+  <div class="group" data-section="text">
+    <label>Main Title</label>
+    <input id="title" value="POOL PARTY!" />
+  </div>
+  
+  <div class="group" data-section="text">
+    <label>Subtitle</label>
+    <input id="subtitle" value="Celebrating" />
+  </div>
+  
+  <div class="group">
+    <label>Names / Occasion</label>
+    <input id="names" value="Lincoln & Bentley's 6th Birthday" />
+  </div>
+  
+  <div class="group row">
+    <div>
+      <label>Date</label>
+      <input id="date" value="June 21" />
+    </div>
+    <div>
+      <label>Time</label>
+      <input id="time" value="12:00 — 2:30 PM" />
+    </div>
+  </div>
+  
+  <div class="group">
+    <label>Location</label>
+    <input id="location" value="The Pointe • 1 Ballwin Commons Circle" />
+  </div>
+  
+  <div class="group">
+    <label>RSVP / Contact</label>
+    <input id="rsvp" value="RSVP: Stephanie • (314) 330-0860 • sdo...@hotmail.com" />
+  </div>
+  
+  <!-- Fonts -->
+  <div class="group" data-section="text">
+    <div class="group-header" onclick="toggleGroup(this)">
+      <h3>📝 Typography</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="group-content">
+      <label>Fonts (Google Fonts)</label>
+      <div class="row">
+        <select id="font-title"></select>
+        <select id="font-names"></select>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <select id="font-body"></select>
+        <a id="fonts-link" class="ghost" href="#" target="_blank" style="text-align:center; display:inline-block; padding:10px; border-radius:10px; border:1px dashed #d7d7e0; text-decoration:none">Open Google Fonts</a>
+      </div>
+    </div>
+  </div>
+</aside>

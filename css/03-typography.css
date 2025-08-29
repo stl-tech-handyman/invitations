@@ -1,0 +1,31 @@
+/* Typography and Text Styles */
+label{display:block; font-size:12px; text-transform:uppercase; letter-spacing:.08em; opacity:.8; margin-bottom:6px}
+
+/* Content Typography */
+.inner{display:flex; flex-direction:column; padding:60px}
+.header{display:flex; justify-content:center; margin-top:36px}
+.pill{font:700 14px/1 var(--body-font); letter-spacing:.15em; text-transform:uppercase; background:rgba(255,255,255,.8); padding:10px 16px; border-radius:999px; border:1px solid rgba(0,0,0,.06)}
+
+.title{margin:28px auto 0; text-align:center; text-shadow:var(--global-text-shadow)}
+.title h1{font:700 96px/0.95 var(--title-font); margin:0; letter-spacing:.01em}
+.title h2{font:600 22px var(--body-font); margin:14px 0 0; letter-spacing:.12em; text-transform:uppercase}
+
+.names{margin:26px auto 0; text-align:center; text-shadow:var(--global-text-shadow)}
+.names h3{font:700 44px var(--names-font); margin:0; letter-spacing:.06em}
+
+.info{margin-top:auto; display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; font-family:var(--body-font)}
+.card{background:rgba(255,255,255,.88); border:1px solid rgba(0,0,0,.06); border-radius:20px; padding:18px 16px; text-align:center; text-shadow:var(--global-text-shadow)}
+.card .k{font-size:12px; text-transform:uppercase; letter-spacing:.14em; opacity:.75}
+.card .v{font-weight:700; font-size:20px; margin-top:6px}
+.card{border-left:4px solid var(--accent-2)}
+
+.footer{display:flex; justify-content:center; margin-top:12px; text-shadow:var(--global-text-shadow)}
+.rsvp{background:rgba(255,255,255,.92); padding:12px 16px; border-radius:14px; font:700 14px var(--body-font); border:1px solid rgba(0,0,0,.06)}
+
+/* Accent coloring */
+.title h1, .names h3{color:var(--accent); text-shadow:var(--global-text-shadow)}
+.pill{color:var(--accent-2); text-shadow:var(--global-text-shadow)}
+.rsvp{color:var(--accent-2); text-shadow:var(--global-text-shadow)}
+.subtitle{color:var(--accent-2); text-shadow:var(--global-text-shadow)}
+.card .k{color:var(--accent-2); text-shadow:var(--global-text-shadow)}
+.footer{border-top:2px solid var(--accent-2); padding-top:16px}

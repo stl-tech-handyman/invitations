@@ -36,6 +36,7 @@ const ELEMENTS_CONFIG = {
   },
   
   decorations: {
+    // Celebration & Party
     balloons: {
       name: "Balloons",
       file: "balloons.svg",
@@ -50,18 +51,88 @@ const ELEMENTS_CONFIG = {
         { x: 400, y: 100 }
       ]
     },
-    flowers: {
-      name: "Flowers",
-      file: "flowers.svg", 
-      category: "nature",
-      tags: ["flowers", "nature", "beautiful", "spring"],
-      defaultOpacity: 75,
+    confetti: {
+      name: "Confetti",
+      file: "confetti.svg",
+      category: "celebration",
+      tags: ["confetti", "party", "celebration", "fun"],
+      defaultOpacity: 85,
+      defaultScale: 0.9,
+      defaultRotation: 0,
+      positions: [
+        { x: 150, y: 150 },
+        { x: 650, y: 100 },
+        { x: 350, y: 200 }
+      ]
+    },
+    gifts: {
+      name: "Gifts",
+      file: "gifts.svg",
+      category: "celebration",
+      tags: ["gifts", "party", "celebration", "birthday"],
+      defaultOpacity: 80,
+      defaultScale: 1.0,
+      defaultRotation: 0,
+      positions: [
+        { x: 200, y: 300 },
+        { x: 600, y: 250 },
+        { x: 400, y: 350 }
+      ]
+    },
+    cake: {
+      name: "Cake",
+      file: "cake.svg",
+      category: "celebration",
+      tags: ["cake", "party", "celebration", "birthday"],
+      defaultOpacity: 85,
+      defaultScale: 0.9,
+      defaultRotation: 0,
+      positions: [
+        { x: 250, y: 300 },
+        { x: 550, y: 250 },
+        { x: 400, y: 350 }
+      ]
+    },
+    candles: {
+      name: "Candles",
+      file: "candles.svg",
+      category: "celebration",
+      tags: ["candles", "party", "celebration", "birthday"],
+      defaultOpacity: 90,
       defaultScale: 0.8,
       defaultRotation: 0,
       positions: [
-        { x: 150, y: 300 },
-        { x: 600, y: 250 },
-        { x: 300, y: 400 }
+        { x: 300, y: 200 },
+        { x: 500, y: 150 },
+        { x: 400, y: 250 }
+      ]
+    },
+    ribbons: {
+      name: "Ribbons",
+      file: "ribbons.svg",
+      category: "celebration",
+      tags: ["ribbons", "party", "celebration", "decorative"],
+      defaultOpacity: 80,
+      defaultScale: 1.0,
+      defaultRotation: 0,
+      positions: [
+        { x: 150, y: 200 },
+        { x: 650, y: 150 },
+        { x: 400, y: 100 }
+      ]
+    },
+    hearts: {
+      name: "Hearts",
+      file: "hearts.svg",
+      category: "celebration",
+      tags: ["hearts", "love", "romantic", "valentine"],
+      defaultOpacity: 85,
+      defaultScale: 0.9,
+      defaultRotation: 0,
+      positions: [
+        { x: 200, y: 250 },
+        { x: 600, y: 200 },
+        { x: 400, y: 300 }
       ]
     },
     stars: {
@@ -76,6 +147,152 @@ const ELEMENTS_CONFIG = {
         { x: 200, y: 150 },
         { x: 650, y: 200 },
         { x: 450, y: 100 }
+      ]
+    },
+    sparkles: {
+      name: "Sparkles",
+      file: "sparkles.svg",
+      category: "celebration",
+      tags: ["sparkles", "glitter", "magical", "shiny"],
+      defaultOpacity: 90,
+      defaultScale: 0.8,
+      defaultRotation: 0,
+      positions: [
+        { x: 250, y: 150 },
+        { x: 600, y: 100 },
+        { x: 400, y: 200 }
+      ]
+    },
+    
+    // Nature & Organic
+    flowers: {
+      name: "Flowers",
+      file: "flowers.svg", 
+      category: "nature",
+      tags: ["flowers", "nature", "beautiful", "spring"],
+      defaultOpacity: 75,
+      defaultScale: 0.8,
+      defaultRotation: 0,
+      positions: [
+        { x: 150, y: 300 },
+        { x: 600, y: 250 },
+        { x: 300, y: 400 }
+      ]
+    },
+    leaves: {
+      name: "Leaves",
+      file: "leaves.svg",
+      category: "nature",
+      tags: ["leaves", "nature", "organic", "autumn"],
+      defaultOpacity: 80,
+      defaultScale: 0.9,
+      defaultRotation: 0,
+      positions: [
+        { x: 200, y: 300 },
+        { x: 550, y: 250 },
+        { x: 350, y: 350 }
+      ]
+    },
+    butterflies: {
+      name: "Butterflies",
+      file: "butterflies.svg",
+      category: "nature",
+      tags: ["butterflies", "nature", "beautiful", "spring"],
+      defaultOpacity: 80,
+      defaultScale: 0.8,
+      defaultRotation: 0,
+      positions: [
+        { x: 250, y: 200 },
+        { x: 550, y: 150 },
+        { x: 400, y: 250 }
+      ]
+    },
+    
+    // Geometric & Abstract
+    geometricShapes: {
+      name: "Geometric Shapes",
+      file: "geometric-shapes.svg",
+      category: "geometric",
+      tags: ["geometric", "shapes", "modern", "abstract"],
+      defaultOpacity: 80,
+      defaultScale: 1.0,
+      defaultRotation: 0,
+      positions: [
+        { x: 200, y: 200 },
+        { x: 600, y: 150 },
+        { x: 400, y: 300 }
+      ]
+    },
+    dots: {
+      name: "Dots",
+      file: "dots.svg",
+      category: "geometric",
+      tags: ["dots", "polka", "pattern", "minimal"],
+      defaultOpacity: 75,
+      defaultScale: 1.0,
+      defaultRotation: 0,
+      positions: [
+        { x: 150, y: 200 },
+        { x: 650, y: 150 },
+        { x: 400, y: 250 }
+      ]
+    },
+    lines: {
+      name: "Lines",
+      file: "lines.svg",
+      category: "geometric",
+      tags: ["lines", "grid", "pattern", "minimal"],
+      defaultOpacity: 80,
+      defaultScale: 1.0,
+      defaultRotation: 0,
+      positions: [
+        { x: 200, y: 200 },
+        { x: 600, y: 150 },
+        { x: 400, y: 300 }
+      ]
+    },
+    
+    // Technology & Digital
+    circuits: {
+      name: "Circuits",
+      file: "circuits.svg",
+      category: "technology",
+      tags: ["circuits", "tech", "digital", "electronics"],
+      defaultOpacity: 80,
+      defaultScale: 0.9,
+      defaultRotation: 0,
+      positions: [
+        { x: 250, y: 200 },
+        { x: 550, y: 150 },
+        { x: 400, y: 250 }
+      ]
+    },
+    chip: {
+      name: "Chip",
+      file: "chip.svg",
+      category: "technology",
+      tags: ["chip", "tech", "digital", "electronics"],
+      defaultOpacity: 80,
+      defaultScale: 0.9,
+      defaultRotation: 0,
+      positions: [
+        { x: 200, y: 200 },
+        { x: 600, y: 150 },
+        { x: 400, y: 250 }
+      ]
+    },
+    network: {
+      name: "Network",
+      file: "network.svg",
+      category: "technology",
+      tags: ["network", "tech", "digital", "connectivity"],
+      defaultOpacity: 80,
+      defaultScale: 0.9,
+      defaultRotation: 0,
+      positions: [
+        { x: 250, y: 200 },
+        { x: 550, y: 150 },
+        { x: 400, y: 250 }
       ]
     }
   },

@@ -1,0 +1,214 @@
+<!-- RIGHT SIDEBAR: All Other Controls -->
+<aside class="right-panel" id="controls">
+  <h2>🎛️ Controls & Effects</h2>
+  
+  <!-- Theme & Colors Section -->
+  <div class="group" data-section="theme">
+    <div class="group-header" onclick="toggleGroup(this)">
+      <h3>🎨 Theme & Colors</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="group-content">
+      <label>Category</label>
+      <select id="category">
+        <option value="pool">Pool Party</option>
+        <option value="birthday">Birthday</option>
+        <option value="baby">Baby Shower</option>
+        <option value="graduation">Graduation</option>
+        <option value="holiday">Holiday</option>
+        <option value="custom">Custom Elements</option>
+      </select>
+    </div>
+  </div>
+  
+  <!-- Accent Colors -->
+  <div class="group" data-section="theme">
+    <div class="group-header" onclick="toggleGroup(this)">
+      <h3>🎨 Accent Colors</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="group-content">
+      <div class="row">
+        <div>
+          <label>Primary Accent</label>
+          <input type="color" id="accent" value="#2ec5ff" />
+        </div>
+        <div>
+          <label>Secondary Accent</label>
+          <input type="color" id="accent2" value="#ff6b6b" />
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Background System -->
+  <div class="group" data-section="background">
+    <div class="group-header" onclick="toggleGroup(this)">
+      <h3>🎨 Background System</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="group-content">
+      <label>Background Mode</label>
+      <select id="bg-mode">
+        <option value="gradient">Theme Gradient</option>
+        <option value="texture">Texture</option>
+        <option value="image">Image</option>
+        <option value="grad+tex">Gradient + Texture</option>
+        <option value="img+tex">Image + Texture</option>
+      </select>
+      
+      <!-- Texture Settings -->
+      <div class="group" id="tex-controls" data-section="background">
+        <h4>🎭 Texture Settings</h4>
+        <label>Texture Preset</label>
+        <select id="texture">
+          <option value="stripes">Diagonal Stripes</option>
+          <option value="dots">Polka Dots</option>
+          <option value="grid">Grid Paper</option>
+          <option value="crosshatch">Crosshatch</option>
+          <option value="chevron">Chevron</option>
+          <option value="checker">Checkerboard</option>
+          <option value="sprinkles">Sprinkles</option>
+          <option value="pluses">Plus Signs</option>
+          <option value="waves">Waves</option>
+          <option value="noise">Noise</option>
+        </select>
+        
+        <div class="row">
+          <div>
+            <label>Texture Opacity</label>
+            <input type="range" id="tex-opacity" min="0" max="100" value="60" />
+            <span id="tex-opacity-value">60</span>%
+          </div>
+          <div>
+            <label>Texture Scale</label>
+            <input type="range" id="tex-scale" min="20" max="200" value="100" />
+            <span id="tex-scale-value">100</span>px
+          </div>
+        </div>
+      </div>
+      
+      <!-- Image Settings -->
+      <div class="group" id="img-controls" data-section="background">
+        <h4>🖼️ Image Settings</h4>
+        <label>Stock Image</label>
+        <select id="stock-image">
+          <optgroup label="Built-in">
+            <option value="pool">Pool Scene</option>
+            <option value="confetti">Confetti</option>
+            <option value="clouds">Clouds</option>
+          </optgroup>
+          <optgroup label="SVG Backgrounds">
+            <!-- Dynamically populated -->
+          </optgroup>
+        </select>
+        
+        <label>Upload Custom Image</label>
+        <input type="file" id="img-upload" accept="image/*" />
+        
+        <div class="drop-zone" id="drop-zone">
+          <div class="drop-zone-content">
+            <span>📁</span>
+            <p>Drag & drop image here</p>
+            <p>or click to browse</p>
+          </div>
+          <input type="file" accept="image/*" />
+        </div>
+        
+        <div class="row">
+          <div>
+            <label>Image Opacity</label>
+            <input type="range" id="img-opacity" min="0" max="100" value="80" />
+            <span id="img-opacity-value">80</span>%
+          </div>
+          <div>
+            <label>Blur</label>
+            <input type="range" id="img-blur" min="0" max="20" value="0" />
+            <span id="img-blur-value">0</span>px
+          </div>
+        </div>
+        
+        <div class="row">
+          <div>
+            <label>Brightness</label>
+            <input type="range" id="img-bright" min="0" max="200" value="100" />
+            <span id="img-bright-value">100</span>%
+          </div>
+          <div>
+            <label>Vignette</label>
+            <input type="range" id="img-vignette" min="0" max="100" value="0" />
+            <span id="img-vignette-value">0</span>px
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Sprites & Decorations -->
+  <div class="group" data-section="decoration">
+    <div class="group-header" onclick="toggleGroup(this)">
+      <h3>✨ Sprites & Decorations</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="group-content">
+      <div class="row">
+        <div>
+          <label>Density</label>
+          <input type="range" id="density" min="5" max="50" value="15" />
+          <span id="density-value">15</span>
+        </div>
+        <div>
+          <label>Scale</label>
+          <input type="range" id="scale" min="40" max="200" value="100" />
+          <span id="scale-value">100</span>%
+        </div>
+      </div>
+      
+      <label>Animation</label>
+      <select id="sprite-anim">
+        <option value="off">Off</option>
+        <option value="gentle">Gentle</option>
+        <option value="lively">Lively</option>
+      </select>
+    </div>
+  </div>
+  
+  <!-- Layout & Effects -->
+  <div class="group" data-section="effects">
+    <div class="group-header" onclick="toggleGroup(this)">
+      <h3>🎭 Layout & Effects</h3>
+      <span class="collapse-icon">▼</span>
+    </div>
+    <div class="group-content">
+      <label>Layout Style</label>
+      <select id="layout">
+        <option value="centered">Centered</option>
+        <option value="banner">Banner</option>
+        <option value="split">Split</option>
+      </select>
+      
+      <label>Entrance Effect</label>
+      <select id="effect">
+        <option value="none">None</option>
+        <option value="fade">Fade In</option>
+        <option value="pop">Pop In</option>
+      </select>
+      
+      <label>Parallax Effect</label>
+      <select id="parallax">
+        <option value="off">Off</option>
+        <option value="on">On</option>
+      </select>
+    </div>
+  </div>
+  
+  <!-- Actions -->
+  <div class="group">
+    <div class="actions">
+      <button id="randomize">🎲 Randomize</button>
+      <button id="swap">🔄 Swap</button>
+      <button id="replay">▶️ Replay</button>
+      <button id="pdf">📄 Print/PDF</button>
+    </div>
+  </div>
+</aside>

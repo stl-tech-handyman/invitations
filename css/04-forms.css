@@ -1,0 +1,8 @@
+/* Form Controls and Input Elements */
+input, select, textarea{width:100%; padding:10px 12px; border:1px solid #e6e6ee; border-radius:12px; outline:none; background:#fafafe; transition:.2s border-color; font:14px/1.2 var(--body-font)}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+
+button{appearance:none; border:0; border-radius:14px; padding:10px 14px; font-weight:700; cursor:pointer; box-shadow:var(--shadow); background:var(--accent); color:white; transition:transform .05s ease}
+button.secondary{background:var(--accent-2)}
+button.ghost{background:transparent; color:var(--ink); box-shadow:none; border:1px dashed #d7d7e0}
+button:active{transform:translateY(1px)}

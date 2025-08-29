@@ -1,0 +1,42 @@
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .app {
+    grid-template-columns: 350px 1fr 350px;
+    gap: 16px;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .app {
+    grid-template-columns: 300px 1fr 300px;
+    gap: 12px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 800px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .left-panel, .right-panel {
+    max-height: 300px;
+  }
+  
+  .stage {
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
+/* Print/PDF */
+@media print{ 
+  body{background:white} 
+  .app{display:block; padding:0} 
+  .panel{display:none} 
+  .stage{box-shadow:none; border-radius:0; width:100vw; height:141.42vw} 
+}

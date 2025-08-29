@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module Test</title>
+</head>
+<body>
+  <h1>Module Test</h1>
+  <div id="test-output"></div>
+  
+  <script type="module">
+    import { THEMES, CUSTOM_THEME, FONTS } from './js/config.js';
+    import { el, state, updateText } from './js/main.js';
+    
+    console.log('✅ Modules imported successfully');
+    console.log('THEMES:', THEMES);
+    console.log('FONTS:', FONTS);
+    console.log('state:', state);
+    
+    document.getElementById('test-output').innerHTML = `
+      <p>✅ Modules loaded successfully!</p>
+      <p>Available themes: ${Object.keys(THEMES).join(', ')}</p>
+      <p>Available fonts: ${FONTS.slice(0, 5).join(', ')}...</p>
+      <p>State seed: ${state.seed}</p>
+    `;
+  </script>
+</body>
+</html>

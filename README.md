@@ -40,9 +40,18 @@ A comprehensive, feature-rich invitation card generator with real-time preview, 
 ### **Asset Management**
 To rename and organize event assets on load, run the PowerShell script:
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\Users\Alexey\Code\event-card-generator\rename-event-assets.ps1"
+# From project root directory
+.\scripts\utilities\rename-event-assets.ps1
 ```
-This script can be configured to run automatically when the application starts.
+
+This script can be configured to run automatically when the application starts. For more details, see `scripts/utilities/README.md`.
+
+### **Asset Generation**
+Use the organized generation tools to create new assets:
+
+- **🎨 Overlays**: `generators/web-interfaces/generate-overlays.html` or `scripts/overlay-generator/`
+- **🖼️ Backgrounds**: `generators/web-interfaces/background-generator.html` or `scripts/background-generator/`
+- **✨ Decorations**: `scripts/decoration-generator/generate_decorations.py`
 
 ### **Using Backgrounds and Elements**
 The application now includes dropdown selectors for custom backgrounds and decorative elements:
@@ -79,8 +88,43 @@ event-card-generator/
 ├── home.html          # Main application
 ├── tests.js           # Comprehensive test suite
 ├── test-runner.html   # Standalone test runner
-└── README.md          # This documentation
+├── scripts/           # Organized automation scripts
+│   ├── overlay-generator/     # SVG overlay generation
+│   ├── background-generator/  # Background image generation
+│   ├── decoration-generator/  # Decoration element generation
+│   ├── git-setup/            # Git repository setup
+│   └── utilities/            # File management utilities
+├── generators/        # Generation tools and interfaces
+│   ├── web-interfaces/       # Web-based generator interfaces
+│   └── node-scripts/         # Node.js generation scripts
+├── docs/             # Technical documentation
+├── config/           # Configuration and dependencies
+└── README.md         # This documentation
 ```
+
+### **Project Organization**
+All project files are now organized into logical directories:
+
+#### **📜 Scripts** (`scripts/`)
+- **🎨 Overlay Generator**: Generate 200 unique SVG overlays
+- **🖼️ Background Generator**: Create 160 diverse background images
+- **✨ Decoration Generator**: Generate 200 SVG decoration patterns
+- **🔧 Git Setup**: Automate repository initialization and setup
+- **🛠️ Utilities**: File renaming and maintenance tools
+
+#### **🎨 Generators** (`generators/`)
+- **🌐 Web Interfaces**: Browser-based generation tools
+- **⚡ Node.js Scripts**: High-performance command-line generation
+
+#### **📚 Documentation** (`docs/`)
+- **Technical Guides**: Detailed implementation documentation
+- **API References**: Complete parameter and usage information
+
+#### **⚙️ Configuration** (`config/`)
+- **Dependencies**: Python package requirements
+- **System Files**: Configuration and error logs
+
+Each directory has its own README with detailed usage instructions. See individual READMEs for specific information.
 
 ## 🧪 Testing Framework
 

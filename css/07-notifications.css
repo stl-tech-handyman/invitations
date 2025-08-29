@@ -1,0 +1,161 @@
+/* Readability Notification */
+.readability-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 320px;
+  max-height: 80vh;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  z-index: 1004;
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  border-left: 4px solid var(--accent-2);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.readability-notification.visible {
+  transform: translateX(0);
+}
+
+.readability-notification .header {
+  background: var(--accent-2);
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.readability-notification .header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.readability-notification .close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.readability-notification .close-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.readability-notification .content {
+  padding: 20px;
+  max-height: calc(80vh - 60px);
+  overflow-y: auto;
+}
+
+.readability-notification .issue {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.readability-notification .issue.critical {
+  border-left: 4px solid #dc3545;
+  background: #fff5f5;
+}
+
+.readability-notification .issue.moderate {
+  border-left: 4px solid #ffc107;
+  background: #fffbf0;
+}
+
+.readability-notification .issue-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.readability-notification .contrast-ratio {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.readability-notification .contrast-ratio.critical {
+  background: #dc3545;
+  color: white;
+}
+
+.readability-notification .contrast-ratio.moderate {
+  background: #ffc107;
+  color: #212529;
+}
+
+.readability-notification .issue-details {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.readability-notification .actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.readability-notification .actions button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.readability-notification .auto-fix {
+  background: #007bff;
+  color: white;
+}
+
+.readability-notification .auto-fix:hover {
+  background: #0056b3;
+}
+
+.readability-notification .highlight {
+  background: #ffc107;
+  color: #212529;
+}
+
+.readability-notification .highlight:hover {
+  background: #e0a800;
+}
+
+/* Notification Animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.notification {
+  animation: slideInRight 0.3s ease-out;
+}
