@@ -1177,31 +1177,78 @@
         ">🎨 Browse & Manage Sprites</button>
       </div>
       
-      <!-- Test Effects Button -->
+      <!-- Test Functionality Section -->
       <div class="group">
-        <button id="test-effects" class="ghost" style="
-          background: #FF9800; 
-          color: white; 
-          width: 100%;
-          padding: 12px;
-          border: none;
-          border-radius: 6px;
-          font-size: 14px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        ">🧪 Test Effects</button>
-        <button id="test-draggable" class="ghost" style="
-          background: #4CAF50; 
-          color: white; 
-          width: 100%;
-          padding: 12px;
-          border: none;
-          border-radius: 6px;
-          font-size: 14px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          margin-top: 8px;
-        ">🎯 Test Draggable</button>
+        <div class="group-header" onclick="toggleGroup(this)">
+          <h3>🧪 Test Functionality</h3>
+          <span class="collapse-icon">▼</span>
+        </div>
+        <div class="group-content">
+          <button id="test-effects" class="ghost" style="
+            background: #FF9800; 
+            color: white; 
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+          ">🎨 Test Effects System</button>
+          
+          <button id="test-draggable" class="ghost" style="
+            background: #4CAF50; 
+            color: white; 
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+          ">🎯 Test Draggable System</button>
+          
+          <button id="test-overlay" class="ghost" style="
+            background: #9C27B0; 
+            color: white; 
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+          ">🎭 Test Overlay System</button>
+          
+          <button id="test-particles" class="ghost" style="
+            background: #E91E63; 
+            color: white; 
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+          ">✨ Test Particle System</button>
+          
+          <button id="test-all-systems" class="ghost" style="
+            background: #2196F3; 
+            color: white; 
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: bold;
+          ">🚀 Test All Systems</button>
+        </div>
       </div>
 
       <!-- Particle Effects -->
@@ -2482,7 +2529,7 @@
     
     // Test effects button
     el('test-effects').addEventListener('click', () => {
-      console.log('🧪 Testing all effects...');
+      console.log('🧪 Testing effects system...');
       
       // Test layout changes
       console.log('🎨 Testing layout changes...');
@@ -2500,25 +2547,7 @@
       console.log('🎭 Testing sprite updates...');
       updateSprites();
       
-      // Test overlay system
-      console.log('🎨 Testing overlay system...');
-      if (typeof applyOverlay === 'function') {
-        applyOverlay();
-      }
-      
-      // Test background system
-      console.log('🖼️ Testing background system...');
-      if (typeof applyBackground === 'function') {
-        applyBackground();
-      }
-      
-      // Test font system
-      console.log('🔤 Testing font system...');
-      if (typeof updateFonts === 'function') {
-        updateFonts();
-      }
-      
-      console.log('✅ All effects tested!');
+      console.log('✅ Effects system tested!');
     });
     
     // Test draggable button
@@ -2533,16 +2562,6 @@
       const textElements = document.querySelectorAll('.title h1, .title h2, .names h3, .pill, .rsvp');
       console.log('📝 Found text elements:', textElements.length);
       
-      // Check object registry
-      if (window.objectRegistry) {
-        console.log('📋 Object registry:', window.objectRegistry.objects.size, 'objects');
-        window.objectRegistry.objects.forEach((obj, id) => {
-          console.log('  -', id, ':', obj.type, obj.data);
-        });
-      } else {
-        console.log('❌ Object registry not found');
-      }
-      
       // Try to make a sprite draggable manually
       if (sprites.length > 0) {
         const firstSprite = sprites[0];
@@ -2556,6 +2575,67 @@
       }
       
       console.log('✅ Draggable system tested!');
+    });
+    
+    // Test overlay button
+    el('test-overlay').addEventListener('click', () => {
+      console.log('🎭 Testing overlay system...');
+      
+      if (typeof applyOverlay === 'function') {
+        applyOverlay();
+        console.log('✅ Overlay system tested!');
+      } else {
+        console.log('❌ Overlay system not found');
+      }
+    });
+    
+    // Test particles button
+    el('test-particles').addEventListener('click', () => {
+      console.log('✨ Testing particle system...');
+      
+      if (window.particleSystem) {
+        console.log('✅ Particle system found:', window.particleSystem);
+        // Test particle creation
+        if (window.particleSystem.createParticles) {
+          window.particleSystem.createParticles('confetti', 'medium');
+          console.log('✅ Particles created!');
+        }
+      } else {
+        console.log('❌ Particle system not found');
+      }
+    });
+    
+    // Test all systems button
+    el('test-all-systems').addEventListener('click', () => {
+      console.log('🚀 Testing all systems...');
+      
+      // Test effects
+      setLayout();
+      setEffect();
+      setupParallax();
+      updateSprites();
+      
+      // Test overlay
+      if (typeof applyOverlay === 'function') {
+        applyOverlay();
+      }
+      
+      // Test background
+      if (typeof applyBackground === 'function') {
+        applyBackground();
+      }
+      
+      // Test fonts
+      if (typeof updateFonts === 'function') {
+        updateFonts();
+      }
+      
+      // Test particles
+      if (window.particleSystem && window.particleSystem.createParticles) {
+        window.particleSystem.createParticles('confetti', 'low');
+      }
+      
+      console.log('✅ All systems tested!');
     });
     
     // Debug current values on page load
@@ -4446,8 +4526,10 @@
   <script src="elements/elements-config.js"></script>
   
   <!-- Sprite System -->
+  <script src="js/sprite-browser.js"></script>
+  <script src="js/sprite-manager.js"></script>
   <script>
-    // Standalone function to make sprites draggable
+    // Standalone function to make sprites draggable (simplified version)
     function makeSpriteDraggable(spriteElement, initialX, initialY) {
       let isDragging = false;
       let startX, startY;
@@ -4581,7 +4663,8 @@
       console.log(`🎯 Made sprite draggable at (${initialX}, ${currentY})`);
     }
     
-    // Simple Sprite Browser Implementation
+    // Simple Sprite Browser Implementation - REFACTORED TO EXTERNAL MODULE
+    // This class is now loaded from js/sprite-browser.js
     class SimpleSpriteBrowser {
       constructor() {
         this.isVisible = false;
