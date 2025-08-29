@@ -2221,11 +2221,12 @@
             </div>
           </div>
 
-          <div class="row" style="margin-top:12px">
-            <button id="reset-edge" class="btn btn-secondary">Reset</button>
-            <button id="test-edge" class="btn" style="background: #28a745; color: white;">Test Edge</button>
-            <button onclick="console.log('🎯 Direct HTML test button clicked'); testEdgeDirectly();" class="btn" style="background: #dc3545; color: white;">Debug Test</button>
-          </div>
+                      <div class="row" style="margin-top:12px">
+              <button id="reset-edge" class="btn btn-secondary">Reset</button>
+              <button id="test-edge" class="btn" style="background: #28a745; color: white;">Test Edge</button>
+              <button onclick="console.log('🎯 Direct HTML test button clicked'); testEdgeDirectly();" class="btn" style="background: #dc3545; color: white;">Debug Test</button>
+              <button onclick="console.log('🎯 Dropdown test button clicked'); testDropdownDirectly();" class="btn" style="background: #6f42c1; color: white;">Test Dropdown</button>
+            </div>
         </div>
       </div>
 
@@ -5122,6 +5123,20 @@
 
     // Log that edge system is loaded
     console.log('🎯 Edge System loaded and ready');
+    
+    // Test if el function is available
+    console.log('🔍 Testing el function availability...');
+    console.log('typeof el:', typeof el);
+    console.log('window.el available:', typeof window.el === 'function');
+    console.log('document.getElementById available:', typeof document.getElementById === 'function');
+    
+    // Test if we can find the edge elements
+    console.log('🔍 Testing element discovery...');
+    console.log('edge-style element:', document.getElementById('edge-style'));
+    console.log('edge-variant element:', document.getElementById('edge-variant'));
+    console.log('edge-thickness element:', document.getElementById('edge-thickness'));
+    console.log('edge-opacity element:', document.getElementById('edge-opacity'));
+    console.log('edge-color element:', document.getElementById('edge-color'));
 
     // Make edge system globally accessible for testing
     window.edgeSystem = {
@@ -5164,16 +5179,59 @@
       }
     };
 
+    // Test dropdown functionality directly
+    window.testDropdownDirectly = function() {
+      console.log('🧪 Testing dropdown functionality directly...');
+      
+      const edgeStyleEl = document.getElementById('edge-style');
+      const edgeVariantEl = document.getElementById('edge-variant');
+      
+      console.log('Edge style element:', edgeStyleEl);
+      console.log('Edge variant element:', edgeVariantEl);
+      
+      if (edgeStyleEl) {
+        console.log('Edge style current value:', edgeStyleEl.value);
+        console.log('Edge style options:', Array.from(edgeStyleEl.options).map(opt => opt.value));
+        
+        // Try to manually trigger a change
+        edgeStyleEl.value = 'torn';
+        console.log('Manually set edge style to "torn"');
+        
+        // Manually trigger change event
+        const event = new Event('change', { bubbles: true });
+        edgeStyleEl.dispatchEvent(event);
+        console.log('Manually dispatched change event');
+      }
+      
+      if (edgeVariantEl) {
+        console.log('Edge variant current value:', edgeVariantEl.value);
+        console.log('Edge variant options:', Array.from(edgeVariantEl.options).map(opt => opt.value));
+      }
+    };
+
     // Initialize edge controls after a delay
-    setTimeout(initializeEdgeControls, 1400);
+    console.log('⏰ Scheduling edge controls initialization in 1400ms...');
+    setTimeout(() => {
+      console.log('⏰ 1400ms timeout fired, calling initializeEdgeControls...');
+      initializeEdgeControls();
+    }, 1400);
 
     // Also try to initialize edge controls when DOM is ready
     if (document.readyState === 'loading') {
+      console.log('📄 DOM still loading, adding DOMContentLoaded listener...');
       document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(initializeEdgeControls, 500);
+        console.log('📄 DOMContentLoaded fired, scheduling edge controls initialization in 500ms...');
+        setTimeout(() => {
+          console.log('⏰ DOMContentLoaded timeout fired, calling initializeEdgeControls...');
+          initializeEdgeControls();
+        }, 500);
       });
     } else {
-      setTimeout(initializeEdgeControls, 500);
+      console.log('📄 DOM already loaded, scheduling edge controls initialization in 500ms...');
+      setTimeout(() => {
+        console.log('⏰ DOM already loaded timeout fired, calling initializeEdgeControls...');
+        initializeEdgeControls();
+      }, 500);
     }
 
     // Initialize overlay controls
