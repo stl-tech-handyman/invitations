@@ -2224,6 +2224,7 @@
           <div class="row" style="margin-top:12px">
             <button id="reset-edge" class="btn btn-secondary">Reset</button>
             <button id="test-edge" class="btn" style="background: #28a745; color: white;">Test Edge</button>
+            <button onclick="console.log('🎯 Direct HTML test button clicked'); testEdgeDirectly();" class="btn" style="background: #dc3545; color: white;">Debug Test</button>
           </div>
         </div>
       </div>
@@ -4923,6 +4924,10 @@
       if (typeof el !== 'function') {
         console.error('❌ el function not available during edge controls initialization!');
         console.log('Available global functions:', Object.keys(window).filter(key => typeof window[key] === 'function'));
+        
+        // Try using document.getElementById directly as fallback
+        console.log('🔄 Trying fallback with document.getElementById...');
+        initializeEdgeControlsFallback();
         return;
       }
       
@@ -5047,11 +5052,76 @@
       // Initialize edge UI
       updateEdgeUI();
 
-      console.log('✅ Edge controls initialized');
+            console.log('✅ Edge controls initialized');
+    }
+
+    // Fallback initialization using document.getElementById directly
+    function initializeEdgeControlsFallback() {
+      console.log('🔄 Initializing edge controls with fallback method...');
+      
+      // Check if all required elements exist using document.getElementById directly
+      const edgeStyleEl = document.getElementById('edge-style');
+      const edgeThicknessEl = document.getElementById('edge-thickness');
+      const edgeOpacityEl = document.getElementById('edge-opacity');
+      const edgeColorEl = document.getElementById('edge-color');
+      const edgeVariantEl = document.getElementById('edge-variant');
+      const resetEdgeEl = document.getElementById('reset-edge');
+      const testEdgeEl = document.getElementById('test-edge');
+      
+      if (!edgeStyleEl || !edgeThicknessEl || !edgeOpacityEl || !edgeColorEl || !edgeVariantEl) {
+        console.error('❌ Some edge control elements not found with fallback method:', {
+          edgeStyle: !!edgeStyleEl,
+          edgeThickness: !!edgeThicknessEl,
+          edgeOpacity: !!edgeOpacityEl,
+          edgeColor: !!edgeColorEl,
+          edgeVariant: !!edgeVariantEl
+        });
+        return;
+      }
+      
+      console.log('✅ All edge control elements found with fallback method');
+      
+      // Add event listeners using the found elements
+      edgeStyleEl.addEventListener('change', (e) => {
+        console.log('🎯 Edge style change event fired (fallback)!');
+        console.log('Event target value:', e.target.value);
+        edgeSettings.style = e.target.value;
+        console.log('🎨 Edge style changed to:', edgeSettings.style);
+        applyEdgeEffect();
+      });
+      
+      // Add other event listeners...
+      edgeThicknessEl.addEventListener('input', (e) => {
+        edgeSettings.thickness = parseInt(e.target.value);
+        document.getElementById('edge-thickness-value').textContent = edgeSettings.thickness;
+        applyEdgeEffect();
+      });
+      
+      edgeOpacityEl.addEventListener('input', (e) => {
+        edgeSettings.opacity = parseFloat(e.target.value);
+        document.getElementById('edge-opacity-value').textContent = edgeSettings.opacity;
+        applyEdgeEffect();
+      });
+      
+      edgeColorEl.addEventListener('change', (e) => {
+        edgeSettings.color = e.target.value;
+        applyEdgeEffect();
+      });
+      
+      edgeVariantEl.addEventListener('change', (e) => {
+        edgeSettings.variant = e.target.value;
+        applyEdgeEffect();
+      });
+      
+      if (resetEdgeEl) {
+        resetEdgeEl.addEventListener('click', resetEdgeSettings);
+      }
+      
+      console.log('✅ Edge controls initialized with fallback method');
     }
 
     // Log that edge system is loaded
-          console.log('🎯 Edge System loaded and ready');
+    console.log('🎯 Edge System loaded and ready');
 
     // Make edge system globally accessible for testing
     window.edgeSystem = {
@@ -5067,6 +5137,30 @@
         edgeSettings.opacity = 0.8;
         applyEdgeEffect();
         console.log('✅ Test edge applied from console!');
+      }
+    };
+
+    // Direct test function accessible from HTML
+    window.testEdgeDirectly = function() {
+      console.log('🧪 Direct test function called!');
+      console.log('Current edge settings:', edgeSettings);
+      console.log('Edge layer element:', document.getElementById('edge-layer'));
+      console.log('Edge style element:', document.getElementById('edge-style'));
+      
+      // Force apply a test edge
+      edgeSettings.style = 'wave';
+      edgeSettings.variant = 'default';
+      edgeSettings.color = '#ff0000';
+      edgeSettings.thickness = 5;
+      edgeSettings.opacity = 0.8;
+      
+      console.log('Updated edge settings:', edgeSettings);
+      
+      try {
+        applyEdgeEffect();
+        console.log('✅ Direct test edge applied successfully!');
+      } catch (error) {
+        console.error('❌ Error in direct test:', error);
       }
     };
 
