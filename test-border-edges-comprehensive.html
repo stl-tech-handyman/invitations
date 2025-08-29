@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Border Edges System - Comprehensive Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .test-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 30px;
+    }
+    
+    .controls-panel {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+    
+    .controls-panel h2 {
+      margin-top: 0;
+      color: #333;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 10px;
+    }
+    
+    .control-group {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border-left: 4px solid #007bff;
+    }
+    
+    .control-group h3 {
+      margin: 0 0 10px 0;
+      color: #007bff;
+      font-size: 14px;
+    }
+    
+    .control-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 12px;
+    }
+    
+    .control-group select,
+    .control-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    
+    .control-group input[type="range"] {
+      margin-bottom: 5px;
+    }
+    
+    .value-display {
+      font-size: 11px;
+      color: #666;
+      font-family: monospace;
+    }
+    
+    .preview-panel {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .preview-panel h2 {
+      margin-top: 0;
+      color: #333;
+      text-align: center;
+    }
+    
+    .invitation-canvas {
+      width: 600px;
+      height: 400px;
+      margin: 0 auto;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      position: relative;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      overflow: hidden;
+    }
+    
+    .edge-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    .status-panel {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border-left: 4px solid #28a745;
+    }
+    
+    .status-panel h3 {
+      margin: 0 0 10px 0;
+      color: #28a745;
+    }
+    
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+      font-size: 12px;
+      font-family: monospace;
+    }
+    
+    .status-success {
+      color: #28a745;
+    }
+    
+    .status-error {
+      color: #dc3545;
+    }
+    
+    .status-warning {
+      color: #ffc107;
+    }
+    
+    .test-buttons {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .test-button {
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .test-button.primary {
+      background: #007bff;
+      color: white;
+    }
+    
+    .test-button.primary:hover {
+      background: #0056b3;
+    }
+    
+    .test-button.secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .test-button.secondary:hover {
+      background: #545b62;
+    }
+    
+    .test-button.danger {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .test-button.danger:hover {
+      background: #c82333;
+    }
+    
+    .debug-info {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff3cd;
+      border-radius: 6px;
+      border-left: 4px solid #ffc107;
+    }
+    
+    .debug-info h3 {
+      margin: 0 0 10px 0;
+      color: #856404;
+    }
+    
+    .debug-info pre {
+      margin: 0;
+      font-size: 11px;
+      color: #856404;
+      background: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Border Edges System - Comprehensive Test</h1>
+  
+  <div class="test-container">
+    <!-- Controls Panel -->
+    <div class="controls-panel">
+      <h2>🎛️ Edge Controls</h2>
+      
+      <!-- Edge Style -->
+      <div class="control-group">
+        <h3>Style Selection</h3>
+        <label>Edge Style</label>
+        <select id="edge-style">
+          <option value="none">None</option>
+          <option value="torn">Torn Paper</option>
+          <option value="scalloped">Scalloped</option>
+          <option value="zigzag">Zigzag</option>
+          <option value="wave">Wavy</option>
+          <option value="spikes">Spikes</option>
+          <option value="dots">Dots</option>
+          <option value="geometric">Geometric</option>
+          <option value="organic">Organic</option>
+          <option value="vintage">Vintage</option>
+        </select>
+      </div>
+      
+      <!-- Edge Variant -->
+      <div class="control-group">
+        <h3>Style Variant</h3>
+        <label>Edge Variant</label>
+        <select id="edge-variant">
+          <option value="default">Default</option>
+          <option value="rough">Rough</option>
+          <option value="smooth">Smooth</option>
+          <option value="sharp">Sharp</option>
+          <option value="soft">Soft</option>
+        </select>
+      </div>
+      
+      <!-- Edge Properties -->
+      <div class="control-group">
+        <h3>Edge Properties</h3>
+        
+        <label>Thickness</label>
+        <input type="range" id="edge-thickness" min="1" max="20" value="3">
+        <div class="value-display">Value: <span id="edge-thickness-value">3</span>px</div>
+        
+        <label>Opacity</label>
+        <input type="range" id="edge-opacity" min="0" max="1" value="0.8" step="0.1">
+        <div class="value-display">Value: <span id="edge-opacity-value">0.8</span></div>
+        
+        <label>Color</label>
+        <input type="color" id="edge-color" value="#000000">
+      </div>
+      
+      <!-- Test Buttons -->
+      <div class="test-buttons">
+        <button class="test-button primary" id="apply-edge">Apply Edge</button>
+        <button class="test-button secondary" id="reset-edge">Reset</button>
+        <button class="test-button danger" id="clear-edge">Clear</button>
+      </div>
+      
+      <!-- Status Panel -->
+      <div class="status-panel">
+        <h3>📊 System Status</h3>
+        <div class="status-item">
+          <span>Border Edges:</span>
+          <span id="system-status" class="status-warning">Initializing...</span>
+        </div>
+        <div class="status-item">
+          <span>Current Style:</span>
+          <span id="current-style">None</span>
+        </div>
+        <div class="status-item">
+          <span>Current Variant:</span>
+          <span id="current-variant">Default</span>
+        </div>
+        <div class="status-item">
+          <span>Effects Applied:</span>
+          <span id="effects-count">0</span>
+        </div>
+      </div>
+      
+      <!-- Debug Info -->
+      <div class="debug-info">
+        <h3>🐛 Debug Information</h3>
+        <pre id="debug-output">Waiting for system...</pre>
+      </div>
+    </div>
+    
+    <!-- Preview Panel -->
+    <div class="preview-panel">
+      <h2>👁️ Invitation Preview</h2>
+      
+      <div class="invitation-canvas">
+        <!-- This is the actual invitation canvas -->
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #333; z-index: 1;">
+          <h3>Sample Invitation</h3>
+          <p>This is where your invitation content goes</p>
+          <p>Edge effects will be applied around this</p>
+        </div>
+        
+        <!-- Edge Layer - Effects will be applied here -->
+        <div id="edge-layer" class="edge-layer"></div>
+      </div>
+      
+      <div style="margin-top: 20px; text-align: center; color: #666; font-size: 14px;">
+        <p><strong>Expected Behavior:</strong> Edge effects should appear and STAY permanently around the invitation</p>
+        <p><strong>Current Issue:</strong> Effects were disappearing - this test page fixes that</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Load Border Edges System -->
+  <script src="js/border-edges.js"></script>
+  
+  <script>
+    // Comprehensive Border Edges Test System
+    class BorderEdgesTestSystem {
+      constructor() {
+        console.log('🧪 BorderEdgesTestSystem: Initializing...');
+        
+        this.system = null;
+        this.effectsApplied = 0;
+        this.currentSettings = {
+          style: 'none',
+          variant: 'default',
+          thickness: 3,
+          opacity: 0.8,
+          color: '#000000'
+        };
+        
+        this.init();
+      }
+      
+      init() {
+        try {
+          // Wait for BorderEdgesSystem to be available
+          if (window.BorderEdgesSystem) {
+            this.system = new window.BorderEdgesSystem();
+            console.log('✅ BorderEdgesTestSystem: BorderEdgesSystem loaded successfully');
+            this.attachEventListeners();
+            this.updateStatus('Ready', 'success');
+            this.updateDebugInfo('System initialized successfully');
+          } else {
+            console.error('❌ BorderEdgesTestSystem: BorderEdgesSystem not found');
+            this.updateStatus('Error: BorderEdgesSystem not found', 'error');
+            this.updateDebugInfo('BorderEdgesSystem class not available');
+          }
+        } catch (error) {
+          console.error('❌ BorderEdgesTestSystem: Initialization error:', error);
+          this.updateStatus('Error: ' + error.message, 'error');
+          this.updateDebugInfo('Initialization error: ' + error.message);
+        }
+      }
+      
+      attachEventListeners() {
+        // Edge Style
+        const edgeStyle = document.getElementById('edge-style');
+        if (edgeStyle) {
+          edgeStyle.addEventListener('change', (e) => {
+            this.currentSettings.style = e.target.value;
+            this.updateCurrentStyle();
+            this.updateDebugInfo(`Edge style changed to: ${e.target.value}`);
+            this.applyEdgeEffect();
+          });
+        }
+        
+        // Edge Variant
+        const edgeVariant = document.getElementById('edge-variant');
+        if (edgeVariant) {
+          edgeVariant.addEventListener('change', (e) => {
+            this.currentSettings.variant = e.target.value;
+            this.updateCurrentVariant();
+            this.updateDebugInfo(`Edge variant changed to: ${e.target.value}`);
+            this.applyEdgeEffect();
+          });
+        }
+        
+        // Edge Thickness
+        const edgeThickness = document.getElementById('edge-thickness');
+        if (edgeThickness) {
+          edgeThickness.addEventListener('input', (e) => {
+            this.currentSettings.thickness = parseInt(e.target.value);
+            document.getElementById('edge-thickness-value').textContent = e.target.value;
+            this.updateDebugInfo(`Edge thickness changed to: ${e.target.value}px`);
+            this.applyEdgeEffect();
+          });
+        }
+        
+        // Edge Opacity
+        const edgeOpacity = document.getElementById('edge-opacity');
+        if (edgeOpacity) {
+          edgeOpacity.addEventListener('input', (e) => {
+            this.currentSettings.opacity = parseFloat(e.target.value);
+            document.getElementById('edge-opacity-value').textContent = e.target.value;
+            this.updateDebugInfo(`Edge opacity changed to: ${e.target.value}`);
+            this.applyEdgeEffect();
+          });
+        }
+        
+        // Edge Color
+        const edgeColor = document.getElementById('edge-color');
+        if (edgeColor) {
+          edgeColor.addEventListener('change', (e) => {
+            this.currentSettings.color = e.target.value;
+            this.updateDebugInfo(`Edge color changed to: ${e.target.value}`);
+            this.applyEdgeEffect();
+          });
+        }
+        
+        // Test Buttons
+        const applyEdge = document.getElementById('apply-edge');
+        if (applyEdge) {
+          applyEdge.addEventListener('click', () => {
+            this.applyEdgeEffect();
+          });
+        }
+        
+        const resetEdge = document.getElementById('reset-edge');
+        if (resetEdge) {
+          resetEdge.addEventListener('click', () => {
+            this.resetEdgeSettings();
+          });
+        }
+        
+        const clearEdge = document.getElementById('clear-edge');
+        if (clearEdge) {
+          clearEdge.addEventListener('click', () => {
+            this.clearEdgeEffects();
+          });
+        }
+        
+        console.log('✅ BorderEdgesTestSystem: Event listeners attached');
+      }
+      
+      applyEdgeEffect() {
+        try {
+          console.log('🎨 BorderEdgesTestSystem: Applying edge effect:', this.currentSettings);
+          
+          if (this.system && this.system.applyEdgeEffect) {
+            // Use the actual BorderEdgesSystem
+            this.system.applyEdgeEffect();
+            this.effectsApplied++;
+            this.updateEffectsCount();
+            this.updateDebugInfo(`Edge effect applied successfully: ${this.currentSettings.style} - ${this.currentSettings.variant}`);
+            console.log('✅ BorderEdgesTestSystem: Edge effect applied via system');
+          } else {
+            // Fallback: Apply directly to our test canvas
+            this.applyEdgeEffectDirectly();
+            this.effectsApplied++;
+            this.updateEffectsCount();
+            this.updateDebugInfo(`Edge effect applied directly: ${this.currentSettings.style} - ${this.currentSettings.variant}`);
+            console.log('✅ BorderEdgesTestSystem: Edge effect applied directly');
+          }
+          
+        } catch (error) {
+          console.error('❌ BorderEdgesTestSystem: Error applying edge effect:', error);
+          this.updateDebugInfo(`Error applying edge effect: ${error.message}`);
+        }
+      }
+      
+      applyEdgeEffectDirectly() {
+        const edgeLayer = document.getElementById('edge-layer');
+        if (!edgeLayer) {
+          console.error('❌ Edge layer not found');
+          return;
+        }
+        
+        // Clear existing effects
+        edgeLayer.innerHTML = '';
+        
+        if (this.currentSettings.style === 'none') {
+          console.log('✅ No edge style selected');
+          return;
+        }
+        
+        // Create SVG for the edge effect
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 600 400');
+        svg.setAttribute('preserveAspectRatio', 'none');
+        svg.style.position = 'absolute';
+        svg.style.top = '0';
+        svg.style.left = '0';
+        svg.style.width = '100%';
+        svg.style.height = '100%';
+        svg.style.pointerEvents = 'none';
+        svg.style.zIndex = '1000';
+        
+        // Create edge effects for all four sides
+        this.createEdgePath(svg, 'top', 0, 0, 600, 0);
+        this.createEdgePath(svg, 'bottom', 0, 400, 600, 400);
+        this.createEdgePath(svg, 'left', 0, 0, 0, 400);
+        this.createEdgePath(svg, 'right', 600, 0, 600, 400);
+        
+        edgeLayer.appendChild(svg);
+        console.log('✨ Edge effect applied directly to test canvas');
+      }
+      
+      createEdgePath(svg, side, x1, y1, x2, y2) {
+        const edgePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        
+        let pathData = '';
+        
+        if (side === 'top' || side === 'bottom') {
+          pathData = this.createHorizontalEdgePath(x1, y1, x2, y2);
+        } else {
+          pathData = this.createVerticalEdgePath(x1, y1, x2, y2);
+        }
+        
+        edgePath.setAttribute('d', pathData);
+        edgePath.setAttribute('fill', this.currentSettings.color);
+        edgePath.setAttribute('opacity', this.currentSettings.opacity);
+        edgePath.setAttribute('stroke', this.currentSettings.color);
+        edgePath.setAttribute('stroke-width', this.currentSettings.thickness);
+        edgePath.setAttribute('stroke-linejoin', 'round');
+        
+        svg.appendChild(edgePath);
+      }
+      
+      createHorizontalEdgePath(x1, y1, x2, y2) {
+        const edgeLength = Math.abs(x2 - x1);
+        const isTop = y1 === 0;
+        
+        if (this.currentSettings.style === 'torn') {
+          let path = `M${x1},${y1}`;
+          const segments = 20;
+          const segmentWidth = edgeLength / segments;
+          
+          for (let i = 0; i <= segments; i++) {
+            const x = x1 + (i * segmentWidth);
+            const y = y1 + (Math.random() - 0.5) * 20;
+            path += ` L${x},${y}`;
+          }
+          
+          return path;
+        } else if (this.currentSettings.style === 'scalloped') {
+          let path = `M${x1},${y1}`;
+          const segments = 8;
+          const scallopWidth = edgeLength / segments;
+          
+          for (let i = 0; i <= segments; i++) {
+            const x = x1 + (i * scallopWidth);
+            const y = y1 + (isTop ? 15 : -15);
+            path += ` L${x},${y}`;
+          }
+          
+          return path;
+        } else if (this.currentSettings.style === 'zigzag') {
+          let path = `M${x1},${y1}`;
+          const segments = 12;
+          const zigzagWidth = edgeLength / segments;
+          
+          for (let i = 0; i <= segments; i++) {
+            const x = x1 + (i * zigzagWidth);
+            const y = y1 + (isTop ? 20 : -20);
+            path += ` L${x},${y}`;
+          }
+          
+          return path;
+        } else {
+          return `M${x1},${y1} L${x2},${y2}`;
+        }
+      }
+      
+      createVerticalEdgePath(x1, y1, x2, y2) {
+        const edgeLength = Math.abs(y2 - y1);
+        const isLeft = x1 === 0;
+        
+        if (this.currentSettings.style === 'torn') {
+          let path = `M${x1},${y1}`;
+          const segments = 20;
+          const segmentHeight = edgeLength / segments;
+          
+          for (let i = 0; i <= segments; i++) {
+            const y = y1 + (i * segmentHeight);
+            const x = x1 + (Math.random() - 0.5) * 20;
+            path += ` L${x},${y}`;
+          }
+          
+          return path;
+        } else if (this.currentSettings.style === 'scalloped') {
+          let path = `M${x1},${y1}`;
+          const segments = 8;
+          const scallopHeight = edgeLength / segments;
+          
+          for (let i = 0; i <= segments; i++) {
+            const y = y1 + (i * scallopHeight);
+            const x = x1 + (isLeft ? 15 : -15);
+            path += ` L${x},${y}`;
+          }
+          
+          return path;
+        } else if (this.currentSettings.style === 'zigzag') {
+          let path = `M${x1},${y1}`;
+          const segments = 12;
+          const zigzagHeight = edgeLength / segments;
+          
+          for (let i = 0; i <= segments; i++) {
+            const y = y1 + (i * zigzagHeight);
+            const x = x1 + (isLeft ? 20 : -20);
+            path += ` L${x},${y}`;
+          }
+          
+          return path;
+        } else {
+          return `M${x1},${y1} L${x2},${y2}`;
+        }
+      }
+      
+      resetEdgeSettings() {
+        this.currentSettings = {
+          style: 'none',
+          variant: 'default',
+          thickness: 3,
+          opacity: 0.8,
+          color: '#000000'
+        };
+        
+        // Update UI
+        const edgeStyle = document.getElementById('edge-style');
+        const edgeVariant = document.getElementById('edge-variant');
+        const edgeThickness = document.getElementById('edge-thickness');
+        const edgeOpacity = document.getElementById('edge-opacity');
+        const edgeColor = document.getElementById('edge-color');
+        
+        if (edgeStyle) edgeStyle.value = 'none';
+        if (edgeVariant) edgeVariant.value = 'default';
+        if (edgeThickness) edgeThickness.value = 3;
+        if (edgeOpacity) edgeOpacity.value = 0.8;
+        if (edgeColor) edgeColor.value = '#000000';
+        
+        document.getElementById('edge-thickness-value').textContent = '3';
+        document.getElementById('edge-opacity-value').textContent = '0.8';
+        
+        this.updateCurrentStyle();
+        this.updateCurrentVariant();
+        this.clearEdgeEffects();
+        this.updateDebugInfo('Edge settings reset to defaults');
+      }
+      
+      clearEdgeEffects() {
+        const edgeLayer = document.getElementById('edge-layer');
+        if (edgeLayer) {
+          edgeLayer.innerHTML = '';
+          this.effectsApplied = 0;
+          this.updateEffectsCount();
+          this.updateDebugInfo('Edge effects cleared');
+        }
+      }
+      
+      updateCurrentStyle() {
+        const currentStyle = document.getElementById('current-style');
+        if (currentStyle) {
+          currentStyle.textContent = this.currentSettings.style;
+        }
+      }
+      
+      updateCurrentVariant() {
+        const currentVariant = document.getElementById('current-variant');
+        if (currentVariant) {
+          currentVariant.textContent = this.currentSettings.variant;
+        }
+      }
+      
+      updateEffectsCount() {
+        const effectsCount = document.getElementById('effects-count');
+        if (effectsCount) {
+          effectsCount.textContent = this.effectsApplied;
+        }
+      }
+      
+      updateStatus(status, type) {
+        const systemStatus = document.getElementById('system-status');
+        if (systemStatus) {
+          systemStatus.textContent = status;
+          systemStatus.className = `status-${type}`;
+        }
+      }
+      
+      updateDebugInfo(message) {
+        const debugOutput = document.getElementById('debug-output');
+        if (debugOutput) {
+          const timestamp = new Date().toLocaleTimeString();
+          debugOutput.textContent = `[${timestamp}] ${message}\n${debugOutput.textContent}`;
+          
+          // Keep only last 10 lines
+          const lines = debugOutput.textContent.split('\n');
+          if (lines.length > 10) {
+            debugOutput.textContent = lines.slice(0, 10).join('\n');
+          }
+        }
+      }
+    }
+    
+    // Initialize the test system when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🧪 Test page: DOM ready, initializing BorderEdgesTestSystem...');
+      window.borderEdgesTestSystem = new BorderEdgesTestSystem();
+    });
+  </script>
+</body>
+</html>
