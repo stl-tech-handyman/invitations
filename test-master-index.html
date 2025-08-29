@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎯 Master Test Index - All Systems</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+    
+    .header h1 {
+      font-size: 3rem;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .header p {
+      font-size: 1.2rem;
+      margin: 10px 0;
+      opacity: 0.9;
+    }
+    
+    .systems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    
+    .system-card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      border-left: 5px solid;
+    }
+    
+    .system-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+    
+    .system-card.border-edges {
+      border-left-color: #007bff;
+    }
+    
+    .system-card.overlay {
+      border-left-color: #28a745;
+    }
+    
+    .system-card.background {
+      border-left-color: #17a2b8;
+    }
+    
+    .system-card.text {
+      border-left-color: #ffc107;
+    }
+    
+    .system-card.color {
+      border-left-color: #dc3545;
+    }
+    
+    .system-card.font {
+      border-left-color: #6f42c1;
+    }
+    
+    .system-card.shadow {
+      border-left-color: #6c757d;
+    }
+    
+    .system-card.sprite {
+      border-left-color: #fd7e14;
+    }
+    
+    .system-card.particle {
+      border-left-color: #e83e8c;
+    }
+    
+    .system-card h2 {
+      margin: 0 0 15px 0;
+      color: #333;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .system-card .icon {
+      font-size: 2rem;
+    }
+    
+    .system-card p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .system-card .features {
+      margin-bottom: 20px;
+    }
+    
+    .system-card .features h4 {
+      color: #333;
+      margin: 0 0 10px 0;
+      font-size: 1rem;
+    }
+    
+    .system-card .features ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .system-card .features li {
+      margin-bottom: 5px;
+    }
+    
+    .system-card .status {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .system-card .status.ready {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .system-card .status.in-progress {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .system-card .status.planned {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .system-card .actions {
+      margin-top: 20px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .btn:hover {
+      background: #0056b3;
+      transform: translateY(-2px);
+    }
+    
+    .btn.primary {
+      background: #007bff;
+    }
+    
+    .btn.success {
+      background: #28a745;
+    }
+    
+    .btn.info {
+      background: #17a2b8;
+    }
+    
+    .btn.warning {
+      background: #ffc107;
+      color: #333;
+    }
+    
+    .btn.danger {
+      background: #dc3545;
+    }
+    
+    .footer {
+      text-align: center;
+      color: white;
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+    }
+    
+    .footer h3 {
+      margin: 0 0 15px 0;
+    }
+    
+    .footer p {
+      margin: 5px 0;
+      opacity: 0.9;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #28a745, #17a2b8);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+    
+    .stat-card {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 0;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin: 5px 0 0 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎯 Master Test Index</h1>
+      <p>Comprehensive Testing Environment for All Invitation Builder Systems</p>
+      <p><strong>Goal:</strong> Test each system in isolation, then integrate safely with zero conflicts</p>
+      
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 30%;"></div>
+      </div>
+      
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Systems Ready</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">7</div>
+          <div class="stat-label">Systems Planned</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Conflicts</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="systems-grid">
+      <!-- Border Edges System -->
+      <div class="system-card border-edges">
+        <h2><span class="icon">🎨</span>Border Edges System</h2>
+        <p>Comprehensive edge styling system with multiple styles, variants, and properties. Fixes the "disappearing effects" issue.</p>
+        
+        <div class="features">
+          <h4>✅ Features Ready:</h4>
+          <ul>
+            <li>10 Edge Styles (torn, scalloped, zigzag, wave, spikes, dots, geometric, organic, vintage)</li>
+            <li>5 Variants (default, rough, smooth, sharp, soft)</li>
+            <li>Thickness, Opacity, Color controls</li>
+            <li>Real-time preview with permanent effects</li>
+            <li>Comprehensive debug information</li>
+          </ul>
+        </div>
+        
+        <div class="status ready">Ready for Testing</div>
+        
+        <div class="actions">
+          <a href="test-border-edges-comprehensive.html" class="btn primary">🧪 Test System</a>
+          <a href="test-border-edges.html" class="btn info">🔍 Basic Test</a>
+        </div>
+      </div>
+      
+      <!-- Overlay System -->
+      <div class="system-card overlay">
+        <h2><span class="icon">🖼️</span>Overlay System</h2>
+        <p>Frame overlay system with multiple styles, positioning, and blend modes. Effects now persist permanently.</p>
+        
+        <div class="features">
+          <h4>✅ Features Ready:</h4>
+          <ul>
+            <li>7 Frame Styles (elegant, vintage, modern, playful, nature, ornate, minimal)</li>
+            <li>Opacity, Scale, Position controls</li>
+            <li>5 Blend Modes (normal, multiply, screen, overlay, soft-light)</li>
+            <li>5 Position options (center, top-left, top-right, bottom-left, bottom-right)</li>
+            <li>Real-time preview with permanent effects</li>
+          </ul>
+        </div>
+        
+        <div class="status ready">Ready for Testing</div>
+        
+        <div class="actions">
+          <a href="test-overlay-system-comprehensive.html" class="btn success">🧪 Test System</a>
+        </div>
+      </div>
+      
+      <!-- Background System -->
+      <div class="system-card background">
+        <h2><span class="icon">🎨</span>Background System</h2>
+        <p>Advanced background system with colors, gradients, textures, and stock images. Multiple layers with permanent effects.</p>
+        
+        <div class="features">
+          <h4>✅ Features Ready:</h4>
+          <ul>
+            <li>4 Modes (Color, Gradient, Texture, Stock Image)</li>
+            <li>5 Texture Types (noise, dots, lines, grid, waves)</li>
+            <li>Gradient directions (horizontal, vertical, diagonal)</li>
+            <li>Advanced image controls (blur, brightness, vignette)</li>
+            <li>Real-time preview with permanent effects</li>
+          </ul>
+        </div>
+        
+        <div class="status ready">Ready for Testing</div>
+        
+        <div class="actions">
+          <a href="test-background-system-comprehensive.html" class="btn info">🧪 Test System</a>
+        </div>
+      </div>
+      
+      <!-- Text System -->
+      <div class="system-card text">
+        <h2><span class="icon">📝</span>Text System</h2>
+        <p>Comprehensive text management system for all invitation content fields with real-time updates.</p>
+        
+        <div class="features">
+          <h4>🔄 Features Planned:</h4>
+          <ul>
+            <li>8 Text Fields (pill, title, subtitle, names, date, time, location, rsvp)</li>
+            <li>Real-time text updates</li>
+            <li>Text validation and formatting</li>
+            <li>Character limits and preview</li>
+            <li>Auto-save and restore</li>
+          </ul>
+        </div>
+        
+        <div class="status in-progress">In Development</div>
+        
+        <div class="actions">
+          <a href="#" class="btn warning" onclick="alert('Coming soon!')">🚧 Coming Soon</a>
+        </div>
+      </div>
+      
+      <!-- Color System -->
+      <div class="system-card color">
+        <h2><span class="icon">🎨</span>Color System</h2>
+        <p>Advanced color management system with accent colors, color schemes, and real-time application.</p>
+        
+        <div class="features">
+          <h4>🔄 Features Planned:</h4>
+          <ul>
+            <li>Primary and Secondary accent colors</li>
+            <li>Color scheme presets</li>
+            <li>Color harmony rules</li>
+            <li>Real-time color application</li>
+            <li>Color accessibility checking</li>
+          </ul>
+        </div>
+        
+        <div class="status in-progress">In Development</div>
+        
+        <div class="actions">
+          <a href="#" class="btn warning" onclick="alert('Coming soon!')">🚧 Coming Soon</a>
+        </div>
+      </div>
+      
+      <!-- Font System -->
+      <div class="system-card font">
+        <h2><span class="icon">🔤</span>Font System</h2>
+        <p>Typography management system with font families, sizes, and styling for different text elements.</p>
+        
+        <div class="features">
+          <h4>🔄 Features Planned:</h4>
+          <ul>
+            <li>Font family selection (title, names, body)</li>
+            <li>Font size controls</li>
+            <li>Font weight and style</li>
+            <li>Google Fonts integration</li>
+            <li>Font pairing suggestions</li>
+          </ul>
+        </div>
+        
+        <div class="status in-progress">In Development</div>
+        
+        <div class="actions">
+          <a href="#" class="btn warning" onclick="alert('Coming soon!')">🚧 Coming Soon</a>
+        </div>
+      </div>
+      
+      <!-- Shadow System -->
+      <div class="system-card shadow">
+        <h2><span class="icon">🌑</span>Shadow System</h2>
+        <p>Advanced shadow and depth system with customizable shadows, glows, and 3D effects.</p>
+        
+        <div class="features">
+          <h4>🔄 Features Planned:</h4>
+          <ul>
+            <li>Shadow position (X, Y)</li>
+            <li>Shadow blur and spread</li>
+            <li>Shadow color and opacity</li>
+            <li>Multiple shadow layers</li>
+            <li>3D depth effects</li>
+          </ul>
+        </div>
+        
+        <div class="status in-progress">In Development</div>
+        
+        <div class="actions">
+          <a href="#" class="btn warning" onclick="alert('Coming soon!')">🚧 Coming Soon</a>
+        </div>
+      </div>
+      
+      <!-- Sprite System -->
+      <div class="system-card sprite">
+        <h2><span class="icon">🎭</span>Sprite System</h2>
+        <p>Decorative sprite and icon system with density controls and category-based organization.</p>
+        
+        <div class="features">
+          <h4>🔄 Features Planned:</h4>
+          <ul>
+            <li>Sprite density controls</li>
+            <li>Category-based organization</li>
+            <li>Sprite positioning and scaling</li>
+            <li>Random placement algorithms</li>
+            <li>Sprite library management</li>
+          </ul>
+        </div>
+        
+        <div class="status in-progress">In Development</div>
+        
+        <div class="actions">
+          <a href="#" class="btn warning" onclick="alert('Coming soon!')">🚧 Coming Soon</a>
+        </div>
+      </div>
+      
+      <!-- Particle System -->
+      <div class="system-card particle">
+        <h2><span class="icon">✨</span>Particle System</h2>
+        <p>Dynamic particle effects system with customizable animations and interactive elements.</p>
+        
+        <div class="features">
+          <h4>🔄 Features Planned:</h4>
+          <ul>
+            <li>Particle count and density</li>
+            <li>Particle movement patterns</li>
+            <li>Color and size variations</li>
+            <li>Interactive particle effects</li>
+            <li>Performance optimization</li>
+          </ul>
+        </div>
+        
+        <div class="status in-progress">In Development</div>
+        
+        <div class="actions">
+          <a href="#" class="btn warning" onclick="alert('Coming soon!')">🚧 Coming Soon</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <h3>🚀 Integration Strategy</h3>
+      <p><strong>Phase 1:</strong> ✅ Border Edges, Overlay, Background systems ready and tested</p>
+      <p><strong>Phase 2:</strong> 🔄 Text, Color, Font systems in development</p>
+      <p><strong>Phase 3:</strong> 📋 Shadow, Sprite, Particle systems planned</p>
+      <p><strong>Goal:</strong> Zero conflicts, clean integration, comprehensive testing</p>
+    </div>
+  </div>
+  
+  <script>
+    // Update progress bar based on completed systems
+    function updateProgress() {
+      const totalSystems = 10;
+      const completedSystems = 3; // Border Edges, Overlay, Background
+      const progress = (completedSystems / totalSystems) * 100;
+      
+      const progressFill = document.querySelector('.progress-fill');
+      if (progressFill) {
+        progressFill.style.width = progress + '%';
+      }
+      
+      // Update stats
+      const readyStat = document.querySelector('.stat-number');
+      if (readyStat) {
+        readyStat.textContent = completedSystems;
+      }
+    }
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProgress();
+      console.log('🎯 Master Test Index: Ready for comprehensive system testing');
+    });
+  </script>
+</body>
+</html>
