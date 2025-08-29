@@ -2,89 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Invitation Builder v2 - Modular</title>
+  <meta name="viewport" content="width="initial-scale=1" />
+  <title>Invitation Builder v2 - Modular with Sidebars</title>
   
   <!-- External CSS and JS modules -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link id="gfonts" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   
+  <!-- External CSS files -->
+  <link rel="stylesheet" href="css/01-variables.css">
+  <link rel="stylesheet" href="css/02-layout.css">
+  <link rel="stylesheet" href="css/03-typography.css">
+  <link rel="stylesheet" href="css/04-forms.css">
+  <link rel="stylesheet" href="css/05-canvas.css">
+  <link rel="stylesheet" href="css/06-animations.css">
+  <link rel="stylesheet" href="css/07-notifications.css">
+  <link rel="stylesheet" href="css/08-controls.css">
+  <link rel="stylesheet" href="css/09-interactive.css">
+  <link rel="stylesheet" href="css/10-responsive.css">
+  
   <style>
-    /* Basic CSS Variables */
-    :root {
-      --accent: #2ec5ff;
-      --accent-2: #ff6b6b;
-      --bg: #f7f7fb;
-      --ink: #1b1b1f;
-      --card: #ffffff;
-      --shadow: 0 10px 30px rgba(0,0,0,.08);
-      --radius: 22px;
-      
-      /* Sidebar fonts - never change */
-      --sidebar-font: system-ui, -apple-system, sans-serif;
-      
-      /* Invitation fonts - can be changed by user (scoped to invitation only) */
-      --title-font: "Playfair Display", serif;
-      --names-font: "Playfair Display", serif;
-      --body-font: "Quicksand", system-ui, -apple-system, sans-serif;
-    }
-    
-    /* Reset and basic styles */
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
-    
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: var(--sidebar-font);
-    }
-    
-    /* Main app layout */
-    .app {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 22px;
-      padding: 22px;
-      height: 100%;
-    }
-    
-    /* Sidebar panel */
-    .panel {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 18px 18px 24px;
-      box-shadow: var(--shadow);
-      overflow: auto;
-    }
-    
-    .panel h2 {
-      font-size: 20px;
-      margin: 6px 0 14px;
-      font-family: var(--sidebar-font);
-    }
-    
-    /* Stage area */
-    .stage-wrap {
-      display: grid;
-      place-items: center;
-      height: 100vh;
-      padding: 20px;
-    }
-    
-    .stage {
-      width: 900px;
-      max-height: calc(100vh - 40px);
-      height: auto;
-      position: relative;
-      overflow: hidden;
-      background: white;
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      aspect-ratio: 2/3;
-    }
-    
-    /* Test button */
+    /* Additional custom styles for v2 */
     .test-button {
       background: #FF9800;
       color: white;
@@ -100,977 +39,385 @@
     .test-button:hover {
       background: #F57C00;
     }
+    
+    .status-display {
+      background: #f0f0f0;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #666;
+      margin-top: 16px;
+    }
+    
+    /* Ensure stage content is properly styled */
+    .stage-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      padding: 40px;
+    }
+    
+    .stage h1, .stage h2, .stage p {
+      margin: 0;
+      min-height: 24px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .stage h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      min-height: 60px;
+    }
+    
+    .stage h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      min-height: 40px;
+    }
+    
+    .stage p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
   </style>
 </head>
 <body>
   <div class="app">
-    <!-- Sidebar Panel -->
-    <aside class="panel">
-      <h2>🧪 Invitation Builder v2</h2>
-      
-      <!-- Test Section -->
-      <div style="margin-bottom: 20px;">
-        <h3>Testing</h3>
-        <button id="test-basic" class="test-button">🧪 Test Basic Structure</button>
-        <button id="test-css" class="test-button">🎨 Test CSS Variables</button>
-        <button id="test-layout" class="test-button">📐 Test Layout</button>
-        <button id="test-text" class="test-button">📝 Test Text System</button>
-        <button id="test-colors" class="test-button">🎨 Test Color System</button>
-        <button id="test-fonts" class="test-button">🔤 Test Font System</button>
-        <button id="test-background" class="test-button">🖼️ Test Background System</button>
-        <button id="test-all-systems" class="test-button" style="
-          background: #2196F3;
-          font-weight: bold;
-          margin-top: 16px;
-        ">🚀 Test All Systems</button>
-        <button id="test-validation" class="test-button" style="
-          background: #9C27B0;
-          font-weight: bold;
-          margin-top: 8px;
-        ">🔍 Test Validation System</button>
-      </div>
-      
-      <!-- Text Input System -->
-      <div style="margin-bottom: 20px;">
-        <h3>📝 Text Input</h3>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Title</label>
-          <input type="text" id="title-input" placeholder="Enter title..." style="
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: var(--sidebar-font);
-          ">
-        </div>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Subtitle</label>
-          <input type="text" id="subtitle-input" placeholder="Enter subtitle..." style="
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: var(--sidebar-font);
-          ">
-        </div>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Names</label>
-          <input type="text" id="names-input" placeholder="Enter names..." style="
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: var(--sidebar-font);
-          ">
-        </div>
-      </div>
-      
-      <!-- Color System -->
-      <div style="margin-bottom: 20px;">
-        <h3>🎨 Colors</h3>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Primary Accent</label>
-          <input type="color" id="accent-color" value="#2ec5ff" style="
-            width: 100%;
-            height: 40px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-          ">
-        </div>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Secondary Accent</label>
-          <input type="color" id="accent2-color" value="#ff6b6b" style="
-            width: 100%;
-            height: 40px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-          ">
-        </div>
-      </div>
-      
-      <!-- Font System -->
-      <div style="margin-bottom: 20px;">
-        <h3>🔤 Fonts</h3>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Title Font</label>
-          <select id="title-font" style="
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: var(--sidebar-font);
-          ">
-            <option value="Playfair Display" selected>Playfair Display</option>
-            <option value="Bebas Neue">Bebas Neue</option>
-            <option value="Abril Fatface">Abril Fatface</option>
-            <option value="Poppins">Poppins</option>
-            <option value="Montserrat">Montserrat</option>
-          </select>
-        </div>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Body Font</label>
-          <select id="body-font" style="
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: var(--sidebar-font);
-          ">
-            <option value="Quicksand" selected>Quicksand</option>
-            <option value="Open Sans">Open Sans</option>
-            <option value="Roboto">Roboto</option>
-            <option value="Lato">Lato</option>
-            <option value="Inter">Inter</option>
-          </select>
-        </div>
-      </div>
-      
-      <!-- Background System -->
-      <div style="margin-bottom: 20px;">
-        <h3>🖼️ Background</h3>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Background Type</label>
-          <select id="bg-type" style="
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: var(--sidebar-font);
-          ">
-            <option value="solid" selected>Solid Color</option>
-            <option value="gradient">Gradient</option>
-            <option value="radial">Radial</option>
-            <option value="image">Background Image</option>
-          </select>
-        </div>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Background Color</label>
-          <input type="color" id="bg-color" value="#ffffff" style="
-            width: 100%;
-            height: 40px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-          ">
-        </div>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Secondary Color (for gradients)</label>
-          <input type="color" id="bg-color2" value="#f0f0f0" style="
-            width: 100%;
-            height: 40px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-          ">
-        </div>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Background Image</label>
-          <select id="bg-image" style="
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: var(--sidebar-font);
-          ">
-            <option value="" selected>Select an image...</option>
-            <option value="backgrounds/i-1.jpg">Image 1 (i-1.jpg)</option>
-            <option value="backgrounds/i-2.jpg">Image 2 (i-2.jpg)</option>
-            <option value="backgrounds/i-3.webp">Image 3 (i-3.webp)</option>
-            <option value="backgrounds/i-4.jpeg">Image 4 (i-4.jpeg)</option>
-            <option value="backgrounds/i-5.jpg">Image 5 (i-5.jpg)</option>
-            <option value="backgrounds/i-6.png">Image 6 (i-6.png)</option>
-            <option value="backgrounds/i-7.png">Image 7 (i-7.png)</option>
-            <option value="backgrounds/i-8.png">Image 8 (i-8.png)</option>
-          </select>
-        </div>
-        <div style="margin-bottom: 12px;">
-          <label style="display: block; font-size: 12px; margin-bottom: 4px;">Image Opacity</label>
-          <input type="range" id="bg-opacity" min="0" max="100" value="100" style="
-            width: 100%;
-            height: 20px;
-          ">
-          <div style="text-align: center; font-size: 11px; color: #666;">
-            <span id="opacity-value">100%</span>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Status Display -->
-      <div id="status" style="
-        background: #f0f0f0;
-        padding: 12px;
-        border-radius: 8px;
-        font-size: 12px;
-        color: #666;
-        margin-top: 16px;
-      ">
-        Status: Ready for testing
-      </div>
-    </aside>
+    <!-- Left Sidebar: Text Editing Controls -->
+    <div id="left-panel-container"></div>
     
-    <!-- Main Stage Area -->
+    <!-- Center Stage Area -->
     <main class="stage-wrap">
       <section class="stage" id="stage">
-        <div style="
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          height: 100%;
-          text-align: center;
-          padding: 40px;
-        ">
+        <div class="stage-content">
           <!-- Title Display -->
-          <h1 id="title-display" style="
-            font-family: var(--title-font);
-            font-size: 48px;
-            color: var(--accent);
-            margin: 0 0 20px 0;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-          ">Invitation Builder v2</h1>
+          <h1 id="title-display">Invitation Builder v2</h1>
           
           <!-- Subtitle Display -->
-          <p id="subtitle-display" style="
-            font-family: var(--body-font);
-            font-size: 18px;
-            color: var(--ink);
-            margin: 0 0 30px 0;
-            min-height: 24px;
-            display: flex;
-            align-items: center;
-          ">Modular version - building one piece at a time</p>
+          <p id="subtitle-display">Modular version with dual sidebars</p>
           
           <!-- Names Display -->
-          <h2 id="names-display" style="
-            font-family: var(--names-font);
-            font-size: 32px;
-            color: var(--accent-2);
-            margin: 0 0 30px 0;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-          ">Your Names Here</h2>
+          <h2 id="names-display">Your Names Here</h2>
           
-          <div style="
-            margin-top: 40px;
-            padding: 20px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 16px;
-            font-size: 14px;
-            color: #666;
-          ">
+          <!-- Status Display -->
+          <div class="status-display">
             <strong>Current Status:</strong><br>
             ✅ Basic HTML structure<br>
             ✅ CSS variables and layout<br>
-            ✅ Test buttons<br>
+            ✅ Dual sidebar system<br>
             ✅ Text input system<br>
-                         ✅ Color system<br>
-             ✅ Font system<br>
-             ✅ Background system (with images!)<br>
-             ✅ Validation system<br>
-             🔄 Next: Adding sprite system
+            ✅ Color system<br>
+            ✅ Font system<br>
+            ✅ Background system<br>
+            ✅ Validation system<br>
+            🔄 Next: Adding sprite system
           </div>
         </div>
       </section>
     </main>
+    
+    <!-- Right Sidebar: All Other Controls -->
+    <div id="right-panel-container"></div>
   </div>
   
-  <!-- Basic JavaScript for testing -->
-  <script>
-    // Basic test functionality
-    function updateStatus(message) {
-      const status = document.getElementById('status');
-      status.textContent = `Status: ${message}`;
-      console.log(`📊 Status: ${message}`);
-    }
+  <!-- External JavaScript modules -->
+  <script type="module" src="js/partial-loader.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/select-initializer.js"></script>
+  <script type="module" src="js/sprite-browser.js"></script>
+  <script type="module" src="js/sprite-manager.js"></script>
+  <script type="module" src="js/event-handlers.js"></script>
+  
+  <!-- Main application script -->
+  <script type="module">
+    import { loadPartials } from './js/partial-loader.js';
+    import { updateFonts, updateText } from './js/main.js';
     
-    // Test basic structure
-    document.getElementById('test-basic').addEventListener('click', () => {
-      console.log('🧪 Testing basic structure...');
+    // Initialize the application
+    async function initializeApp() {
+      console.log('🚀 Initializing Invitation Builder v2...');
       
-      // Test if elements exist
-      const stage = document.getElementById('stage');
-      const panel = document.querySelector('.panel');
-      const app = document.querySelector('.app');
-      
-      if (stage && panel && app) {
-        updateStatus('✅ Basic structure working');
-        console.log('✅ All basic elements found');
-      } else {
-        updateStatus('❌ Basic structure broken');
-        console.error('❌ Missing basic elements');
-      }
-    });
-    
-    // Test CSS variables
-    document.getElementById('test-css').addEventListener('click', () => {
-      console.log('🎨 Testing CSS variables...');
-      
-      const root = document.documentElement;
-      const computedStyle = getComputedStyle(root);
-      
-      const accent = computedStyle.getPropertyValue('--accent').trim();
-      const bg = computedStyle.getPropertyValue('--bg').trim();
-      
-      if (accent === '#2ec5ff' && bg === '#f7f7fb') {
-        updateStatus('✅ CSS variables working');
-        console.log('✅ CSS variables loaded correctly');
-      } else {
-        updateStatus('❌ CSS variables broken');
-        console.error('❌ CSS variables not loading');
-      }
-    });
-    
-    // Test layout
-    document.getElementById('test-layout').addEventListener('click', () => {
-      console.log('📐 Testing layout...');
-      
-      const app = document.querySelector('.app');
-      const computedStyle = getComputedStyle(app);
-      
-      const gridTemplate = computedStyle.gridTemplateColumns;
-      
-      if (gridTemplate.includes('380px') && gridTemplate.includes('1fr')) {
-        updateStatus('✅ Layout grid working');
-        console.log('✅ Grid layout applied correctly');
-      } else {
-        updateStatus('❌ Layout grid broken');
-        console.error('❌ Grid layout not working');
-      }
-    });
-    
-    // Text system functionality
-    function updateTextDisplay() {
-      const titleInput = document.getElementById('title-input');
-      const subtitleInput = document.getElementById('subtitle-input');
-      const namesInput = document.getElementById('names-input');
-      
-      const titleDisplay = document.getElementById('title-display');
-      const subtitleDisplay = document.getElementById('subtitle-display');
-      const namesDisplay = document.getElementById('names-display');
-      
-      if (titleInput && titleDisplay) {
-        titleDisplay.textContent = titleInput.value || 'Invitation Builder v2';
-      }
-      
-      if (subtitleInput && subtitleDisplay) {
-        subtitleDisplay.textContent = subtitleInput.value || 'Modular version - building one piece at a time';
-      }
-      
-      if (namesInput && namesDisplay) {
-        namesDisplay.textContent = namesInput.value || 'Your Names Here';
-      }
-    }
-    
-    // Add live text update listeners
-    function setupTextListeners() {
-      const inputs = ['title-input', 'subtitle-input', 'names-input'];
-      
-      inputs.forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-          input.addEventListener('input', updateTextDisplay);
-          console.log(`📝 Added listener for ${id}`);
-        }
-      });
-    }
-    
-    // Test text system
-    document.getElementById('test-text').addEventListener('click', () => {
-      console.log('📝 Testing text system...');
-      
-      // Test if all elements exist
-      const inputs = ['title-input', 'subtitle-input', 'names-input'];
-      const displays = ['title-display', 'subtitle-display', 'names-display'];
-      
-      let allFound = true;
-      
-      inputs.forEach(id => {
-        if (!document.getElementById(id)) {
-          console.error(`❌ Missing input: ${id}`);
-          allFound = false;
-        }
-      });
-      
-      displays.forEach(id => {
-        if (!document.getElementById(id)) {
-          console.error(`❌ Missing display: ${id}`);
-          allFound = false;
-        }
-      });
-      
-      if (allFound) {
-        updateStatus('✅ Text system working');
-        console.log('✅ Text system fully functional');
+      try {
+        // Load sidebar partials
+        await loadPartials();
         
-        // Test live update
-        const titleInput = document.getElementById('title-input');
-        if (titleInput) {
-          titleInput.value = 'Test Title';
-          updateTextDisplay();
-          console.log('✅ Live text update working');
-        }
-      } else {
-        updateStatus('❌ Text system broken');
-        console.error('❌ Text system has issues');
+        // Set up event listeners for the new sidebar structure
+        setupSidebarEventListeners();
+        
+        // Initialize all systems
+        initializeAllSystems();
+        
+        console.log('✅ Invitation Builder v2 initialized successfully');
+        
+      } catch (error) {
+        console.error('❌ Failed to initialize app:', error);
       }
-    });
+    }
     
-    // Color system functionality
-    function updateColors() {
-      const accentColor = document.getElementById('accent-color').value;
-      const accent2Color = document.getElementById('accent2-color').value;
+    // Set up event listeners for the new sidebar structure
+    function setupSidebarEventListeners() {
+      console.log('🔧 Setting up sidebar event listeners...');
+      
+      // Wait for partials to be loaded
+      setTimeout(() => {
+        // Text input listeners
+        const textInputs = ['pill', 'title', 'subtitle', 'names', 'date', 'time', 'location', 'rsvp'];
+        textInputs.forEach(id => {
+          const input = document.getElementById(id);
+          if (input) {
+            input.addEventListener('input', handleTextChange);
+            console.log(`📝 Added text listener for ${id}`);
+          }
+        });
+        
+        // Color input listeners
+        const colorInputs = ['accent', 'accent2'];
+        colorInputs.forEach(id => {
+          const input = document.getElementById(id);
+          if (input) {
+            input.addEventListener('input', handleColorChange);
+            console.log(`🎨 Added color listener for ${id}`);
+          }
+        });
+        
+        // Font select listeners
+        const fontSelects = ['font-title', 'font-names', 'font-body'];
+        fontSelects.forEach(id => {
+          const select = document.getElementById(id);
+          if (select) {
+            select.addEventListener('change', handleFontChange);
+            console.log(`🔤 Added font listener for ${id}`);
+          }
+        });
+        
+        // Background system listeners
+        const bgInputs = ['bg-mode', 'texture', 'tex-opacity', 'tex-scale', 'stock-image', 'img-opacity', 'img-blur', 'img-bright', 'img-vignette'];
+        bgInputs.forEach(id => {
+          const input = document.getElementById(id);
+          if (input) {
+            input.addEventListener('change', handleBackgroundChange);
+            input.addEventListener('input', handleBackgroundChange);
+            console.log(`🖼️ Added background listener for ${id}`);
+          }
+        });
+        
+        // Edge system listeners
+        const edgeInputs = ['edge-style', 'edge-variant', 'edge-thickness', 'edge-opacity', 'edge-color'];
+        edgeInputs.forEach(id => {
+          const input = document.getElementById(id);
+          if (input) {
+            input.addEventListener('change', handleEdgeChange);
+            input.addEventListener('input', handleEdgeChange);
+            console.log(`✂️ Added edge listener for ${id}`);
+          }
+        });
+        
+        // Overlay system listeners
+        const overlayInputs = ['overlay-style', 'overlay-opacity', 'overlay-scale', 'overlay-position', 'overlay-blend'];
+        overlayInputs.forEach(id => {
+          const input = document.getElementById(id);
+          if (input) {
+            input.addEventListener('change', handleOverlayChange);
+            input.addEventListener('input', handleOverlayChange);
+            console.log(`🎨 Added overlay listener for ${id}`);
+          }
+        });
+        
+        // Shadow system listeners
+        const shadowInputs = ['shadow-x', 'shadow-y', 'shadow-blur', 'shadow-color', 'shadow-opacity'];
+        shadowInputs.forEach(id => {
+          const input = document.getElementById(id);
+          if (input) {
+            input.addEventListener('change', handleShadowChange);
+            input.addEventListener('input', handleShadowChange);
+            console.log(`🌑 Added shadow listener for ${id}`);
+          }
+        });
+        
+        // Layout and effects listeners
+        const effectInputs = ['layout', 'effect', 'parallax', 'density', 'scale', 'sprite-anim'];
+        effectInputs.forEach(id => {
+          const input = document.getElementById(id);
+          if (input) {
+            input.addEventListener('change', handleEffectChange);
+            input.addEventListener('input', handleEffectChange);
+            console.log(`🎭 Added effect listener for ${id}`);
+          }
+        });
+        
+        console.log('✅ All sidebar event listeners set up');
+        
+      }, 500); // Wait for partials to load
+    }
+    
+    // Event handler functions
+    function handleTextChange(event) {
+      const input = event.target;
+      const value = input.value;
+      const id = input.id;
+      
+      console.log(`📝 Text changed: ${id} = "${value}"`);
+      
+      // Update corresponding display elements
+      switch (id) {
+        case 'title':
+          updateDisplayElement('title-display', value);
+          break;
+        case 'subtitle':
+          updateDisplayElement('subtitle-display', value);
+          break;
+        case 'names':
+          updateDisplayElement('names-display', value);
+          break;
+        // Add other text fields as needed
+      }
+    }
+    
+    function handleColorChange(event) {
+      const input = event.target;
+      const value = input.value;
+      const id = input.id;
+      
+      console.log(`🎨 Color changed: ${id} = ${value}`);
       
       // Update CSS variables
-      document.documentElement.style.setProperty('--accent', accentColor);
-      document.documentElement.style.setProperty('--accent-2', accent2Color);
-      
-      // Update display elements
-      const titleDisplay = document.getElementById('title-display');
-      const namesDisplay = document.getElementById('names-display');
-      
-      if (titleDisplay) titleDisplay.style.color = accentColor;
-      if (namesDisplay) namesDisplay.style.color = accent2Color;
-      
-      console.log('🎨 Colors updated:', { accent: accentColor, accent2: accent2Color });
-    }
-    
-    // Setup color listeners
-    function setupColorListeners() {
-      const colorInputs = ['accent-color', 'accent2-color'];
-      
-      colorInputs.forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-          input.addEventListener('input', updateColors);
-          console.log(`🎨 Added color listener for ${id}`);
-        }
-      });
-    }
-    
-    // Test color system
-    document.getElementById('test-colors').addEventListener('click', () => {
-      console.log('🎨 Testing color system...');
-      
-      const accentInput = document.getElementById('accent-color');
-      const accent2Input = document.getElementById('accent2-color');
-      
-      if (accentInput && accent2Input) {
-        updateStatus('✅ Color system working');
-        console.log('✅ Color system fully functional');
-        
-        // Test color change
-        accentInput.value = '#ff0000';
-        accent2Input.value = '#00ff00';
-        updateColors();
-        console.log('✅ Live color update working');
-      } else {
-        updateStatus('❌ Color system broken');
-        console.error('❌ Color system has issues');
-      }
-    });
-    
-    // Preload all fonts for better reliability
-    function preloadFonts() {
-      console.log('🔤 Preloading all fonts...');
-      
-      const fonts = [
-        'Playfair Display',
-        'Bebas Neue', 
-        'Abril Fatface',
-        'Poppins',
-        'Montserrat',
-        'Quicksand',
-        'Open Sans',
-        'Roboto',
-        'Lato',
-        'Inter'
-      ];
-      
-      fonts.forEach(font => {
-        const link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'font';
-        link.type = 'font/woff2';
-        link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:400,600,700&display=swap`;
-        link.crossOrigin = 'anonymous';
-        document.head.appendChild(link);
-        
-        // Also load the actual font
-        const fontLink = document.createElement('link');
-        fontLink.rel = 'stylesheet';
-        fontLink.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:400,600,700&display=swap`;
-        document.head.appendChild(fontLink);
-      });
-      
-      console.log('🔤 All fonts preloaded');
-    }
-    
-    // Font system functionality
-    function updateFonts() {
-      const titleFont = document.getElementById('title-font').value;
-      const bodyFont = document.getElementById('body-font').value;
-      
-      console.log('🔤 Updating fonts:', { titleFont, bodyFont });
-      
-      // Update Google Fonts link with proper encoding
-      const gfontsLink = document.getElementById('gfonts');
-      if (gfontsLink) {
-        try {
-          const families = [
-            `${titleFont}:400,600,700`,
-            `${bodyFont}:400,600,700`
-          ].map(f => `family=${encodeURIComponent(f)}`).join('&');
-          
-          const newHref = `https://fonts.googleapis.com/css2?${families}&display=swap`;
-          console.log('🔤 New Google Fonts URL:', newHref);
-          
-          gfontsLink.href = newHref;
-          
-          // Force reload of the font
-          const newLink = document.createElement('link');
-          newLink.rel = 'stylesheet';
-          newLink.href = newHref;
-          newLink.id = 'gfonts-new';
-          
-          // Remove old link and add new one
-          if (gfontsLink.parentNode) {
-            gfontsLink.parentNode.removeChild(gfontsLink);
-            document.head.appendChild(newLink);
-            newLink.id = 'gfonts';
-          }
-          
-        } catch (error) {
-          console.error('🔤 Error updating Google Fonts:', error);
-        }
-      }
-      
-      // Update CSS variables (scoped to stage only)
-      const stage = document.getElementById('stage');
-      if (stage) {
-        // Set font variables on the stage element
-        stage.style.setProperty('--title-font', `'${titleFont}', serif`);
-        stage.style.setProperty('--body-font', `'${bodyFont}', system-ui, sans-serif`);
-        
-        // Also update the specific text elements directly for immediate effect
-        const titleDisplay = document.getElementById('title-display');
-        const subtitleDisplay = document.getElementById('subtitle-display');
-        const namesDisplay = document.getElementById('names-display');
-        
-        if (titleDisplay) {
-          titleDisplay.style.fontFamily = `'${titleFont}', serif`;
-        }
-        if (subtitleDisplay) {
-          subtitleDisplay.style.fontFamily = `'${bodyFont}', system-ui, sans-serif`;
-        }
-        if (namesDisplay) {
-          namesDisplay.style.fontFamily = `'${titleFont}', serif`;
-        }
-        
-        console.log('🔤 Fonts applied to stage and elements');
-      }
-      
-      // Wait a bit for fonts to load, then verify
-      setTimeout(() => {
-        console.log('🔤 Fonts should now be loaded');
-        if (stage) {
-          console.log('🔤 Current stage font variables:', {
-            titleFont: getComputedStyle(stage).getPropertyValue('--title-font'),
-            bodyFont: getComputedStyle(stage).getPropertyValue('--body-font')
-          });
-        }
-      }, 1000);
-    }
-    
-    // Setup font listeners
-    function setupFontListeners() {
-      const fontInputs = ['title-font', 'body-font'];
-      
-      fontInputs.forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-          input.addEventListener('change', updateFonts);
-          console.log(`🔤 Added font listener for ${id}`);
-        }
-      });
-    }
-    
-    // Test font system
-    document.getElementById('test-fonts').addEventListener('click', () => {
-      console.log('🔤 Testing font system...');
-      
-      const titleFontSelect = document.getElementById('title-font');
-      const bodyFontSelect = document.getElementById('body-font');
-      
-      if (titleFontSelect && bodyFontSelect) {
-        updateStatus('✅ Font system working');
-        console.log('✅ Font system fully functional');
-        
-        // Test font change
-        titleFontSelect.value = 'Montserrat';
-        bodyFontSelect.value = 'Roboto';
-        updateFonts();
-        console.log('✅ Live font update working');
-        
-        // Verify fonts are actually loaded
-        setTimeout(() => {
-          verifyFontsLoaded();
-        }, 1500);
-      } else {
-        updateStatus('❌ Font system broken');
-        console.error('❌ Font system has issues');
-      }
-    });
-    
-    // Verify fonts are actually loaded
-    function verifyFontsLoaded() {
-      console.log('🔤 Verifying fonts are loaded...');
-      
-      const stage = document.getElementById('stage');
-      if (!stage) return;
-      
-      const computedStyle = getComputedStyle(stage);
-      const titleFont = computedStyle.getPropertyValue('--title-font');
-      const bodyFont = computedStyle.getPropertyValue('--body-font');
-      
-      console.log('🔤 Current font variables:', { titleFont, bodyFont });
-      
-      // Check if fonts are actually applied to elements
-      const titleDisplay = document.getElementById('title-display');
-      const subtitleDisplay = document.getElementById('subtitle-display');
-      
-      if (titleDisplay) {
-        const titleComputed = getComputedStyle(titleDisplay);
-        console.log('🔤 Title font family:', titleComputed.fontFamily);
-      }
-      
-      if (subtitleDisplay) {
-        const subtitleComputed = getComputedStyle(subtitleDisplay);
-        console.log('🔤 Subtitle font family:', subtitleComputed.fontFamily);
+      if (id === 'accent') {
+        document.documentElement.style.setProperty('--accent', value);
+        updateDisplayElement('title-display', null, { color: value });
+      } else if (id === 'accent2') {
+        document.documentElement.style.setProperty('--accent-2', value);
+        updateDisplayElement('names-display', null, { color: value });
       }
     }
     
-    // Background system functionality
+    function handleFontChange(event) {
+      const select = event.target;
+      const value = select.value;
+      const id = select.id;
+      
+      console.log(`🔤 Font changed: ${id} = ${value}`);
+      
+      // Update fonts using the existing font system
+      updateFonts();
+    }
+    
+    function handleBackgroundChange(event) {
+      const input = event.target;
+      const value = input.value;
+      const id = input.id;
+      
+      console.log(`🖼️ Background changed: ${id} = ${value}`);
+      
+      // Update background using the existing background system
+      updateBackground();
+    }
+    
+    function handleEdgeChange(event) {
+      const input = event.target;
+      const value = input.value;
+      const id = input.id;
+      
+      console.log(`✂️ Edge changed: ${id} = ${value}`);
+      
+      // Update edge effects
+      updateEdgeEffects();
+    }
+    
+    function handleOverlayChange(event) {
+      const input = event.target;
+      const value = input.value;
+      const id = input.id;
+      
+      console.log(`🎨 Overlay changed: ${id} = ${value}`);
+      
+      // Update overlay effects
+      updateOverlayEffects();
+    }
+    
+    function handleShadowChange(event) {
+      const input = event.target;
+      const value = input.value;
+      const id = input.id;
+      
+      console.log(`🌑 Shadow changed: ${id} = ${value}`);
+      
+      // Update shadow effects
+      updateShadowEffects();
+    }
+    
+    function handleEffectChange(event) {
+      const input = event.target;
+      const value = input.value;
+      const id = input.id;
+      
+      console.log(`🎭 Effect changed: ${id} = ${value}`);
+      
+      // Update effects
+      updateEffects();
+    }
+    
+    // Helper functions
+    function updateDisplayElement(elementId, text, styles = {}) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        if (text !== null) {
+          element.textContent = text;
+        }
+        if (styles) {
+          Object.assign(element.style, styles);
+        }
+      }
+    }
+    
+    // Placeholder functions for systems that will be implemented
     function updateBackground() {
-      const bgType = document.getElementById('bg-type').value;
-      const bgColor = document.getElementById('bg-color').value;
-      const bgColor2 = document.getElementById('bg-color2').value;
-      const bgImage = document.getElementById('bg-image').value;
-      const bgOpacity = document.getElementById('bg-opacity').value;
-      
-      const stage = document.getElementById('stage');
-      if (!stage) return;
-      
-      let backgroundStyle = '';
-      
-      switch (bgType) {
-        case 'solid':
-          backgroundStyle = bgColor;
-          break;
-        case 'gradient':
-          backgroundStyle = `linear-gradient(135deg, ${bgColor}, ${bgColor2})`;
-          break;
-        case 'radial':
-          backgroundStyle = `radial-gradient(circle at center, ${bgColor}, ${bgColor2})`;
-          break;
-        case 'image':
-          if (bgImage) {
-            backgroundStyle = `url('${bgImage}')`;
-            // Set background properties for proper image display
-            stage.style.backgroundSize = 'cover';
-            stage.style.backgroundPosition = 'center';
-            stage.style.backgroundRepeat = 'no-repeat';
-          } else {
-            backgroundStyle = bgColor; // Fallback to solid color
-          }
-          break;
-        default:
-          backgroundStyle = bgColor;
-      }
-      
-      // Apply the background
-      stage.style.background = backgroundStyle;
-      
-      // Handle image opacity if it's an image background
-      if (bgType === 'image' && bgImage) {
-        // Create a pseudo-element for opacity control
-        let opacityOverlay = stage.querySelector('.bg-opacity-overlay');
-        if (!opacityOverlay) {
-          opacityOverlay = document.createElement('div');
-          opacityOverlay.className = 'bg-opacity-overlay';
-          opacityOverlay.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: ${bgColor};
-            opacity: ${1 - (bgOpacity / 100)};
-            pointer-events: none;
-            z-index: 1;
-          `;
-          stage.appendChild(opacityOverlay);
-        } else {
-          opacityOverlay.style.background = bgColor;
-          opacityOverlay.style.opacity = 1 - (bgOpacity / 100);
-        }
-      } else {
-        // Remove opacity overlay if not using image
-        const opacityOverlay = stage.querySelector('.bg-opacity-overlay');
-        if (opacityOverlay) {
-          opacityOverlay.remove();
-        }
-      }
-      
-      console.log('🖼️ Background updated:', { 
-        type: bgType, 
-        color1: bgColor, 
-        color2: bgColor2, 
-        image: bgImage, 
-        opacity: bgOpacity 
-      });
+      console.log('🖼️ Background system update (to be implemented)');
     }
     
-    // Setup background listeners
-    function setupBackgroundListeners() {
-      const bgInputs = ['bg-type', 'bg-color', 'bg-color2', 'bg-image', 'bg-opacity'];
-      
-      bgInputs.forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-          input.addEventListener('change', updateBackground);
-          input.addEventListener('input', updateBackground);
-          console.log(`🖼️ Added background listener for ${id}`);
-        }
-      });
-      
-      // Special handling for opacity slider to show value
-      const opacitySlider = document.getElementById('bg-opacity');
-      const opacityValue = document.getElementById('opacity-value');
-      if (opacitySlider && opacityValue) {
-        opacitySlider.addEventListener('input', () => {
-          opacityValue.textContent = `${opacitySlider.value}%`;
-        });
-      }
+    function updateEdgeEffects() {
+      console.log('✂️ Edge effects update (to be implemented)');
     }
     
-    // Test background system
-    document.getElementById('test-background').addEventListener('click', () => {
-      console.log('🖼️ Testing background system...');
-      
-      const bgTypeSelect = document.getElementById('bg-type');
-      const bgColorInput = document.getElementById('bg-color');
-      const bgColor2Input = document.getElementById('bg-color2');
-      const bgImageSelect = document.getElementById('bg-image');
-      const bgOpacitySlider = document.getElementById('bg-opacity');
-      
-      if (bgTypeSelect && bgColorInput && bgColor2Input && bgImageSelect && bgOpacitySlider) {
-        updateStatus('✅ Background system working');
-        console.log('✅ Background system fully functional');
-        
-        // Test image background
-        bgTypeSelect.value = 'image';
-        bgImageSelect.value = 'backgrounds/i-1.jpg';
-        bgColorInput.value = '#ffffff';
-        bgOpacitySlider.value = 80;
-        updateBackground();
-        console.log('✅ Live background image update working');
-      } else {
-        updateStatus('❌ Background system broken');
-        console.error('❌ Background system has issues');
-      }
-    });
-    
-    // Test all systems
-    document.getElementById('test-all-systems').addEventListener('click', () => {
-      console.log('🚀 Testing all systems...');
-      
-      // Test text system
-      const titleInput = document.getElementById('title-input');
-      if (titleInput) {
-        titleInput.value = '🎉 Party Invitation';
-        updateTextDisplay();
-      }
-      
-      // Test color system
-      const accentInput = document.getElementById('accent-color');
-      const accent2Input = document.getElementById('accent2-color');
-      if (accentInput && accent2Input) {
-        accentInput.value = '#ff6b6b';
-        accent2Input.value = '#4ecdc4';
-        updateColors();
-      }
-      
-      // Test font system
-      const titleFontSelect = document.getElementById('title-font');
-      const bodyFontSelect = document.getElementById('body-font');
-      if (titleFontSelect && bodyFontSelect) {
-        titleFontSelect.value = 'Bebas Neue';
-        bodyFontSelect.value = 'Open Sans';
-        updateFonts();
-      }
-      
-      // Test background system
-      const bgTypeSelect = document.getElementById('bg-type');
-      const bgColorInput = document.getElementById('bg-color');
-      const bgColor2Input = document.getElementById('bg-color2');
-      const bgImageSelect = document.getElementById('bg-image');
-      const bgOpacitySlider = document.getElementById('bg-opacity');
-      if (bgTypeSelect && bgColorInput && bgColor2Input && bgImageSelect && bgOpacitySlider) {
-        bgTypeSelect.value = 'image';
-        bgImageSelect.value = 'backgrounds/i-3.webp';
-        bgColorInput.value = '#667eea';
-        bgOpacitySlider.value = 70;
-        updateBackground();
-      }
-      
-      updateStatus('✅ All systems tested successfully!');
-      console.log('✅ All systems tested successfully!');
-    });
-    
-    // Test validation system
-    document.getElementById('test-validation').addEventListener('click', () => {
-      console.log('🔍 Testing validation system...');
-      updateStatus('🔍 Running validation tests...');
-      
-      const validationResult = validateAllSystems();
-      
-      if (validationResult) {
-        console.log('✅ Validation system working correctly');
-      } else {
-        console.error('❌ Validation system detected issues');
-      }
-    });
-    
-    // Validation system to check all select boxes
-    function validateAllSelects() {
-      console.log('🔍 Validating all select elements...');
-      
-      const allSelects = document.querySelectorAll('select');
-      let validationPassed = true;
-      let emptySelects = [];
-      
-      allSelects.forEach((select, index) => {
-        const id = select.id || `select-${index}`;
-        const options = select.querySelectorAll('option');
-        const hasValue = select.value && select.value.trim() !== '';
-        const hasOptions = options.length > 0;
-        
-        console.log(`🔍 Select "${id}":`, {
-          hasValue: hasValue,
-          hasOptions: hasOptions,
-          optionCount: options.length,
-          currentValue: select.value,
-          options: Array.from(options).map(opt => opt.value)
-        });
-        
-        if (!hasOptions) {
-          emptySelects.push(`${id} (no options)`);
-          validationPassed = false;
-        } else if (!hasValue) {
-          emptySelects.push(`${id} (no selected value)`);
-          validationPassed = false;
-        }
-      });
-      
-      if (validationPassed) {
-        console.log('✅ All select elements are properly populated');
-        updateStatus('✅ All selects validated successfully');
-      } else {
-        console.error('❌ Select validation failed:', emptySelects);
-        updateStatus(`❌ Select validation failed: ${emptySelects.join(', ')}`);
-      }
-      
-      return validationPassed;
+    function updateOverlayEffects() {
+      console.log('🎨 Overlay effects update (to be implemented)');
     }
     
-    // Check for any missing select options that should exist
-    function checkForMissingSelects() {
-      console.log('🔍 Checking for missing select elements...');
-      
-      const expectedSelects = [
-        'title-font',
-        'body-font', 
-        'bg-type',
-        'bg-image'
-      ];
-      
-      const missingSelects = [];
-      
-      expectedSelects.forEach(id => {
-        const select = document.getElementById(id);
-        if (!select) {
-          missingSelects.push(id);
-          console.error(`❌ Missing expected select: ${id}`);
-        }
-      });
-      
-      if (missingSelects.length > 0) {
-        console.error('❌ Missing select elements:', missingSelects);
-        updateStatus(`❌ Missing selects: ${missingSelects.join(', ')}`);
-        return false;
-      } else {
-        console.log('✅ All expected select elements found');
-        return true;
-      }
+    function updateShadowEffects() {
+      console.log('🌑 Shadow effects update (to be implemented)');
     }
     
-    // Comprehensive system validation
-    function validateAllSystems() {
-      console.log('🚀 Starting comprehensive system validation...');
+    function updateEffects() {
+      console.log('🎭 Effects update (to be implemented)');
+    }
+    
+    // Initialize all systems
+    function initializeAllSystems() {
+      console.log('🚀 Initializing all systems...');
       
-      const results = {
-        selects: validateAllSelects(),
-        missing: checkForMissingSelects(),
-        inputs: true, // We'll add input validation later
-        overall: true
+      // Set initial values for display elements
+      const initialTexts = {
+        'title-display': 'Invitation Builder v2',
+        'subtitle-display': 'Modular version with dual sidebars',
+        'names-display': 'Your Names Here'
       };
       
-      // Check if any validation failed
-      if (!results.selects || !results.missing) {
-        results.overall = false;
-      }
+      Object.entries(initialTexts).forEach(([id, text]) => {
+        updateDisplayElement(id, text);
+      });
       
-      console.log('📊 Validation Results:', results);
-      
-      if (results.overall) {
-        updateStatus('✅ All systems validated successfully');
-        console.log('🎉 All systems are ready to go!');
-      } else {
-        updateStatus('❌ System validation failed - check console');
-        console.error('❌ System validation failed - some issues detected');
-      }
-      
-      return results.overall;
+      console.log('✅ All systems initialized');
     }
     
-    // Initialize
-    updateStatus('Ready for testing');
-    setupTextListeners();
-    setupColorListeners();
-    setupFontListeners();
-    setupBackgroundListeners();
-    
-    // Preload fonts for better reliability
-    preloadFonts();
-    
-    // Run validation after a short delay to ensure DOM is ready
-    setTimeout(() => {
-      validateAllSystems();
-    }, 100);
-    
-    console.log('🚀 Invitation Builder v2 initialized');
+    // Start the application when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeApp);
+    } else {
+      initializeApp();
+    }
   </script>
 </body>
 </html>
