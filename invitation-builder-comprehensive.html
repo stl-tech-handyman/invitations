@@ -828,10 +828,15 @@
           <button id="test-background-system" style="background: #607D8B; color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
             🖼️ Test Background System
           </button>
-          <button id="test-edge-system" style="background: #795548; color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
-            ✂️ Test Edge System
+          <button id="test-background-images" style="background: #FF5722; color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+            🖼️ Test Background Images
           </button>
         </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+          <button id="test-edge-system" style="background: #795548; color: white; padding:10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+            ✂️ Test Edge System
+          </button>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
           <button id="test-effects-system" style="background: #FF5722; color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
@@ -1142,9 +1147,8 @@
             <h4>Background Image</h4>
             <div class="row">
               <select id="stock-image">
-                <option value="pool">🏊 Pool Scene</option>
-                <option value="confetti">🎉 Confetti</option>
-                <option value="clouds">☁️ Clouds</option>
+                <!-- Background images will be populated dynamically from backgrounds/ folder -->
+                <option value="">Loading backgrounds...</option>
               </select>
               <div id="drop-zone" class="drop-zone">
                 <div class="drop-zone-content">
@@ -2381,16 +2385,91 @@
       const key = el('stock-image').value;
       let backgroundImage = 'none';
       
+      console.log('🖼️ Setting stock image:', key);
+      
       // Check if it's a stock image
       if (IMAGES[key]) {
         backgroundImage = IMAGES[key];
+        console.log('✅ Using stock SVG image');
       }
-      // Check if it's a custom background
+      // Check if it's a custom background from backgrounds/ folder
       else if (CUSTOM_BACKGROUNDS[key]) {
         backgroundImage = `url('${CUSTOM_BACKGROUNDS[key]}')`;
+        console.log('✅ Using custom background from backgrounds/ folder:', CUSTOM_BACKGROUNDS[key]);
+      }
+      else {
+        console.log('⚠️ No background image found for key:', key);
       }
       
       el('photo').style.backgroundImage = backgroundImage;
+    }
+    
+    // Function to populate background images dropdown from backgrounds/ folder
+    function populateBackgroundImages() {
+      const stockImageSelect = el('stock-image');
+      if (!stockImageSelect) {
+        console.error('❌ Stock image select not found');
+        return;
+      }
+      
+      // Clear existing options
+      stockImageSelect.innerHTML = '';
+      
+      // Add default option
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = '🎨 Select Background Image';
+      stockImageSelect.appendChild(defaultOption);
+      
+      // Add stock SVG backgrounds
+      const stockOptions = [
+        { value: 'pool', label: '🏊 Pool Scene' },
+        { value: 'confetti', label: '🎉 Confetti' },
+        { value: 'clouds', label: '☁️ Clouds' }
+      ];
+      
+      stockOptions.forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option.value;
+        optionElement.textContent = option.label;
+        stockImageSelect.appendChild(optionElement);
+      });
+      
+      // Add custom backgrounds from backgrounds/ folder
+      Object.entries(CUSTOM_BACKGROUNDS).forEach(([key, path]) => {
+        // Only add backgrounds that start with 'i-' (from backgrounds/ folder)
+        if (key.startsWith('i-')) {
+          const optionElement = document.createElement('option');
+          optionElement.value = key;
+          
+          // Extract filename without extension for display
+          const filename = path.split('/').pop().split('.')[0];
+          const extension = path.split('.').pop().toUpperCase();
+          
+          // Create a nice label based on the filename
+          let label = `🖼️ ${filename.toUpperCase()}`;
+          
+          // Add file type indicator
+          if (extension === 'JPG' || extension === 'JPEG') {
+            label = `📷 ${filename.toUpperCase()}`;
+          } else if (extension === 'PNG') {
+            label = `🖼️ ${filename.toUpperCase()}`;
+          } else if (extension === 'WEBP') {
+            label = `🌐 ${filename.toUpperCase()}`;
+          }
+          
+          optionElement.textContent = label;
+          stockImageSelect.appendChild(optionElement);
+        }
+      });
+      
+      console.log(`✅ Populated background images dropdown with ${stockImageSelect.options.length - 1} options`);
+      
+      // Set default value to first background image
+      if (stockImageSelect.options.length > 1) {
+        stockImageSelect.selectedIndex = 1; // Skip the default "Select Background Image" option
+        setStockImage(); // Apply the first background
+      }
     }
 
     function drawSprites(theme){
@@ -2754,10 +2833,57 @@
       try {
         applyBackground();
         const bgMode = el('bg-mode').value;
-        updateTestStatus(`✅ Background system working - Mode: ${bgMode}`);
+        
+        // Test background images dropdown
+        const stockImageSelect = el('stock-image');
+        if (stockImageSelect && stockImageSelect.options.length > 1) {
+          updateTestStatus(`✅ Background system working - Mode: ${bgMode}, ${stockImageSelect.options.length - 1} background images loaded`);
+        } else {
+          updateTestStatus(`⚠️ Background system working but no background images found - Mode: ${bgMode}`);
+        }
       } catch (error) {
         console.error('❌ Background system test failed:', error);
         updateTestStatus(`❌ Background system failed: ${error.message}`, true);
+      }
+    });
+    
+    // Test Background Images System
+    el('test-background-images').addEventListener('click', () => {
+      console.log('🖼️ Testing background images system...');
+      updateTestStatus('🖼️ Testing background images system...');
+      
+      try {
+        // Test if background images dropdown is populated
+        const stockImageSelect = el('stock-image');
+        if (!stockImageSelect) {
+          throw new Error('Stock image select not found');
+        }
+        
+        // Check if dropdown has options
+        if (stockImageSelect.options.length <= 1) {
+          throw new Error('Background images dropdown is empty');
+        }
+        
+        // Test setting a background image
+        const firstImageOption = stockImageSelect.options[1]; // Skip the default option
+        if (firstImageOption) {
+          stockImageSelect.value = firstImageOption.value;
+          setStockImage();
+          
+          // Check if background image was applied
+          const photoElement = el('photo');
+          if (photoElement && photoElement.style.backgroundImage !== 'none') {
+            updateTestStatus(`✅ Background images working - Loaded ${stockImageSelect.options.length - 1} images, applied: ${firstImageOption.textContent}`);
+          } else {
+            updateTestStatus(`⚠️ Background images loaded but not applied - ${stockImageSelect.options.length - 1} images available`);
+          }
+        } else {
+          throw new Error('No background image options found');
+        }
+        
+      } catch (error) {
+        console.error('❌ Background images test failed:', error);
+        updateTestStatus(`❌ Background images failed: ${error.message}`, true);
       }
     });
     
@@ -3351,7 +3477,16 @@
     }
 
     // init
-    populateFonts(); updateText(); setTheme('pool'); updateSprites(); setStockImage(); setLayout(); setEffect(); setupParallax(); applyBackground();
+    populateFonts(); 
+    populateBackgroundImages(); // Populate background images from backgrounds/ folder
+    updateText(); 
+    setTheme('pool'); 
+    updateSprites(); 
+    setStockImage(); 
+    setLayout(); 
+    setEffect(); 
+    setupParallax(); 
+    applyBackground();
     
     // Set initial control visibility based on default background mode
     const initialMode = el('bg-mode').value;
@@ -3500,6 +3635,12 @@
       if (typeof populateFonts === 'function') {
         populateFonts();
         console.log('✅ Fonts initialized');
+      }
+      
+      // Initialize background images from backgrounds/ folder
+      if (typeof populateBackgroundImages === 'function') {
+        populateBackgroundImages();
+        console.log('✅ Background images initialized from backgrounds/ folder');
       }
       
       // Initialize overlay system
