@@ -1571,7 +1571,6 @@
             </div>
 
             <div class="row" style="margin-top:12px">
-              <button id="apply-global-shadow" class="btn">Apply to All</button>
               <button id="reset-global-shadow" class="btn btn-secondary">Reset</button>
             </div>
           </div>
@@ -2289,7 +2288,7 @@
       return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
 
-    // Apply shadow to all text elements
+    // Apply shadow to all text elements (now called automatically)
     function applyGlobalShadow() {
       const shadowCSS = generateShadowCSS(globalShadow);
       document.documentElement.style.setProperty('--global-text-shadow', shadowCSS);
@@ -2300,7 +2299,7 @@
         el.style.textShadow = shadowCSS;
       });
 
-      console.log('✨ Global shadow applied:', shadowCSS);
+      console.log('✨ Global shadow applied automatically:', shadowCSS);
     }
 
     // Reset all shadows
@@ -2323,6 +2322,9 @@
       document.getElementById('shadow-y-value').textContent = globalShadow.y;
       document.getElementById('shadow-blur-value').textContent = globalShadow.blur;
       document.getElementById('shadow-opacity-value').textContent = globalShadow.opacity;
+      
+      // Apply shadows automatically when UI is updated
+      applyGlobalShadow();
     }
   </script>
 
@@ -4360,33 +4362,37 @@
 
     // Initialize shadow controls
     function initializeShadowControls() {
-      // Shadow range inputs
+      // Shadow range inputs - automatically apply shadows when changed
       el('shadow-x').addEventListener('input', (e) => {
         globalShadow.x = parseInt(e.target.value);
         document.getElementById('shadow-x-value').textContent = globalShadow.x;
+        applyGlobalShadow(); // Auto-apply
       });
 
       el('shadow-y').addEventListener('input', (e) => {
         globalShadow.y = parseInt(e.target.value);
         document.getElementById('shadow-y-value').textContent = globalShadow.y;
+        applyGlobalShadow(); // Auto-apply
       });
 
       el('shadow-blur').addEventListener('input', (e) => {
         globalShadow.blur = parseInt(e.target.value);
         document.getElementById('shadow-blur-value').textContent = globalShadow.blur;
+        applyGlobalShadow(); // Auto-apply
       });
 
       el('shadow-color').addEventListener('change', (e) => {
         globalShadow.color = e.target.value;
+        applyGlobalShadow(); // Auto-apply
       });
 
       el('shadow-opacity').addEventListener('input', (e) => {
         globalShadow.opacity = parseFloat(e.target.value);
         document.getElementById('shadow-opacity-value').textContent = globalShadow.opacity;
+        applyGlobalShadow(); // Auto-apply
       });
 
       // Shadow action buttons
-      el('apply-global-shadow').addEventListener('click', applyGlobalShadow);
       el('reset-global-shadow').addEventListener('click', resetGlobalShadow);
 
       // Initialize shadow UI
