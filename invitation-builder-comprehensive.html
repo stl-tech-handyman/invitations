@@ -2221,13 +2221,13 @@
             </div>
           </div>
 
-                      <div class="row" style="margin-top:12px">
-              <button id="reset-edge" class="btn btn-secondary">Reset</button>
-              <button id="test-edge" class="btn" style="background: #28a745; color: white;">Test Edge</button>
+          <div class="row" style="margin-top:12px">
+            <button id="reset-edge" class="btn btn-secondary">Reset</button>
+            <button id="test-edge" class="btn" style="background: #28a745; color: white;">Test Edge</button>
               <button onclick="console.log('🎯 Direct HTML test button clicked'); testEdgeDirectly();" class="btn" style="background: #dc3545; color: white;">Debug Test</button>
               <button onclick="console.log('🎯 Dropdown test button clicked'); testDropdownDirectly();" class="btn" style="background: #6f42c1; color: white;">Test Dropdown</button>
               <button onclick="console.log('🎯 Manual listener button clicked'); attachEdgeListenersManually();" class="btn" style="background: #fd7e14; color: white;">Manual Listeners</button>
-            </div>
+          </div>
         </div>
       </div>
 
@@ -4970,7 +4970,7 @@
         console.log('Calling applyEdgeEffect...');
         
         try {
-          applyEdgeEffect();
+        applyEdgeEffect();
           console.log('✅ applyEdgeEffect completed successfully');
         } catch (error) {
           console.error('❌ Error in applyEdgeEffect:', error);
@@ -5055,7 +5055,7 @@
       // Initialize edge UI
       updateEdgeUI();
 
-            console.log('✅ Edge controls initialized');
+      console.log('✅ Edge controls initialized');
       window.edgeSystemInitialized = true;
       console.log('🏁 Edge system initialization complete!');
     }
@@ -8593,6 +8593,25 @@
         console.log('✨ Particle System initialized');
       }
 
+      syncSettingsWithUI() {
+        // Sync all settings with current UI values
+        const effectTypeEl = document.getElementById('particle-effect-type');
+        const intensityEl = document.getElementById('particle-intensity');
+        const speedEl = document.getElementById('particle-speed');
+        const directionEl = document.getElementById('particle-direction');
+        const colorsEl = document.getElementById('particle-colors');
+        const sizeEl = document.getElementById('particle-size');
+
+        if (effectTypeEl) this.settings.effectType = effectTypeEl.value;
+        if (intensityEl) this.settings.intensity = intensityEl.value;
+        if (speedEl) this.settings.speed = speedEl.value;
+        if (directionEl) this.settings.direction = directionEl.value;
+        if (colorsEl) this.settings.colors = colorsEl.value;
+        if (sizeEl) this.settings.size = sizeEl.value;
+
+        console.log('🔄 Particle settings synced with UI:', this.settings);
+      }
+
       setupEventListeners() {
         // Start particles
         document.getElementById('start-particles')?.addEventListener('click', () => {
@@ -8617,7 +8636,9 @@
         // Settings changes
         ['particle-effect-type', 'particle-intensity', 'particle-speed', 'particle-direction', 'particle-colors', 'particle-size'].forEach(id => {
           document.getElementById(id)?.addEventListener('change', (e) => {
-            this.settings[id.replace('particle-', '')] = e.target.value;
+            const settingName = id.replace('particle-', '');
+            this.settings[settingName] = e.target.value;
+            console.log(`🎯 Particle setting updated: ${settingName} = ${e.target.value}`);
             if (this.isActive) {
               this.restart();
             }
@@ -8628,9 +8649,12 @@
       start() {
         if (this.isActive) return;
 
+        // Sync settings with current UI values
+        this.syncSettingsWithUI();
+        
         this.isActive = true;
         this.animate();
-        console.log('🚀 Particle effects started:', this.settings.effectType);
+        console.log('🚀 Particle effects started:', this.settings.effectType, 'Direction:', this.settings.direction);
       }
 
       stop() {
@@ -8676,36 +8700,37 @@
           x = 450 + (Math.random() - 0.5) * 200;
           y = 675 + (Math.random() - 0.5) * 200;
         } else {
-          // Random position based on direction
-          switch (this.settings.direction) {
-            case 'down':
-              x = Math.random() * 900;
-              y = -20;
-              break;
-            case 'up':
-              x = Math.random() * 900;
-              y = 1370;
-              break;
-            case 'left':
-              x = 920;
-              y = Math.random() * 1350;
-              break;
-            case 'right':
-              x = -20;
-              y = Math.random() * 1350;
-              break;
-            case 'random':
-              x = Math.random() * 900;
-              y = Math.random() * 1350;
-              break;
-            case 'outward':
-              x = 450 + (Math.random() - 0.5) * 100;
-              y = 675 + (Math.random() - 0.5) * 100;
-              break;
-            default:
-              x = Math.random() * 900;
-              y = -20;
-          }
+                  // Random position based on direction
+        console.log(`🎯 Creating particle with direction: ${this.settings.direction}`);
+        switch (this.settings.direction) {
+          case 'down':
+            x = Math.random() * 900;
+            y = -20;
+            break;
+          case 'up':
+            x = Math.random() * 900;
+            y = 1370;
+            break;
+          case 'left':
+            x = 920;
+            y = Math.random() * 1350;
+            break;
+          case 'right':
+            x = -20;
+            y = Math.random() * 1350;
+            break;
+          case 'random':
+            x = Math.random() * 900;
+            y = Math.random() * 1350;
+            break;
+          case 'outward':
+            x = 450 + (Math.random() - 0.5) * 100;
+            y = 675 + (Math.random() - 0.5) * 100;
+            break;
+          default:
+            x = Math.random() * 900;
+            y = -20;
+        }
         }
 
         // Size
@@ -8811,13 +8836,16 @@
           return (Math.random() - 0.5) * 8 * baseSpeed;
         }
 
+        let velocityX;
         switch (this.settings.direction) {
-          case 'left': return -2 * baseSpeed;
-          case 'right': return 2 * baseSpeed;
-          case 'random': return (Math.random() - 0.5) * 4 * baseSpeed;
-          case 'outward': return (Math.random() - 0.5) * 6 * baseSpeed;
-          default: return (Math.random() - 0.5) * 2 * baseSpeed;
+          case 'left': velocityX = -2 * baseSpeed; break;
+          case 'right': velocityX = 2 * baseSpeed; break;
+          case 'random': velocityX = (Math.random() - 0.5) * 4 * baseSpeed; break;
+          case 'outward': velocityX = (Math.random() - 0.5) * 6 * baseSpeed; break;
+          default: velocityX = (Math.random() - 0.5) * 2 * baseSpeed; break;
         }
+        console.log(`🎯 Velocity X for direction '${this.settings.direction}': ${velocityX}`);
+        return velocityX;
       }
 
       getVelocityY(isBurst) {
@@ -8826,13 +8854,16 @@
           return (Math.random() - 0.5) * 8 * baseSpeed;
         }
 
+        let velocityY;
         switch (this.settings.direction) {
-          case 'down': return 2 * baseSpeed;
-          case 'up': return -2 * baseSpeed;
-          case 'right': return (Math.random() - 0.5) * 4 * baseSpeed;
-          case 'outward': return (Math.random() - 0.5) * 6 * baseSpeed;
-          default: return 2 * baseSpeed;
+          case 'down': velocityY = 2 * baseSpeed; break;
+          case 'up': velocityY = -2 * baseSpeed; break;
+          case 'right': velocityY = (Math.random() - 0.5) * 4 * baseSpeed; break;
+          case 'outward': velocityY = (Math.random() - 0.5) * 6 * baseSpeed; break;
+          default: velocityY = 2 * baseSpeed; break;
         }
+        console.log(`🎯 Velocity Y for direction '${this.settings.direction}': ${velocityY}`);
+        return velocityY;
       }
 
       getParticleLife() {
@@ -8978,7 +9009,7 @@
   <link rel="stylesheet" href="css/border-edges.css">
   <script src="js/border-edges.js"></script>
   <script src="js/system-manager.js"></script>
-  
+
   <!-- Select Initialization System -->
   <script>
     // Initialize all select dropdowns automatically
