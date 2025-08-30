@@ -1910,6 +1910,9 @@
               <button id="send-all-to-back" class="btn" style="background: #6c757d; color: white;">⬇️ Send All to
                 Back</button>
             </div>
+            <div class="row" style="margin-top: 8px;">
+              <button id="reset-all-positions" class="btn" style="background: #dc3545; color: white;">🗑️ Reset All Positions</button>
+            </div>
 
             <div
               style="margin-top: 12px; padding: 8px; background: #f8f9fa; border-radius: 4px; font-size: 11px; color: #666;">
@@ -3775,6 +3778,9 @@
         spriteElement.classList.remove('dragging');
         spriteElement.style.animationPlayState = 'running';
 
+        // Save the new position to localStorage
+        saveObjectPosition(spriteElement, currentX, currentY);
+
         console.log(`🎯 Finished dragging sprite to (${currentX}, ${currentY})`);
       });
 
@@ -5620,23 +5626,29 @@
               updateEdgeUI();
             }
 
-            // Apply overlay settings
-            if (settings.overlay) {
-              overlaySettings = { ...overlaySettings, ...settings.overlay };
-              updateOverlayUI();
-            }
+                  // Apply overlay settings
+      if (settings.overlay) {
+        overlaySettings = { ...overlaySettings, ...settings.overlay };
+        updateOverlayUI();
+      }
 
-            // Update the invitation
-            updateText();
-            updateFonts();
-            setTheme(el('category').value);
-            updateSprites();
-            setStockImage();
-            setLayout();
-            setEffect();
-            setupParallax();
-            applyBackground();
-            applyEdgeEffect();
+      // Restore object positions if saved
+      if (settings.objectPositions) {
+        localStorage.setItem('objectPositions', JSON.stringify(settings.objectPositions));
+        console.log('📍 Object positions restored from saved invitation');
+      }
+
+      // Update the invitation
+      updateText();
+      updateFonts();
+      setTheme(el('category').value);
+      updateSprites();
+      setStockImage();
+      setLayout();
+      setEffect();
+      setupParallax();
+      applyBackground();
+      applyEdgeEffect();
 
             console.log('✅ Settings imported successfully');
 
@@ -5650,6 +5662,78 @@
       };
 
       input.click();
+    }
+
+    // Save object position to localStorage
+    function saveObjectPosition(element, x, y) {
+      if (!element || !element.id) return;
+      
+      const objectPositions = JSON.parse(localStorage.getItem('objectPositions') || '{}');
+      objectPositions[element.id] = { x, y, timestamp: Date.now() };
+      localStorage.setItem('objectPositions', JSON.stringify(objectPositions));
+      
+      console.log(`💾 Saved position for ${element.id}: (${x}, ${y})`);
+    }
+
+    // Load object positions from localStorage
+    function loadObjectPositions() {
+      const objectPositions = JSON.parse(localStorage.getItem('objectPositions') || '{}');
+      console.log('📂 Loading saved object positions:', objectPositions);
+      
+      Object.keys(objectPositions).forEach(id => {
+        const element = document.getElementById(id);
+        if (element && objectPositions[id].x !== undefined && objectPositions[id].y !== undefined) {
+          // Apply the saved position
+          const transform = element.getAttribute('transform') || '';
+          const newTransform = transform.replace(
+            /translate\([^)]+\)/,
+            `translate(${objectPositions[id].x} ${objectPositions[id].y})`
+          );
+          element.setAttribute('transform', newTransform);
+          
+          // Update the drag data
+          if (element._dragData) {
+            element._dragData.x = objectPositions[id].x;
+            element._dragData.y = objectPositions[id].y;
+          }
+          
+          console.log(`📍 Restored position for ${id}: (${objectPositions[id].x}, ${objectPositions[id].y})`);
+        }
+      });
+    }
+
+    // Clear all saved object positions
+    function clearObjectPositions() {
+      localStorage.removeItem('objectPositions');
+      console.log('🗑️ All saved object positions cleared');
+    }
+
+    // Reset all objects to their default positions
+    function resetAllObjectPositions() {
+      const objectPositions = JSON.parse(localStorage.getItem('objectPositions') || '{}');
+      
+      Object.keys(objectPositions).forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          // Reset to default position (0, 0)
+          const transform = element.getAttribute('transform') || '';
+          const newTransform = transform.replace(
+            /translate\([^)]+\)/,
+            'translate(0 0)'
+          );
+          element.setAttribute('transform', newTransform);
+          
+          // Update the drag data
+          if (element._dragData) {
+            element._dragData.x = 0;
+            element._dragData.y = 0;
+          }
+        }
+      });
+      
+      // Clear saved positions
+      clearObjectPositions();
+      console.log('🔄 All objects reset to default positions');
     }
 
     // Save current invitation to /invites folder
@@ -5701,7 +5785,8 @@
           },
           shadows: globalShadow,
           edges: edgeSettings,
-          overlay: overlaySettings
+          overlay: overlaySettings,
+          objectPositions: JSON.parse(localStorage.getItem('objectPositions') || '{}')
         }
       };
 
@@ -5786,6 +5871,17 @@
       if (settings.edges) {
         edgeSettings = { ...edgeSettings, ...settings.edges };
         updateEdgeUI();
+      }
+
+      if (settings.overlay) {
+        overlaySettings = { ...overlaySettings, ...settings.overlay };
+        updateOverlayUI();
+      }
+
+      // Restore object positions if saved
+      if (settings.objectPositions) {
+        localStorage.setItem('objectPositions', JSON.stringify(settings.objectPositions));
+        console.log('📍 Object positions restored from saved invitation');
       }
 
       // Update the invitation
@@ -8399,16 +8495,7 @@
       if (resetPosBtn) {
         resetPosBtn.addEventListener('click', () => {
           if (confirm('Reset all object positions to default?')) {
-            window.objectRegistry.objects.forEach((obj) => {
-              if (obj.element.style.transform) {
-                obj.element.style.transform = obj.element.style.transform.replace(
-                  /translate\([^)]+\)/,
-                  'translate(0px, 0px)'
-                );
-                window.objectRegistry.update(obj.id, { x: 0, y: 0 });
-              }
-            });
-            console.log('🔄 Reset all object positions');
+            resetAllObjectPositions();
           }
         });
       }
@@ -8502,11 +8589,21 @@
         // Add global object management functions
         window.exportObjects = exportAllObjects;
         window.importObjects = importAllObjects;
+        window.saveObjectPosition = saveObjectPosition;
+        window.loadObjectPositions = loadObjectPositions;
+        window.clearObjectPositions = clearObjectPositions;
+        window.resetAllObjectPositions = resetAllObjectPositions;
 
         // Initialize object management button listeners
         setTimeout(() => {
           initializeObjectManagementButtons();
         }, 2000);
+
+        // Load saved object positions
+        setTimeout(() => {
+          loadObjectPositions();
+          console.log('📍 Object positions loaded from localStorage');
+        }, 2500);
 
         console.log('🔧 Global debugging functions added: checkSpriteStatus(), debugSprites()');
         console.log('🔧 Global object management functions added: exportObjects(), importObjects()');
